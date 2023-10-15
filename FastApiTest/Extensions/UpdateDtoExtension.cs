@@ -1,0 +1,33 @@
+﻿using FastApiTest.Models.Moco.Dto;
+using FastApiTest.Models.Moco.Resource;
+using Microsoft.EntityFrameworkCore;
+
+namespace FastApiTest.Extensions
+{
+    public static class UpdateDtoExtension
+    {
+        public static async Task<Charge> Update(this ChargeDto dto, MoCoContext dbContext)
+        {
+            var target = await dbContext.Charges.FindAsync(dto.Id);
+            if (target is null)
+                throw new Exception("Charge data couldnt be found");
+
+            if(target.ChargeName is not null) target.ChargeName = dto.ChargeName;
+            if(target.Value is not 0.0) target.Value = dto.Value;
+
+            return target;
+        }
+
+        public static async Task<Revenue> Update(this RevenueDto dto, MoCoContext dbContext)
+        {
+            var target = await dbContext.Revenue.FindAsync(dto.Id);
+            if (target is null)
+                throw new Exception("Charge data couldnt be found");
+
+            if (target.CompanyName is not null) target.CompanyName = dto.CompanyName;
+            if (target.Value is not 0.0) target.Value = dto.Value;
+
+            return target;
+        }
+    }
+}
