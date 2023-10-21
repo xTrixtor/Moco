@@ -1,8 +1,8 @@
-﻿using FastApiTest.Extensions;
-using FastApiTest.Models.Moco.Dto;
+﻿using MocoApi.Extensions;
+using MocoApi.Models.Moco.Dto;
 using FastEndpoints;
 
-namespace FastApiTest.Endpoints.Revenue
+namespace MocoApi.Endpoints.Revenue
 {
     public class GetRevenuesEndpoint : EndpointWithoutRequest<GetRevenuesResponse>
     {

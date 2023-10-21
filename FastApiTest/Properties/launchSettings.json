@@ -1,6 +1,6 @@
 {
   "profiles": {
-    "FastApiTest": {
+    "MocoApi": {
       "commandName": "Project",
       "launchBrowser": true,
       "environmentVariables": {

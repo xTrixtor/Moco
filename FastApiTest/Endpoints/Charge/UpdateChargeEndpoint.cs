@@ -1,11 +1,11 @@
-﻿using FastApiTest.Extensions;
-using FastApiTest.Models.Keycloak;
-using FastApiTest.Models.Moco.Dto;
+﻿using MocoApi.Extensions;
+using MocoApi.Models.Keycloak;
+using MocoApi.Models.Moco.Dto;
 using FastEndpoints;
 
-namespace FastApiTest.Endpoints.Charge
+namespace MocoApi.Endpoints.Charge
 {
-    public class UpdateChargeEndpoint: Endpoint<UpdateChargeRequest,UpdateChargeResponse>
+    public class UpdateButgetEndpoint: Endpoint<UpdateChargeRequest,UpdateChargeResponse>
     {
         public override void Configure()
         {

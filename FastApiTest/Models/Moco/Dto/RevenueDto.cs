@@ -1,7 +1,7 @@
-﻿using FastApiTest.Models.Moco.Resource;
+﻿using MocoApi.Models.Moco.Resource;
 using System.ComponentModel.DataAnnotations;
 
-namespace FastApiTest.Models.Moco.Dto
+namespace MocoApi.Models.Moco.Dto
 {
     public class RevenueDto
     {

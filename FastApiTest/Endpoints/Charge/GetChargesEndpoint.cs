@@ -1,17 +1,17 @@
-﻿using FastApiTest.Extensions;
-using FastApiTest.Models.Moco.Dto;
+﻿using MocoApi.Extensions;
+using MocoApi.Models.Moco.Dto;
 using FastEndpoints;
 
-namespace FastApiTest.Endpoints.Charge
+namespace MocoApi.Endpoints.Charge
 {
-    public class GetChargesEndpoint: EndpointWithoutRequest<GetChargesResponse>
+    public class GetBudgetsEndpoint: Endpoint<GetChargesRequest,GetChargesResponse>
     {
         public override void Configure()
         {
             Get("/charge");
-            AllowAnonymous();
+            Policies("User");
         }
-        public async override Task HandleAsync(CancellationToken ct)
+        public async override Task HandleAsync(GetChargesRequest req, CancellationToken ct)
         {
             using(var dbContext = new MoCoContext())
             {
@@ -26,6 +26,12 @@ namespace FastApiTest.Endpoints.Charge
                 }
             }
         }
+    }
+
+    public record GetChargesRequest
+    {
+        [FromClaim("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier")]
+        public string UserId { get; set; }
     }
 
     public record GetChargesResponse

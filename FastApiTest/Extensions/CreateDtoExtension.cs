@@ -1,7 +1,7 @@
-﻿using FastApiTest.Models.Moco.Dto;
-using FastApiTest.Models.Moco.Resource;
+﻿using MocoApi.Models.Moco.Dto;
+using MocoApi.Models.Moco.Resource;
 
-namespace FastApiTest.Extensions
+namespace MocoApi.Extensions
 {
     public static class CreateDtoExtension
     {
@@ -29,6 +29,7 @@ namespace FastApiTest.Extensions
         {
             return new Revenue
             {
+                Id = dto.Id,
                 CompanyName = dto.CompanyName,
                 Value = dto.Value,
                 UserId = dto.UserId
@@ -40,6 +41,45 @@ namespace FastApiTest.Extensions
             var revenue = dto.Prepare();
             await moCoContext.Revenue.AddAsync(revenue);
             return revenue;
+        }
+
+        public static Budget Prepare(this BudgetDto dto)
+        {
+            return new Budget
+            {
+                Id = dto.Id,
+                Value = dto.Value,
+                Name = dto.Name,
+                UserId = dto.UserId
+            };
+        }
+
+        public static async Task<Budget> PrepareAddAsync(this BudgetDto dto, MoCoContext moCoContext)
+        {
+            var revenue = dto.Prepare();
+            await moCoContext.Budgets.AddAsync(revenue);
+            return revenue;
+        }
+
+        public static Person Prepare(this PersonDto dto)
+        {
+            return new Person
+            {
+                Id = dto.Id,
+                Email = dto.Email,
+                Firstname = dto.Firstname,
+                LastName = dto.LastName,
+                Username = dto.Username,
+                CreatedAt = dto.CreatedAt,  
+                KeycloakUserId = dto.KeycloakUserId 
+            };
+        }
+
+        public static async Task<Person> PrepareAddAsync(this PersonDto dto, MoCoContext moCoContext)
+        {
+            var person = dto.Prepare();
+            await moCoContext.Persons.AddAsync(person);
+            return person;
         }
     }
 }

@@ -1,8 +1,8 @@
-﻿using FastApiTest.Extensions;
-using FastApiTest.Models.Moco.Dto;
+﻿using MocoApi.Extensions;
+using MocoApi.Models.Moco.Dto;
 using FastEndpoints;
 
-namespace FastApiTest.Endpoints.Charge
+namespace MocoApi.Endpoints.Charge
 {
     public class CreateChargeEndpoint: Endpoint<CreateChargeRequest, CreateChargeRespone>
     {
@@ -13,7 +13,6 @@ namespace FastApiTest.Endpoints.Charge
             {
                 s.Summary = "Create Charge for User";
                 s.Description = "Send Userdata to Keycloak to create a new User in the realm";
-                s.ResponseExamples[200] = new CreateUserResponse { Success = true };
                 s.Responses[200] = "Returns true";
                 s.Responses[403] = "Return false";
             });

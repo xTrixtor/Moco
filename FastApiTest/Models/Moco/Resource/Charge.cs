@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace FastApiTest.Models.Moco.Resource
+﻿namespace MocoApi.Models.Moco.Resource
 {
     public class Charge
     {

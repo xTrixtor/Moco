@@ -1,13 +1,17 @@
-﻿using FastApiTest.DataStore;
-using FastApiTest.Models.Keycloak;
+﻿using MocoApi.DataStore;
+using MocoApi.Models.Keycloak;
 using FastEndpoints;
+using MocoApi.Endpoints.User;
+using System.IdentityModel.Tokens.Jwt;
+using MocoApi.Models.Moco.Dto;
+using MocoApi.Extensions;
 
-public class MyEndpoint : Endpoint<CreateUserRequest, CreateUserResponse>
+public class CreateUserEndpoint : Endpoint<CreateUserRequest, CreateUserResponse>
 {
     private readonly IConfiguration conf;
     private readonly KeycloakServices keycloakServices;
 
-    public MyEndpoint(IConfiguration conf, KeycloakServices keycloakServices)
+    public CreateUserEndpoint(IConfiguration conf, KeycloakServices keycloakServices)
     {
         this.conf = conf;
         this.keycloakServices = keycloakServices;
@@ -17,19 +21,13 @@ public class MyEndpoint : Endpoint<CreateUserRequest, CreateUserResponse>
     {
         Post("/user");
         AllowAnonymous();
-        Throttle(
-                hitLimit: 10,
-                durationSeconds: 60,
-                headerName: "x-create-user" // this is optional
-            );
         Credential[] exampleCredentials = { new Credential { type = "password", value = "123", temporary = false } };
         
         Summary(s =>
         {
             s.Summary = "Create Keycloak User";
             s.Description = "Send Userdata to Keycloak to create a new User in the realm";
-            s.ExampleRequest = new CreateUserRequest { User = new KeycloakUser { username = "username", enabled = true, credentials = exampleCredentials } };
-            s.ResponseExamples[200] = new CreateUserResponse { Success = true};
+            s.ExampleRequest = new CreateUserRequest { User = new KeycloakUser { username = "username", enabled = true, credentials = exampleCredentials, email="email@mail.com", firstName="NIco", lastName="Böhner"} };
             s.Responses[200] = "Returns true";
             s.Responses[403] = "Return false";
         });
@@ -40,18 +38,37 @@ public class MyEndpoint : Endpoint<CreateUserRequest, CreateUserResponse>
         var keycloakSettings = conf.GetRequiredSection($"{AppsettingsSection.Keycloak}").Get<KeycloakSettings>();
         if (keycloakSettings is null) ThrowError("Couldnt load Keycloak settings");
 
-        var accessToken = await keycloakServices.GetAccessTokenAsync(keycloakSettings.Realm_Master_Username, keycloakSettings.Realm_Master_Password, keycloakSettings);
+        var accessToken = await keycloakServices.AdminLoginAsync();
 
-        var userCreatedBool = false;
         try
         {
-            userCreatedBool = await keycloakServices.CreateUserAsync(req.User, accessToken, keycloakSettings);
+            var res = await keycloakServices.CreateUserAsync(req.User, accessToken, keycloakSettings);
+
+            var handler = new JwtSecurityTokenHandler();
+            var jwtSecurityToken = handler.ReadJwtToken(res.access_token);
+
+            var userId = jwtSecurityToken.Claims.First(claim => claim.Type == "sub").Value;
+
+            var personDto = new PersonDto
+            {
+                KeycloakUserId = userId,
+                Email = req.User.email,
+                Username = req.User.username,
+                Firstname = req.User.firstName,
+                LastName = req.User.lastName,   
+                CreatedAt = DateTime.UtcNow,
+            }; 
+            using (var dbContext = new MoCoContext())
+            {
+                await personDto.PrepareAddAsync(dbContext);
+                await dbContext.SaveChangesAsync();    
+            }
+            await SendAsync(new CreateUserResponse { KeycloakResponse = res, PersonInfo = personDto});   
         }
         catch (Exception e)
         {
             ThrowError(e.Message);
         }
-        await SendAsync(new CreateUserResponse { Success = userCreatedBool });
     }
     
 }
@@ -59,11 +76,10 @@ public class MyEndpoint : Endpoint<CreateUserRequest, CreateUserResponse>
 public record CreateUserRequest
 {
     public KeycloakUser User { get; set; }
-    
 }
 
 public record CreateUserResponse
 {
-    public bool Success { get; set; }
+    public required KeyCloakSuccessfullLoginResponse KeycloakResponse { get; set; }
+    public required PersonDto PersonInfo { get; set; }
 }
-

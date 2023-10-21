@@ -1,11 +1,11 @@
-﻿using FastApiTest.DataStore;
+﻿using MocoApi.DataStore;
 using FastEndpoints;
 using FastEndpoints.Swagger;
 using Keycloak.AuthServices.Authentication;
 using Keycloak.AuthServices.Authorization;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using NSwag;
-
+using MocoApi.Handler;
 
 IConfigurationRoot config = new ConfigurationBuilder()
     .AddJsonFile("appsettings.json")
@@ -13,6 +13,18 @@ IConfigurationRoot config = new ConfigurationBuilder()
     .Build();
 
 var bld = WebApplication.CreateBuilder();
+string MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
+
+bld.Services.AddCors(options =>
+{
+    options.AddPolicy(name: MyAllowSpecificOrigins,
+                      builder =>
+                      {
+                          builder.AllowAnyOrigin();
+                          builder.AllowAnyMethod();
+                          builder.AllowAnyMethod();
+                      });
+});
 
 bld.Services
    .AddFastEndpoints()
@@ -55,10 +67,19 @@ bld.Services.SwaggerDocument(o =>
 });
 
 //DIJ
-
+bld.Services.AddScoped<CachedAdminTokenHandler>();
+bld.Services.AddHttpClient("adminKeycloak").AddHttpMessageHandler<CachedAdminTokenHandler>();
+bld.Services.AddSingleton<IConfiguration>(bld.Configuration);
 bld.Services.AddScoped<KeycloakServices>();
+bld.Services.AddMemoryCache();
 
 var app = bld.Build();
+
+app.UseCors(builder => builder
+.AllowAnyOrigin()
+.AllowAnyMethod()
+.AllowAnyHeader()
+) ;
 
 app.UseAuthentication() //add this
    .UseAuthorization() //add this

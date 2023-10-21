@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using FastApiTest.Models.Moco.Resource;
+using MocoApi.Models.Moco.Resource;
 
-namespace FastApiTest.Models.Moco.Dto
+namespace MocoApi.Models.Moco.Dto
 {
     public class ChargeDto
     {

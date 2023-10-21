@@ -1,8 +1,8 @@
-﻿using FastApiTest.Endpoints.User;
+﻿using MocoApi.Endpoints.User;
 using FastEndpoints;
 using FluentValidation;
 
-namespace FastApiTest.Validation
+namespace MocoApi.Validation
 {
     public class LoginValidator : Validator<LoginRequest>
     {
