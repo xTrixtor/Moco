@@ -5,7 +5,8 @@ using Keycloak.AuthServices.Authentication;
 using Keycloak.AuthServices.Authorization;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using NSwag;
-using MocoApi.Handler;
+using Microsoft.Extensions.Options;
+
 
 IConfigurationRoot config = new ConfigurationBuilder()
     .AddJsonFile("appsettings.json")
@@ -28,8 +29,8 @@ bld.Services.AddCors(options =>
 
 bld.Services
    .AddFastEndpoints()
-   .AddAuthorization()
-   .SwaggerDocument();
+   .SwaggerDocument(o => o.ShortSchemaNames = true)
+   .AddAuthorization();
 
 bld.Services.AddKeycloakAuthentication(bld.Configuration);
 
@@ -52,6 +53,7 @@ bld.Services.AddAuthorization(options =>
 bld.Services.SwaggerDocument(o =>
 {
     o.EnableJWTBearerAuth = false;
+    o.ShortSchemaNames = true;
     o.DocumentSettings = s =>
     {
         s.DocumentName = "Initial-Release";
@@ -67,11 +69,7 @@ bld.Services.SwaggerDocument(o =>
 });
 
 //DIJ
-bld.Services.AddScoped<CachedAdminTokenHandler>();
-bld.Services.AddHttpClient("adminKeycloak").AddHttpMessageHandler<CachedAdminTokenHandler>();
-bld.Services.AddSingleton<IConfiguration>(bld.Configuration);
 bld.Services.AddScoped<KeycloakServices>();
-bld.Services.AddMemoryCache();
 
 var app = bld.Build();
 
@@ -83,7 +81,11 @@ app.UseCors(builder => builder
 
 app.UseAuthentication() //add this
    .UseAuthorization() //add this
-   .UseFastEndpoints()
+   .UseFastEndpoints(c =>
+    {
+        c.Endpoints.RoutePrefix = "api";
+        c.Endpoints.ShortNames = true;
+    })
    .UseSwaggerGen()
    .UseDefaultExceptionHandler();
 app.Run();
