@@ -29,7 +29,7 @@ bld.Services.AddCors(options =>
 bld.Services
    .AddFastEndpoints()
    .AddAuthorization()
-   .SwaggerDocument();
+   .SwaggerDocument(o => o.ShortSchemaNames = true) ;
 
 bld.Services.AddKeycloakAuthentication(bld.Configuration);
 
@@ -52,6 +52,7 @@ bld.Services.AddAuthorization(options =>
 bld.Services.SwaggerDocument(o =>
 {
     o.EnableJWTBearerAuth = false;
+    o.ShortSchemaNames = true;
     o.DocumentSettings = s =>
     {
         s.DocumentName = "Initial-Release";
@@ -83,7 +84,11 @@ app.UseCors(builder => builder
 
 app.UseAuthentication() //add this
    .UseAuthorization() //add this
-   .UseFastEndpoints()
+   .UseFastEndpoints(c =>
+   {
+       c.Endpoints.RoutePrefix = "api";
+       c.Endpoints.ShortNames = true;
+   })
    .UseSwaggerGen()
    .UseDefaultExceptionHandler();
 app.Run();

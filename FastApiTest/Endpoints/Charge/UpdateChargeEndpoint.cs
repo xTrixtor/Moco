@@ -2,10 +2,11 @@
 using MocoApi.Models.Keycloak;
 using MocoApi.Models.Moco.Dto;
 using FastEndpoints;
+using MocoApi.Models.Moco.Resource;
 
 namespace MocoApi.Endpoints.Charge
 {
-    public class UpdateButgetEndpoint: Endpoint<UpdateChargeRequest,UpdateChargeResponse>
+    public class UpdateChargeEndpoint: Endpoint<UpdateChargeRequest,UpdateChargeResponse>
     {
         public override void Configure()
         {

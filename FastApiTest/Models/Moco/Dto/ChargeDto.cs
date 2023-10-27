@@ -1,5 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-using MocoApi.Models.Moco.Resource;
+﻿using MocoApi.Models.Moco.Resource;
 
 namespace MocoApi.Models.Moco.Dto
 {

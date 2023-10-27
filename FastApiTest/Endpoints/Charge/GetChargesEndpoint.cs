@@ -4,7 +4,7 @@ using FastEndpoints;
 
 namespace MocoApi.Endpoints.Charge
 {
-    public class GetBudgetsEndpoint: Endpoint<GetChargesRequest,GetChargesResponse>
+    public class GetChargesEndpoint: Endpoint<GetChargesRequest,GetChargesResponse>
     {
         public override void Configure()
         {
