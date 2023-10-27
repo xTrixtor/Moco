@@ -13,7 +13,6 @@ namespace MocoApi.Endpoints.Charge
             {
                 s.Summary = "Create Charge for User";
                 s.Description = "Send Userdata to Keycloak to create a new User in the realm";
-                s.ResponseExamples[200] = new CreateUserResponse { Success = true };
                 s.Responses[200] = "Returns true";
                 s.Responses[403] = "Return false";
             });

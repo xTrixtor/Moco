@@ -1,4 +1,5 @@
 ﻿using FastEndpoints;
+using MocoApi.DataStore;
 using Newtonsoft.Json;
 using System.IdentityModel.Tokens.Jwt;
 
@@ -7,12 +8,13 @@ namespace MocoApi.Endpoints.User
     public class LoginUserEndpoint : Endpoint<LoginRequest, LoginResponse>
     {
         private readonly IConfiguration configuration;
-
+        private readonly KeycloakServices _keycloakServices;
         private KeycloakSettings keycloakSettings;
 
-        public LoginUserEndpoint(IConfiguration configuration)
+        public LoginUserEndpoint(IConfiguration configuration, KeycloakServices keycloakServices)
         {
             this.configuration = configuration;
+            this._keycloakServices = keycloakServices;
         }
         public override void Configure()
         {
@@ -45,27 +47,10 @@ namespace MocoApi.Endpoints.User
                 ThrowError("Es konnten keine Daten aus den Appsettings gelesen werden");
             }
 
-            using HttpClient client = new();
-
-
-            var data = new[] {
-                new KeyValuePair<string, string>("grant_type", "password"),
-                new KeyValuePair<string, string>("client_id", keycloakSettings.resource),
-                new KeyValuePair<string, string>("username", req.Username),
-                new KeyValuePair<string, string>("password", req.Password),
-            };
-
-            var response = await client.PostAsync(keycloakSettings.BaseURL + keycloakSettings.LoginPath, new FormUrlEncodedContent(data));
-
-            if (!response.IsSuccessStatusCode)
-            {
-                //return error
-            }
-            var jsonContent = await response.Content.ReadAsStringAsync();
-
-            var keyCloakResponse = JsonConvert.DeserializeObject<KeyCloakSuccessfullLoginResponse>(jsonContent);
+            var keyCloakResponse = await _keycloakServices.GetTokensAsync(req.Username, req.Password, keycloakSettings);
 
             if (keyCloakResponse.access_token is null) ThrowError("JWT Token ist null");
+            if (keyCloakResponse.refresh_token is null) ThrowError("Refresh Token ist null");
 
             var handler = new JwtSecurityTokenHandler();
             var jwtSecurityToken = handler.ReadJwtToken(keyCloakResponse.access_token);
@@ -78,6 +63,7 @@ namespace MocoApi.Endpoints.User
             {
                 UserId = userId,
                 JWTToken = keyCloakResponse.access_token,
+                RefreshToken = keyCloakResponse.refresh_token,
                 Success = true,
                 ExpireTime = expireDate,
             });
@@ -95,6 +81,7 @@ namespace MocoApi.Endpoints.User
         public string UserId { get; set; }
         public bool Success { get; set; }
         public string JWTToken { get; set; }
+        public string RefreshToken { get; set; }
         public DateTime ExpireTime { get; set; }
     }
 

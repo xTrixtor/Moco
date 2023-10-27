@@ -4,12 +4,12 @@ using FastEndpoints;
 
 namespace MocoApi.Endpoints.Charge
 {
-    public class GetChargesEndpoint: Endpoint<GetChargesRequest,GetChargesResponse>
+    public class GetBudgetsEndpoint: Endpoint<GetChargesRequest,GetChargesResponse>
     {
         public override void Configure()
         {
             Get("/charge");
-            Policies("Admin");
+            Policies("User");
         }
         public async override Task HandleAsync(GetChargesRequest req, CancellationToken ct)
         {

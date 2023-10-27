@@ -60,5 +60,26 @@ namespace MocoApi.Extensions
             await moCoContext.Budgets.AddAsync(revenue);
             return revenue;
         }
+
+        public static Person Prepare(this PersonDto dto)
+        {
+            return new Person
+            {
+                Id = dto.Id,
+                Email = dto.Email,
+                Firstname = dto.Firstname,
+                LastName = dto.LastName,
+                Username = dto.Username,
+                CreatedAt = dto.CreatedAt,  
+                KeycloakUserId = dto.KeycloakUserId 
+            };
+        }
+
+        public static async Task<Person> PrepareAddAsync(this PersonDto dto, MoCoContext moCoContext)
+        {
+            var person = dto.Prepare();
+            await moCoContext.Persons.AddAsync(person);
+            return person;
+        }
     }
 }
