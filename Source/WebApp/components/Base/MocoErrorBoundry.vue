@@ -22,7 +22,10 @@
 
 <script setup lang="ts">
 const handleError = (e: any) => {
-  console.log(e);
-  if (e.status === 401) sessionStorage.setItem("authToken", "");
+  console.error(e.status);
+  if (e.status === 401) {
+    sessionStorage.setItem("authToken", "");
+    location.reload();
+  }
 };
 </script>

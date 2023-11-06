@@ -1,81 +1,101 @@
 <template>
-  <div v-if="groupedCharges" class="bg-slate-50 grid grid-cols-3 gap-2">
-    <div v-for="(interval, key) in keys">
-      <div v-if="groupedCharges[+interval]">
-        <IntervalCard
-          :charge="groupedCharges[+interval]"
-          :interval="TimeInterval[+interval]"
-          :key="key"
-          v-for="(charge, key) in groupedCharges[interval]"
-        />
-        <IntervalCard />
+  <div
+    v-if="groupedCharges"
+    class="bg-slate-50 flex w-full h-full py-8 px-4"
+  >
+    <div class="col-span-3 grid grid-cols-3 gap-2 w-2/3">
+      <div v-for="(interval, key) in keys">
+        <div v-if="groupedCharges[+interval]">
+          <IntervalCard
+            :charges="groupedCharges[+interval]"
+            :interval="interval"
+          />
+        </div>
       </div>
     </div>
+    <div class="flex-1 flex h-full w-full justify-center">
+      <DxPieChart
+        :data-source="totalValues"
+        title="Überblick"
+        palette="Soft"
+        class="pie"
+        size-group="piesGroup"
+      >
+        <DxSeries
+          argument-field="title"
+          value-field="percent"
+        >
+          <DxLabel
+            :visible="true"
+            format="percent"
+          />
+        </DxSeries>
+        <DxLegend
+          :row-count="1"
+          vertical-alignment="bottom"
+          horizontal-alignment="center"
+          item-text-position="right"
+        />
+      </DxPieChart>
+    </div>
   </div>
-  {{ "t" + logoutTimer }}
-  {{ keys }}
-  <DxChart :data-source="data">
-    <DxArgumentAxis :tick-interval="10" />
-    <DxSeries type="bar" />
-    <DxLegend :visible="false" />
-  </DxChart>
+
 </template>
 
 <script setup lang="ts">
-import DxChart, {
-  DxArgumentAxis,
-  DxSeries,
-  DxLegend,
-} from "devextreme-vue/chart";
-
 import { useApiStore } from "~/stores/apiStore";
 import {
-  MocoApiModelsMocoDtoChargeDto,
-  TimeInterval,
+ChargeDto,
+GetRevenuesResponse,
+TimeInterval,
 } from "@/stores/apiClient";
-import { useUserStore } from "~/stores/userStore";
-import { storeToRefs } from "pinia";
+import { storeToRefs } from 'pinia';
+import { useChargeStore } from '~/stores/chargeStore';
 
-const { logoutTimer } = storeToRefs(useUserStore());
+const chargeStore = useChargeStore();
+const {charges, groupedCharges} = storeToRefs(chargeStore)
 
-const userCharges = ref([] as MocoApiModelsMocoDtoChargeDto[]);
-const groupedCharges = ref<ChargesByTimeIntervalDictionary>();
-const timeIntervalKeys = enumKeys(TimeInterval);
 const keys = computed(() => Object.keys(groupedCharges.value ?? ""));
 
-type ChargesByTimeIntervalDictionary = Record<
+export type ChargesByTimeIntervalDictionary = Record<
   TimeInterval,
-  MocoApiModelsMocoDtoChargeDto
+  ChargeDto[]
 >;
 
-onMounted(async () => {
-  const response =
-    await useApiStore().ChargeClient.mocoApiEndpointsChargeGetBudgetsEndpoint();
-  if (response.charges) userCharges.value = response.charges;
+const revenue = computedAsync(async() =>
+  await useApiStore().RevenueClient.getRevenuesEndpoint(),
+  {} as GetRevenuesResponse
+);
 
-  const result = useGroupBy(
-    response.charges,
-    "timeInterval"
-  ) as ChargesByTimeIntervalDictionary;
-  console.log(result);
-  groupedCharges.value = result;
+const totalRevenue = computed(()=> createTotalRevenue());
+const totalCharges = computed(()=> createTotalCharges());
+const totalValues = computed(() => createTotalValues());
+
+onMounted(async () => {
+  await chargeStore.fetch();
 });
 
-const data = [
-  {
-    arg: 1990,
-    val: 5320816667,
-  },
-  {
-    arg: 2000,
-    val: 6127700428,
-  },
-  {
-    arg: 2010,
-    val: 6916183482,
-  },
-];
-function enumKeys<O extends object, K extends keyof O = keyof O>(obj: O): K[] {
-  return Object.keys(obj).filter((k) => Number.isNaN(+k)) as K[];
+interface TotalValue {
+  title:string;
+  value:number;
+  percent: number;
 }
+const createTotalRevenue = (): TotalValue => {
+  return {title: "Gehalt", value: useCeil(useSumBy(revenue.value.revenues, "value"),2)} as TotalValue
+}
+const createTotalCharges = (): TotalValue => {
+  return {title: "Feste Kosten", value: useSumBy(charges.value, "value")} as TotalValue
+}
+
+const createTotalValues = () => {
+  const totalValuesList = [totalRevenue.value, totalCharges.value]
+  const total = useSumBy(totalValuesList, "value")
+  return totalValuesList.map((totalValue) =>{
+    return {percent: totalValue.value/total, title: totalValue.title, value: totalValue.value} as TotalValue
+  })
+}
+
 </script>
+<style>
+
+</style>

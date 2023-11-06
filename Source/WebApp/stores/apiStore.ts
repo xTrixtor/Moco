@@ -8,6 +8,8 @@ import {
   IChargeClient,
   ILoginClient,
   LoginClient,
+  RefreshClient,
+  IRefreshClient,
 } from "./apiClient";
 
 export const useApiStore = defineStore("api", {
@@ -23,6 +25,9 @@ export const useApiStore = defineStore("api", {
     },
     ChargeClient(): IChargeClient {
       return new ChargeClient();
+    },
+    RefreshClient(): IRefreshClient {
+      return new RefreshClient();
     },
   },
 });

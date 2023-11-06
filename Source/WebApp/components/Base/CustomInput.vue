@@ -2,7 +2,7 @@ import { mergeProps } from 'nuxt/dist/app/compat/capi';
 <template>
   <div class="w-full flex flex-col">
     <input
-      class="border-2 p-2 border-gray-300 border-b-2 border-t-0 border-x-0 rounded-sm w-full bg-slate-50 font-semibold"
+      class="border-2 p-2 border-gray-300 border-b-2 border-t-0 border-x-0 rounded-sm w-full bg-slate-50 font-semibold outline-none focus:border-b-brand"
       :class="props.styling"
       :placeholder="props.placeholder"
       @input="handleInputChange"
@@ -29,4 +29,9 @@ const handleInputChange = (e: any) => {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+input:focus-visible::after {
+  outline: 2px solid crimson;
+  border-radius: 3px;
+}
+</style>

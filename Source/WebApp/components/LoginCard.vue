@@ -1,6 +1,6 @@
 <template>
   <BaseFullScreenLoader v-if="loading" />
-  <div v-else class="grid justify-center items-center bg-slate-50 h-screen">
+  <div v-else class="grid justify-center items-center h-screen">
     <div
       class="w-[500px] h-2/5 bg-[#242426] shadow-lg rounded-lg p-4 flex flex-col"
     >
@@ -23,6 +23,13 @@
           v-model="user.password"
         />
         <BasePrimaryButton btnTxt="Anmelden" :onClick="handleLogin" />
+        <el-button
+          size="small"
+          type="primary"
+          class="!bg-brand/20 !border-0"
+          :onClick="() => (data = true)"
+          >Registieren</el-button
+        >
       </div>
     </div>
   </div>
@@ -30,13 +37,19 @@
 
 <script setup lang="ts">
 import CustomInput from "./Base/CustomInput.vue";
-import { MocoApiEndpointsUserLoginRequest } from "~/stores/apiClient";
 import { useUserStore } from "~/stores/userStore";
 import { onKeyStroke } from "@vueuse/core";
-import { storeToRefs } from "pinia";
+import { useVModel } from "@vueuse/core";
+
+const props = defineProps<{
+  modelValue: boolean;
+}>();
+const emit = defineEmits(["update:modelValue"]);
+
+const data = useVModel(props, "modelValue", emit);
 
 onKeyStroke("Enter", async (e) => {
-  const a = await handleLogin();
+  await handleLogin();
 });
 
 interface User {
