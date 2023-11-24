@@ -1,15 +1,14 @@
 <template>
-    <div class="grid grid-cols-4 gap-3 p-4">
+    <div class="grid grid-cols-3 gap-3 p-4">
         <div v-for="(smartIntervalKey, key) in smartKeys" :key="key">
             <div v-if="smartIntervalKey.isEmpty">
-                <BudgetEmptyChargeCard :time-interval="smartIntervalKey.intervalString"/>
+                <BudgetEmptyChargeCard :smart-interval-key="smartIntervalKey"/>
             </div>
             <div v-else>
-                <BudgetChargeCard v-if="groupedCharges"  :time-interval="smartIntervalKey.intervalString" :charges="groupedCharges[+smartIntervalKey.intervalString]"/>
+                <BudgetChargeCard v-if="groupedCharges" :smart-interval-key="smartIntervalKey" :charges="groupedCharges[+smartIntervalKey.intervalString]"/>
             </div>
         </div>
     </div>
-    <BudgetChangeDataGrid/>
 </template>
 
 <script setup lang="ts">
@@ -25,16 +24,17 @@ const allKeys = Object.keys(TimeInterval).filter((item) => {
 });
 const keysWithValue = computed(() => Object.keys(groupedCharges.value ?? ""));
 const smartKeys = computed(() => createSmartKeys())
-interface SmartIntervalKey {
+export interface SmartIntervalKey {
+    timeIntervalKey: number;
     intervalString: string;
     isEmpty:boolean;
 }
 
-const createSmartKeys = () => allKeys.map((intervalString:string) => {
-    if(keysWithValue.value.includes(intervalString))
-        return {intervalString, isEmpty:false} as SmartIntervalKey;
+const createSmartKeys = () => allKeys.map((intervalKey) => {
+    if(keysWithValue.value.includes(intervalKey))
+        return {intervalString: TimeInterval[+intervalKey], timeIntervalKey: +intervalKey, isEmpty:false} as SmartIntervalKey;
     else
-        return {intervalString, isEmpty:true} as SmartIntervalKey;
+        return {intervalString: TimeInterval[+intervalKey], timeIntervalKey: +intervalKey, isEmpty:true} as SmartIntervalKey;
 })
 
 onMounted(async()=>{

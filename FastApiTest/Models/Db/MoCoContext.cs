@@ -31,7 +31,7 @@ public class MoCoContext : DbContext
         modelBuilder.Entity<Charge>()
             .HasData(new Charge[] 
             { 
-                new Charge { ChargeName = "Dildo", Catecory = Catecory.Luxus, TimeInterval = TimeInterval.monatlich, UserId = "75097005-23ad-4e28-994b-91fdf414b205", Id = 1, Value = 123.32 },
+                new Charge { ChargeName = "Monitor", Catecory = Catecory.Luxus, TimeInterval = TimeInterval.monatlich, UserId = "75097005-23ad-4e28-994b-91fdf414b205", Id = 1, Value = 123.32 },
                 new Charge { ChargeName = "Miete", Catecory = Catecory.Wohnen, TimeInterval = TimeInterval.monatlich, UserId = "75097005-23ad-4e28-994b-91fdf414b205", Id = 2, Value = 23.5 },
                 new Charge { ChargeName = "Investieren", Catecory = Catecory.Investieren, TimeInterval = TimeInterval.monatlich, UserId = "75097005-23ad-4e28-994b-91fdf414b205", Id = 3, Value = 250.0 },
                 new Charge { ChargeName = "Runfunk", Catecory = Catecory.Sonstiges, TimeInterval = TimeInterval.vierteljährlich, UserId = "75097005-23ad-4e28-994b-91fdf414b205", Id = 4, Value = 42 },

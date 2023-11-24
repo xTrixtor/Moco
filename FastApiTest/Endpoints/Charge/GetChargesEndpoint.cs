@@ -31,7 +31,7 @@ namespace MocoApi.Endpoints.Charge
     public record GetChargesRequest
     {
         [FromClaim("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier")]
-        public string UserId { get; set; }
+        public string? UserId { get; set; }
     }
 
     public record GetChargesResponse

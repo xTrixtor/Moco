@@ -5,7 +5,7 @@ namespace MocoApi.Extensions
 {
     public static class CreateDtoExtension
     {
-        public static Charge Prepare(this ChargeDto dto)
+        public static Charge Prepare(this ChargeDto dto, string userId)
         {
             return new Charge
             {
@@ -14,13 +14,13 @@ namespace MocoApi.Extensions
                 Catecory = dto.Catecory,
                 Value = dto.Value,
                 TimeInterval = dto.TimeInterval,
-                UserId = dto.UserId,
+                UserId = userId,
             };
         }
 
-        public static async Task<Charge> PrepareAddAsync(this ChargeDto dto, MoCoContext moCoContext)
+        public static async Task<Charge> PrepareAddAsync(this ChargeDto dto, MoCoContext moCoContext, string userId)
         {
-            var charge = dto.Prepare();
+            var charge = dto.Prepare(userId);
             await moCoContext.Charges.AddAsync(charge);
             return charge;
         }

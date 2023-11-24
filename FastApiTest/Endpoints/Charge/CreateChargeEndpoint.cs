@@ -22,7 +22,7 @@ namespace MocoApi.Endpoints.Charge
         {
             using(var dbContext = new MoCoContext())
             {
-                var charge = await req.CChargeDto.PrepareAddAsync(dbContext);
+                var charge = await req.ChargeDto.PrepareAddAsync(dbContext, req.UserId);
                 await dbContext.SaveChangesAsync();
             }
 
@@ -31,7 +31,9 @@ namespace MocoApi.Endpoints.Charge
     }
     public record CreateChargeRequest
     {
-        public required ChargeDto CChargeDto { get; set; }
+        [FromClaim("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier")]
+        public string? UserId { get; set; }
+        public required ChargeDto ChargeDto { get; set; }
     }
 
     public record CreateChargeRespone

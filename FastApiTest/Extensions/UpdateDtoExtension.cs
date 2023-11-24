@@ -8,7 +8,7 @@ namespace MocoApi.Extensions
     {
         public static async Task<Charge> Update(this ChargeDto dto, MoCoContext dbContext)
         {
-            var target = await dbContext.Charges.FindAsync(dto.Id);
+            var target = await dbContext.Charges.FirstOrDefaultAsync(x => x.Id.Equals(dto.Id));
             if (target is null)
                 throw new Exception("Charge data couldnt be found");
 
@@ -20,7 +20,7 @@ namespace MocoApi.Extensions
 
         public static async Task<Revenue> Update(this RevenueDto dto, MoCoContext dbContext)
         {
-            var target = await dbContext.Revenue.FindAsync(dto.Id);
+            var target = await dbContext.Revenue.FirstOrDefaultAsync(x => x.Id.Equals(dto.Id));
             if (target is null)
                 throw new Exception("Revenue data couldnt be found");
 

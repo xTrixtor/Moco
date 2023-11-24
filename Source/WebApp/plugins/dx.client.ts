@@ -3,7 +3,9 @@ import DxPieChart, {
     DxLabel,
     DxLegend,
   } from 'devextreme-vue/pie-chart';
-  import {DxDataGrid} from 'devextreme-vue/data-grid';
+  import {
+    DxDataGrid, DxColumn, DxPaging, DxPager,
+  } from 'devextreme-vue/data-grid';
 
 export default defineNuxtPlugin((nuxtApp) => {
     nuxtApp.vueApp
@@ -13,5 +15,6 @@ export default defineNuxtPlugin((nuxtApp) => {
       .component("DxLabel", DxLabel)
       .component("DxLegend", DxLegend)
       
-      .component("DxDataGrid",DxDataGrid)
+      .component("DxDataGrid", DxDataGrid)
+      .component("DxColumn", DxColumn)
 });
