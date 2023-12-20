@@ -17,11 +17,6 @@
         :prop="tschema.Property"
         :label="tschema.Name"
       />
-      <el-table-column prop="catecory" label="Kategorie">
-        <template #default="scope">
-          <span>{{ Catecory[scope.row.catecory] }}</span>
-        </template>
-      </el-table-column>
     </el-table>
     <template #footer>
       <span class="dialog-footer">
@@ -32,7 +27,7 @@
 </template>
 
 <script setup lang="ts">
-import { Catecory, ChargeDto } from "~/stores/apiClient";
+import { ChargeDto } from "~/stores/apiClient";
 import type { TableColumnCtx } from "element-plus";
 
 interface ChargeCardProps {

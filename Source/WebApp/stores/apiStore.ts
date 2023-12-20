@@ -10,6 +10,12 @@ import {
   LoginClient,
   RefreshClient,
   IRefreshClient,
+  IBudgetClient,
+  BudgetClient,
+  FixedcostClient,
+  IFixedcostClient,
+  GroupcostClient,
+  IGroupcostClient
 } from "./apiClient";
 
 export const useApiStore = defineStore("api", {
@@ -23,11 +29,20 @@ export const useApiStore = defineStore("api", {
     RevenueClient(): IRevenueClient {
       return new RevenueClient();
     },
+    BudgetClient(): IBudgetClient{
+      return new BudgetClient;
+    },
     ChargeClient(): IChargeClient {
       return new ChargeClient();
     },
     RefreshClient(): IRefreshClient {
       return new RefreshClient();
     },
+    FixedcostClient(): IFixedcostClient{
+      return new FixedcostClient();
+    },
+    GroupcostClient(): IGroupcostClient{
+      return new GroupcostClient();
+    }
   },
 });

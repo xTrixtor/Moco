@@ -1,5 +1,5 @@
-﻿using MocoApi.Models.Moco.Resource;
-using System.Runtime.CompilerServices;
+﻿using MocoApi.Extensions;
+using MocoApi.Models.Moco.Resource;
 
 namespace MocoApi.Models.Moco.Dto
 {
@@ -13,12 +13,14 @@ namespace MocoApi.Models.Moco.Dto
         {
             Id = budget.Id;
             Name = budget.Name;
-            Value = budget.Value;
+            Limit = budget.Limit;
             UserId = budget.UserId;
+            Charges = budget.Charges?.Select(x => x.asDto()).ToArray();
         }
         public int Id { get; set; }
         public string Name { get; set; }
-        public double Value { get; set; }
+        public ChargeDto[]? Charges { get; set; }
+        public double Limit { get; set; }
         public string UserId { get; set; }
     }
 }

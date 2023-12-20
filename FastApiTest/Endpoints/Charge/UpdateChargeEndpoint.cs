@@ -15,7 +15,7 @@ namespace MocoApi.Endpoints.Charge
             {
                 s.Summary = "Updates Charge Data";
                 s.Description = "Updates ";
-                s.ExampleRequest = new UpdateChargeRequest { UChargeDto = new ChargeDto { ChargeName = "test", Catecory = Catecory.Vertraglich, Id = 1, TimeInterval = TimeInterval.wöchentlich, UserId = "asdf" } };
+                s.ExampleRequest = new UpdateChargeRequest { UChargeDto = new ChargeDto { ChargeName = "test", Id = 1, TimeInterval = TimeInterval.wöchentlich, UserId = "asdf" } };
                 s.ResponseExamples[200] = new UpdateChargeResponse { Success = true };
                 s.Responses[200] = "Returns true";
                 s.Responses[403] = "Return false";

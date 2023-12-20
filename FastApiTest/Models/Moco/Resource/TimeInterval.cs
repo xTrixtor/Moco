@@ -2,6 +2,7 @@
 {
     public enum TimeInterval
     {
+        einmalig,
         wöchentlich,
         zweiwöchtentlich,
         monatlich,

@@ -7,10 +7,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace MocoApi.Migrations
+namespace Moco.Api.Migrations
 {
     [DbContext(typeof(MoCoContext))]
-    [Migration("20231020193323_InitialCreate")]
+    [Migration("20231215013832_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -19,9 +19,64 @@ namespace MocoApi.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "7.0.12")
+                .HasAnnotation("Proxies:ChangeTracking", false)
+                .HasAnnotation("Proxies:CheckEquality", false)
+                .HasAnnotation("Proxies:LazyLoading", true)
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
-            modelBuilder.Entity("MocoApi.Models.Moco.Resource.Budget", b =>
+            modelBuilder.Entity("Moco.Api.Models.Moco.Dto.FixedCost", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<int>("GroupCostId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<int>("TimeInterval")
+                        .HasColumnType("int");
+
+                    b.Property<double>("Value")
+                        .HasColumnType("double");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("GroupCostId");
+
+                    b.ToTable("FixedCosts");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            GroupCostId = 1,
+                            Name = "Miete",
+                            TimeInterval = 3,
+                            Value = 670.0
+                        },
+                        new
+                        {
+                            Id = 2,
+                            GroupCostId = 1,
+                            Name = "Strom",
+                            TimeInterval = 3,
+                            Value = 45.0
+                        },
+                        new
+                        {
+                            Id = 3,
+                            GroupCostId = 2,
+                            Name = "Lebenversicherung",
+                            TimeInterval = 3,
+                            Value = 250.0
+                        });
+                });
+
+            modelBuilder.Entity("Moco.Api.Models.Moco.Dto.GroupCost", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -35,8 +90,41 @@ namespace MocoApi.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<double>("Value")
+                    b.HasKey("Id");
+
+                    b.ToTable("GroupCosts");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Wohnen",
+                            UserId = "75097005-23ad-4e28-994b-91fdf414b205"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "Investieren",
+                            UserId = "75097005-23ad-4e28-994b-91fdf414b205"
+                        });
+                });
+
+            modelBuilder.Entity("MocoApi.Models.Moco.Resource.Budget", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<double>("Limit")
                         .HasColumnType("double");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("longtext");
 
                     b.HasKey("Id");
 
@@ -46,23 +134,30 @@ namespace MocoApi.Migrations
                         new
                         {
                             Id = 1,
-                            Name = "Essen",
-                            UserId = "75097005-23ad-4e28-994b-91fdf414b205",
-                            Value = 300.0
+                            Limit = 300.0,
+                            Name = "Haushalt",
+                            UserId = "75097005-23ad-4e28-994b-91fdf414b205"
                         },
                         new
                         {
                             Id = 2,
+                            Limit = 150.0,
                             Name = "Tanken",
-                            UserId = "75097005-23ad-4e28-994b-91fdf414b205",
-                            Value = 150.0
+                            UserId = "75097005-23ad-4e28-994b-91fdf414b205"
                         },
                         new
                         {
                             Id = 3,
+                            Limit = 100.0,
                             Name = "Aktivität",
-                            UserId = "75097005-23ad-4e28-994b-91fdf414b205",
-                            Value = 100.0
+                            UserId = "75097005-23ad-4e28-994b-91fdf414b205"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Limit = 100.0,
+                            Name = "Luxus",
+                            UserId = "75097005-23ad-4e28-994b-91fdf414b205"
                         });
                 });
 
@@ -72,7 +167,7 @@ namespace MocoApi.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<int>("Catecory")
+                    b.Property<int>("BudgetId")
                         .HasColumnType("int");
 
                     b.Property<string>("ChargeName")
@@ -91,42 +186,35 @@ namespace MocoApi.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("BudgetId");
+
                     b.ToTable("Charges");
 
                     b.HasData(
                         new
                         {
-                            Id = 1,
-                            Catecory = 12,
-                            ChargeName = "Dildo",
-                            TimeInterval = 2,
-                            UserId = "75097005-23ad-4e28-994b-91fdf414b205",
-                            Value = 123.31999999999999
-                        },
-                        new
-                        {
                             Id = 2,
-                            Catecory = 10,
-                            ChargeName = "Miete",
-                            TimeInterval = 2,
+                            BudgetId = 1,
+                            ChargeName = "Rewe",
+                            TimeInterval = 3,
                             UserId = "75097005-23ad-4e28-994b-91fdf414b205",
                             Value = 23.5
                         },
                         new
                         {
                             Id = 3,
-                            Catecory = 7,
+                            BudgetId = 1,
                             ChargeName = "Investieren",
-                            TimeInterval = 2,
+                            TimeInterval = 3,
                             UserId = "75097005-23ad-4e28-994b-91fdf414b205",
                             Value = 250.0
                         },
                         new
                         {
                             Id = 4,
-                            Catecory = 0,
+                            BudgetId = 1,
                             ChargeName = "Runfunk",
-                            TimeInterval = 3,
+                            TimeInterval = 4,
                             UserId = "75097005-23ad-4e28-994b-91fdf414b205",
                             Value = 42.0
                         });
@@ -207,6 +295,34 @@ namespace MocoApi.Migrations
                             UserId = "75097005-23ad-4e28-994b-91fdf414b205",
                             Value = 2500.2199999999998
                         });
+                });
+
+            modelBuilder.Entity("Moco.Api.Models.Moco.Dto.FixedCost", b =>
+                {
+                    b.HasOne("Moco.Api.Models.Moco.Dto.GroupCost", "GroupCost")
+                        .WithMany("FixedCosts")
+                        .HasForeignKey("GroupCostId");
+
+                    b.Navigation("GroupCost");
+                });
+
+            modelBuilder.Entity("MocoApi.Models.Moco.Resource.Charge", b =>
+                {
+                    b.HasOne("MocoApi.Models.Moco.Resource.Budget", "Budget")
+                        .WithMany("Charges")
+                        .HasForeignKey("BudgetId");
+
+                    b.Navigation("Budget");
+                });
+
+            modelBuilder.Entity("Moco.Api.Models.Moco.Dto.GroupCost", b =>
+                {
+                    b.Navigation("FixedCosts");
+                });
+
+            modelBuilder.Entity("MocoApi.Models.Moco.Resource.Budget", b =>
+                {
+                    b.Navigation("Charges");
                 });
 #pragma warning restore 612, 618
         }

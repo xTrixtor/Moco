@@ -6,6 +6,7 @@ using Keycloak.AuthServices.Authorization;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using NSwag;
 using MocoApi.Handler;
+using Moco.Api.Factories.Db;
 
 IConfigurationRoot config = new ConfigurationBuilder()
     .AddJsonFile("appsettings.json")
@@ -73,6 +74,7 @@ bld.Services.AddHttpClient("adminKeycloak").AddHttpMessageHandler<CachedAdminTok
 bld.Services.AddSingleton<IConfiguration>(bld.Configuration);
 bld.Services.AddScoped<KeycloakServices>();
 bld.Services.AddMemoryCache();
+bld.Services.AddSingleton<MocoContextFactory>();
 
 var app = bld.Build();
 
@@ -92,8 +94,18 @@ app.UseAuthentication() //add this
    .UseSwaggerGen()
    .UseDefaultExceptionHandler();
 
-app.Run();
-
+#if DEBUGCLEAN
+{
+using(var dbContext = new MoCoContext())
+{
+    dbContext.Database.EnsureDeleted();
+    dbContext.Database.EnsureCreated();
+}
+}
+#endif
+{
+    app.Run();
+}
 
 
 enum AppsettingsSection

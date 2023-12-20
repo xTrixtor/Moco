@@ -2,9 +2,8 @@
   <button
     :disabled="props.disabled"
     class="bg-brand px-4 py-2 text-white rounded-sm shadow-sm border-2 border-gray-300"
-    :class="
-      props.disabled ? 'bg-slate-300 cursor-not-allowed duration-500' : ''
-    "
+    :class="[props.disabled ? ' bg-slate-300 cursor-not-allowed duration-500 ' : '', props.styling?props.styling:'']"
+    
     @click="$props.onClick()"
   >
     {{ props.btnTxt }}
@@ -15,7 +14,7 @@
 interface ButtonProps {
   btnTxt: string;
   onClick?: any;
-  style?: string;
+  styling?: string;
   disabled?: boolean;
 }
 const props = defineProps<ButtonProps>();

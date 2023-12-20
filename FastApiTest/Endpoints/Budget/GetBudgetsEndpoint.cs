@@ -19,12 +19,8 @@ namespace MocoApi.Endpoints.Budget
             {
                 try
                 {
-                    IQueryable<Models.Moco.Resource.Budget> query = dbContext.Budgets;
-                    if(req.UserId is not null)
-                        query = query.Where(b => b.UserId == req.UserId);
-
-                    var result = await query.Select(x => x.asDto()).ToListAsync();
-                    await SendAsync(new GetBudgetsResponse { Budgets = result });
+                    var budgets = dbContext.Budgets.Where(x => x.UserId == req.UserId).ToList().Select(x => x.asDto()).ToList();
+                    await SendAsync(new GetBudgetsResponse { Budgets = budgets });
                 }
                 catch (Exception)
                 {
@@ -35,7 +31,7 @@ namespace MocoApi.Endpoints.Budget
     }
     public record GetBudgetsRequest
     {
-        [FromHeader]
+        [FromClaim("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier")]
         public string UserId { get; set; }
     }
     public record GetBudgetsResponse

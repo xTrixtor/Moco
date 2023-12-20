@@ -14,7 +14,7 @@ namespace MocoApi.Endpoints.Budget
             {
                 s.Summary = "Updates Charge Data";
                 s.Description = "Updates ";
-                s.ExampleRequest = new UpdateBudgetRequest { UBudgetDto = new BudgetDto { Name = "Essen", Id = 1, Value= 300 } };
+                s.ExampleRequest = new UpdateBudgetRequest { UBudgetDto = new BudgetDto { Name = "Essen", Id = 1, Limit= 300 } };
                 s.ResponseExamples[200] = new UpdateBudgetResponse { Success = true };
                 s.Responses[200] = "Returns true";
                 s.Responses[403] = "Return false";

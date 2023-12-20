@@ -1,6 +1,7 @@
 ﻿using MocoApi.Extensions;
 using MocoApi.Models.Moco.Dto;
 using FastEndpoints;
+using MocoApi.Models.Moco.Resource;
 
 namespace MocoApi.Endpoints.Charge
 {

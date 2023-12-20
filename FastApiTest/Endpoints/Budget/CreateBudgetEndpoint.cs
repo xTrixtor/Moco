@@ -15,7 +15,7 @@ namespace MocoApi.Endpoints.Budget
         {
             using (var dbContext = new MoCoContext())
             {
-                var charge = await req.Budget.PrepareAddAsync(dbContext);
+                var charge = await req.Budget.PrepareAddAsync(dbContext, req.UserId);
                 await dbContext.SaveChangesAsync();
             }
             await SendAsync(new CBudgetResponse { Budget = req.Budget, Success = true });
@@ -24,6 +24,8 @@ namespace MocoApi.Endpoints.Budget
 
     public record CBudgetRequest
     {
+        [FromClaim("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier")]
+        public string UserId { get; set; }
         public required BudgetDto Budget { get; set; }
     }
     public record CBudgetResponse

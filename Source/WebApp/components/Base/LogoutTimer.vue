@@ -3,7 +3,7 @@
     v-if="hover"
     @mouseover="hover = true"
     @mouseleave="hover = false"
-    class="border-2 border-white flex w-full px-2 bg-brand/50 justify-center items-center rounded-lg my-2 cursor-pointer"
+    class="border-2 border-white flex w-[130px] px-2 bg-brand/50 justify-center items-center rounded-lg my-2 cursor-pointer"
   >
     <div class="divide-x-2 flex h-full items-center">
       <p
@@ -16,6 +16,7 @@
         <Icon
           name="teenyicons:refresh-solid"
           size="1.5rem"
+          class="hover:rotate-180 duration-300"
           :class="refreshLoading ? 'animate-spin' : ''"
           @click="() => handleRefreshClick()"
         />
@@ -26,7 +27,7 @@
     v-else
     @mouseover="hover = true"
     @mouseleave="hover = false"
-    class="border-2 border-white flex w-full px-2 bg-white/20 justify-center items-center rounded-lg my-2"
+    class="border-2 border-white flex w-[130px] px-2 bg-white/20 justify-center items-center rounded-lg my-2"
   >
     <div v-if="text" class="divide-x-2 flex h-full items-center">
       <p class="text-white font-bold flex pr-2">Logout</p>

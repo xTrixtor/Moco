@@ -2,6 +2,7 @@ import { defineStore } from "pinia";
 import { ChargesByTimeIntervalDictionary } from "~/pages/index.vue";
 import { ChargeDto, TimeInterval } from "./apiClient";
 import { useApiStore } from "./apiStore";
+import { useBudgetStore } from "./budgetStore";
 
 export const useChargeStore = defineStore("charge", {
   state: () => {
@@ -24,6 +25,9 @@ export const useChargeStore = defineStore("charge", {
         await useApiStore().ChargeClient.getChargesEndpoint();
     if (response.charges) this.setCharges(response.charges);
     this.groupCharges();
+    },
+    async deleteCharge(budgetId: number, chargeId: number){
+      useBudgetStore().deleteChangeFromBudget(budgetId, chargeId)
     },
     groupCharges(){
       const groupedCharges = useGroupBy(

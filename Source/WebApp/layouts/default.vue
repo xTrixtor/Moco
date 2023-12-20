@@ -6,8 +6,10 @@
     </Transition>
 
     <div v-else>
-      <Navbar />
-      <slot />
+      <Navbar/>
+      <div class="mt-4">
+        <slot/>
+      </div>
     </div>
   </BaseMocoErrorBoundry>
 </template>

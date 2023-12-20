@@ -13,13 +13,13 @@
         <CustomInput
           type="text"
           placeholder="Username"
-          styling="!bg-secondary !text-white"
+          styling="!border-secondary !text-white"
           v-model="user.username"
         />
         <CustomInput
           type="password"
           placeholder="Password"
-          styling="!bg-secondary !text-white"
+          styling="!border-secondary !text-white"
           v-model="user.password"
         />
         <BasePrimaryButton btnTxt="Anmelden" :onClick="handleLogin" />
