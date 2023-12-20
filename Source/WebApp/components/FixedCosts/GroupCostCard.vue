@@ -13,7 +13,7 @@
     </div>
     <FixedCostTable :fixedcosts="props.groupCost.fixedCosts ?? []" />
     <div
-      class="w-full bg-yellow-100 py-1 flex justify-between px-4 font-medium text-sm rounded-bl-3xl rounded-br-md"
+      class="w-full bg-yellow-100 py-1 flex justify-between px-4 font-medium text-sm rounded-bl-[2rem] rounded-br-md"
     >
       <div>Summe:</div>
       <div>

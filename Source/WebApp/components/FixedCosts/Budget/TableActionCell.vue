@@ -1,0 +1,51 @@
+<template>
+    <div class="w-full flex justify-end items-center">
+        <Icon class="flex justify-center items-center cursor-pointer text-green-600 hover:!text-green-400 duration-300 mr-1" size="1.5rem" name="ant-design:edit-outlined" @click="() => (modalVis = true)"/>
+        <Icon class="flex justify-center items-center cursor-pointer text-red-600 hover:!text-red-400 duration-300 mr-1" size="1.5rem" name="material-symbols:delete-outline" @click="confirmDelete"/>
+    </div>
+    <FixedCostsBudgetEditModal v-model="modalVis" :budget-dto="props.dto"/>
+</template>
+
+<script setup lang="ts">
+
+
+interface SpecialCellProps{
+    dto:any;
+    label:string;
+    deleteApiCall: () => void;
+    updateApiCall?:Function;
+}
+
+const props = defineProps<SpecialCellProps>()
+const modalVis = ref(false);
+
+
+const confirmDelete = () =>{
+    ElMessageBox.confirm(
+    `Willst du ${props.label} wirklich löschen?`,
+    'Warning',
+    {
+      confirmButtonText: 'OK',
+      cancelButtonText: 'Schließen',
+      type: 'warning',
+    }
+  )
+    .then(async() => {
+        await props.deleteApiCall();
+      ElMessage({
+        type: 'success',
+        message: 'Erfolgreich gelöscht',
+      })
+    })
+    .catch(() => {
+      ElMessage({
+        type: 'info',
+        message: 'Leider ist beim Löschen etwas schief gelaufen',
+      })
+    })
+}
+</script>
+
+<style>
+
+</style>
