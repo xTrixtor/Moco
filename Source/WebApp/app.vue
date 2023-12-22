@@ -5,4 +5,10 @@ import { useUserStore } from './stores/userStore';
   </NuxtLayout>
 </template>
 
-<script setup></script>
+<script setup>
+import { useUtilStore } from './stores/utilStore';
+
+onMounted(() => {
+  useUtilStore().calculateIsMobil();
+})
+</script>

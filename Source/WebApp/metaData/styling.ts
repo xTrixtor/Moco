@@ -1,1 +1,1 @@
-export const cellStyling = "mx-1 w-1/3 flex justify-start text-sm ";
+export const cellStyling = "px-1 flex justify-start text-sm";

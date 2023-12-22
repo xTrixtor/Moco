@@ -13,14 +13,7 @@
         <div class="flex">
           <p class="font-semibold">Summe:</p>
           <p class="px-2">
-            {{
-              useSumBy(
-                props.charges,
-                function (o: ChargeDto) {
-                  return o.value;
-                }
-              )
-            }}
+            a
             €
           </p>
         </div>
@@ -54,8 +47,6 @@ interface ChargeCardProps {
 const props = defineProps<ChargeCardProps>();
 
 const modalVis = ref(false);
-onMounted(() => {
-});
 </script>
 
 <style scoped></style>

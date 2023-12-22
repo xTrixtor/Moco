@@ -1,6 +1,6 @@
 <template>
   <el-dialog
-    v-if="$props.modelValue"
+    v-if="props.modelValue"
     v-model="props.modelValue"
     :title="'Hinzufügen von Kosten'"
     width="30%"
@@ -13,6 +13,7 @@
           v-model="fixedCostCDto.name"
           type="text"
           placeholder="Name"
+          :clearable="true"
         />
       </div>
       <div class="flex">
@@ -21,6 +22,7 @@
           v-model="fixedCostCDto.value"
           type="number"
           placeholder="Kosten"
+          :clearable="true"
         />
       </div>
       <div class="flex">
@@ -54,6 +56,7 @@
                   placeholder="Neue Gruppierung"
                   class="flex-1"
                   :styling="'border-none'"
+                  :clearable="true"
                   />
                   <Icon name="gridicons:add-outline" @click="onConfirm" class="ml-2 text-2xl cursor-pointer " :class="newGroupCostName?'duration-500 rotate-180 text-green-800':'text-zinc-300/75'" />
                   <Icon name="ic:round-clear" @click="clear" class="ml-2 text-2xl cursor-pointer duration-300 hover:rotate-90 hover:text-red-600"/>
@@ -114,7 +117,7 @@ const props = defineProps<AddChargeModalProps>();
 const emit = defineEmits(["update:modelValue"]);
 
 const data = useVModel(props, "modelValue", emit);
-const fixedCostCDto = reactive<CreateFixedCDto>({});
+let fixedCostCDto = reactive<CreateFixedCDto>({});
 const newGroupCostName = ref<String>("");
 
 const isAdding = ref(false)
@@ -139,7 +142,7 @@ const clear = () => {
 
 const handleCreateCharge = async () => {
   await useApiStore().FixedcostClient.createFixedCostEndpoint(fixedCostCDto);
-  fixedCostCDto.value = 0;
+  fixedCostCDto = {} as CreateFixedCDto;
   await useFixedCostStore().fetch();
   data.value = false;
 };
@@ -153,6 +156,12 @@ const createTimeIntervalSelectOptions = (): SelectOption[] => {
     return { label: TimeInterval[+key], value: +key } as SelectOption;
   });
 };
+
+onKeyStroke("Enter", async (e) => {
+    if(props.modelValue){
+      await handleCreateCharge();
+    }
+  });
 
 onKeyStroke("Esc", async (e) => {
   data.value = false;

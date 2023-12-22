@@ -12,7 +12,8 @@
           <BaseCustomInput
             v-model="budgetUDto.name"
             type="text"
-            :placeholder="budgetUDto.name"
+            :placeholder="initialState.name"
+            :clearable="true"
           />
         </div>
         <div class="flex">
@@ -20,7 +21,8 @@
           <BaseCustomInput
             v-model="budgetUDto.limit"
             type="number"
-            :placeholder="budgetUDto.limit"
+            :placeholder="initialState.limit"
+            :clearable="true"
           />
         </div>
         <div class="flex flex-row-reverse justify-between">
@@ -32,14 +34,13 @@
           </div>
         </div>
       </div>
-      {{ props.budgetDto }}
     </el-dialog>
   </template>
   
   <script setup lang="ts">
-  import { BudgetDto } from "~/stores/apiClient";
+  import { BudgetDto, UpdateBudgetRequest } from "~/stores/apiClient";
   import { useApiStore } from "~/stores/apiStore";
-  import { useFixedCostStore } from "~/stores/fixedCostStore";
+  import { useBudgetStore } from "~/stores/budgetStore";
   
   interface ChargeCardProps {
     modelValue: boolean;
@@ -52,14 +53,22 @@
   const budgetUDto = reactive<BudgetDto>({...props.budgetDto})
   const isDirty = ref(false)
   
+  const initialState = props.budgetDto;
+
   const handleUpdateCharge = async() => {
-      await useApiStore().FixedcostClient.updateFixedCostEndpoint(budgetUDto)
-      await useFixedCostStore().fetch();
+      await useApiStore().BudgetClient.updateButgetEndpoint({uBudgetDto:budgetUDto} as UpdateBudgetRequest)
+      await useBudgetStore().fetch();
       data.value = false;
   }
 
   onKeyStroke("Esc", async (e) => {
-    data.value = false;
+    if(props.modelValue)
+      data.value = false;
+  });
+
+  onKeyStroke("Enter", async (e) => {
+    if(props.modelValue)
+      await handleUpdateCharge();
   });
   
   const handleClose = () => {
@@ -74,7 +83,7 @@
       let isDirty = false;
       const compareProperties = ["name", "limit"]
       compareProperties.forEach(prop => {
-          if(newCharge[prop] != props.fixedcost[prop]){
+          if(newCharge[prop] != props.budgetDto[prop]){
               isDirty = true;
           }
       });

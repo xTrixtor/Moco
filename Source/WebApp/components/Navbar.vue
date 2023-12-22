@@ -1,5 +1,5 @@
-<template>
-  <div v-if="isMobil" class="flex-center justify-between !h-[70px] !bg-secondary px-4">
+<template >
+  <div v-if="isMobil" class="flex-center justify-between !h-[70px] !bg-secondary px-4" id="navbar">
     <NuxtLink  to="/">
       <NuxtImg class="h-12" src="/logo/MoFo-Logo-Hor.png" alt="Moco Logo" />
     </NuxtLink>
@@ -11,6 +11,7 @@
   </div>
   <el-menu
     v-else
+    id="navbar"
     :default-active="activeIndex"
     mode="horizontal"
     :ellipsis="false"
@@ -24,7 +25,9 @@
     </el-menu-item>
     <div class="flex-1 flex justify-center items-center">
       <el-menu-item v-for="(navItem,key) in navBarItems" :index="`${key}`">
-        <NuxtLink class="font-bold xl:!text-lg !text-brand" :to="navItem.link">{{navItem.name}}</NuxtLink>
+        <NuxtLink :to="navItem.link">
+          <p class="font-bold xl:!text-lg !text-brand underlineAnimation before:bg-brand hover:bg-none">{{ navItem.name }}</p>
+        </NuxtLink>
       </el-menu-item>
     </div>
     <div class="flex h-[80%] justinfy-center mx-2">
@@ -54,6 +57,7 @@
 import { ref } from "vue";
 import { useUserStore } from "~/stores/userStore";
 import { navBarItems } from "../metaData/navaBarData"
+import { useUtilStore } from "~/stores/utilStore";
 
 const activeIndex = ref("1");
 const handleSelect = (key: string, keyPath: string[]) => {
@@ -63,16 +67,19 @@ const logout = () => {
   useUserStore().logout();
 };
 
-const isMobil = computed(() => calculateIfMobil())
-const mobilMenuClick = ref(false);
+const { isMobil } = useUtilStore();
 
-const calculateIfMobil = (): boolean => {
-  return screen.width < 768
-}
+const mobilMenuClick = ref(false);
 </script>
 
 <style>
 .el-sub-menu__icon-arrow {
   @apply !text-white;
+}
+.el-menu-item:hover{
+  @apply !bg-white/5;
+}
+.el-menu--horizontal>.el-sub-menu .el-sub-menu__title:hover {
+  @apply !bg-white/5;
 }
 </style>

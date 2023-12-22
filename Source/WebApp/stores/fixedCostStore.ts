@@ -1,6 +1,7 @@
 import { defineStore } from "pinia";
 import {GroupCostDto, } from "./apiClient";
 import { useApiStore } from "./apiStore";
+import {createMonthlyGroupCost} from "@/utils/chargeUtils"
 
 export const useFixedCostStore = defineStore("fixedCost", {
   state: () => {
@@ -19,9 +20,9 @@ export const useFixedCostStore = defineStore("fixedCost", {
     async fetch(): Promise<GroupCostDto[]> {
       var response = await useApiStore().FixedcostClient.getAllFixedCostsEndpoint();
       this.setGroupCostOptions(response.fixedCostGroups??[]);
-      this.groupCosts = response.fixedCostGroups??[];
+      this.groupCosts = createMonthlyGroupCost(response.fixedCostGroups??[]);
 
-      return response.fixedCostGroups?? [];
+      return this.groupCosts;
     },
     setGroupCostOptions(groupCosts: GroupCostDto[]) {
       this.groupCostOptions = groupCosts.map<GroupCostOption>((x) => {

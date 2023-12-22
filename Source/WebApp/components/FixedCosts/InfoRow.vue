@@ -1,6 +1,6 @@
 <template>
-    <div class="h-full w-full flex justify-end border-4 rounded-lg rounded-bl-[2rem] rounded-tr-[2rem] border-brand px-4">
-        <div class="h-full w-48 flex flex-col p-2">
+    <div class="h-[15vh] w-full flex justify-end border-2 rounded-lg rounded-bl-[2rem] rounded-tr-[2rem] px-4 my-4 shadow-lg">
+        <div class="h-full w-48 flex justify-center flex-col">
             <div id="addButton" :class="baseButtonStyling" class="bg-indigo-500 hover:bg-indigo-400 " @click="() => addBudgetModalVis = true">
                 Budget
                 <Icon name="gridicons:add-outline" class="ml-2 text-2xl duration-500"/>

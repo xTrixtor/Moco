@@ -7,9 +7,10 @@
 
     <div v-else>
       <Navbar/>
-      <div class="mt-4">
+      <div class="px-4 bg-slate-50">
         <slot/>
       </div>
+      <BaseScrollButton/>
     </div>
   </BaseMocoErrorBoundry>
 </template>

@@ -13,6 +13,7 @@
             v-model="createBudgetDto.name"
             type="text"
             placeholder="Name"
+            :clearable="true"
           />
         </div>
         <div class="flex">
@@ -21,6 +22,7 @@
             v-model="createBudgetDto.limit"
             type="number"
             placeholder="Limit"
+            :clearable="true"
           />
         </div>
         <div
@@ -71,6 +73,11 @@ BudgetDto,
     await useBudgetStore().fetch();
     data.value = false;
   };
+
+  onKeyStroke("Enter", async (e) => {
+    if(props.modelValue)
+      await handleCreateCharge();
+  });
 
   onKeyStroke("Esc", async (e) => {
     data.value = false;
