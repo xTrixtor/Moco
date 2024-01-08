@@ -1,6 +1,6 @@
 ﻿using FastEndpoints;
 using Moco.Api.Endpoints.FixedCost;
-using Moco.Api.Models.Moco.Resource;
+using Moco.Api.Models.Moco.Dto;
 using MocoApi.Extensions;
 
 namespace Moco.Api.Endpoints.GroupCost

@@ -1,19 +1,19 @@
-﻿using Moco.Api.Models.Moco.Dto;
+﻿using Moco.Api.Models.Moco.Resource;
 using MocoApi.Models.Moco.Resource;
 
-namespace Moco.Api.Models.Moco.Resource
+namespace Moco.Api.Models.Moco.Dto
 {
     public class FixedCostDto
     {
         public FixedCostDto()
         {
-            
+
         }
         public FixedCostDto(FixedCost fixedCost)
         {
             Id = fixedCost.Id;
             Name = fixedCost.Name;
-            Value = fixedCost.Value;    
+            Value = fixedCost.Value;
             GroupCostId = fixedCost.GroupCostId;
             TimeInterval = fixedCost.TimeInterval;
         }

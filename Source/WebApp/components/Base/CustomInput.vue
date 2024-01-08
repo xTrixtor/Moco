@@ -3,7 +3,7 @@ import { mergeProps } from 'nuxt/dist/app/compat/capi';
   <div class="w-full flex flex-col">
     <div class="flex-center relative">
       <input
-      class="border-2 p-2 border-b-2 border-t-0 border-x-0 rounded-sm w-full bg-transparent font-semibold outline-none focus:border-b-brand flex-1 "
+      class="border-2 p-2 border-b-2 border-t-0 border-x-0 rounded-sm w-full bg-transparent font-semibold outline-none focus:border-b-primary flex-1 text-white"
       :class="props.styling"
       :placeholder="props.placeholder"
       @input="handleInputChange"

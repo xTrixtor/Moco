@@ -1,5 +1,9 @@
 ﻿using FastEndpoints;
+using Microsoft.EntityFrameworkCore;
+using Moco.Api.Factories.Db;
 using MocoApi.DataStore;
+using MocoApi.Extensions;
+using MocoApi.Models.Moco.Dto;
 using Newtonsoft.Json;
 using System.IdentityModel.Tokens.Jwt;
 
@@ -9,12 +13,14 @@ namespace MocoApi.Endpoints.User
     {
         private readonly IConfiguration configuration;
         private readonly KeycloakServices _keycloakServices;
+        private readonly MocoContextFactory mocoContextFactory;
         private KeycloakSettings keycloakSettings;
 
-        public LoginUserEndpoint(IConfiguration configuration, KeycloakServices keycloakServices)
+        public LoginUserEndpoint(IConfiguration configuration, KeycloakServices keycloakServices, MocoContextFactory mocoContextFactory)
         {
             this.configuration = configuration;
             this._keycloakServices = keycloakServices;
+            this.mocoContextFactory = mocoContextFactory;
         }
         public override void Configure()
         {
@@ -59,14 +65,20 @@ namespace MocoApi.Endpoints.User
             var timestampString = jwtSecurityToken.Claims.First(claim => claim.Type == "exp").Value;
             var expireDate = new DateTime();
             expireDate = expireDate.AddSeconds(long.Parse(timestampString)).AddHours(2);
-            await SendAsync(new()
+
+            using (var context = mocoContextFactory.CreateMocoContext())
             {
-                UserId = userId,
-                JWTToken = keyCloakResponse.access_token,
-                RefreshToken = keyCloakResponse.refresh_token,
-                Success = true,
-                ExpireTime = expireDate,
-            });
+                var userdb = await context.Users.FirstOrDefaultAsync(x => x.KeycloakUserId == userId);
+                await SendAsync(new()
+                {
+                    User = userdb.asDto(),
+                    JWTToken = keyCloakResponse.access_token,
+                    RefreshToken = keyCloakResponse.refresh_token,
+                    Success = true,
+                    ExpireTime = expireDate,
+                });;
+            }
+            
         }
     }
 
@@ -78,7 +90,7 @@ namespace MocoApi.Endpoints.User
 
     public record LoginResponse
     {
-        public string UserId { get; set; }
+        public UserDto User { get; set; }
         public bool Success { get; set; }
         public string JWTToken { get; set; }
         public string RefreshToken { get; set; }

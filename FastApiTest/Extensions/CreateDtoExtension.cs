@@ -1,7 +1,9 @@
 ﻿using Moco.Api.Endpoints.FixedCost;
 using Moco.Api.Endpoints.GroupCost;
+using Moco.Api.Extensions;
 using Moco.Api.Models.Moco.Dto;
 using Moco.Api.Models.Moco.Resource;
+using MocoApi.Endpoints.Charge;
 using MocoApi.Models.Moco.Dto;
 using MocoApi.Models.Moco.Resource;
 
@@ -9,22 +11,20 @@ namespace MocoApi.Extensions
 {
     public static class CreateDtoExtension
     {
-        public static Charge Prepare(this ChargeDto dto, string userId)
+        public static Charge Prepare(this ChargeCDto dto)
         {
-            return new  Charge
+            return new Charge
             {
-                Id = dto.Id,
                 ChargeName = dto.ChargeName,
-                BudgetId = dto.BudgetId,
                 Value = dto.Value,
-                TimeInterval = dto.TimeInterval,
-                UserId = userId,
-            };
+                BudgetId = dto.BudgetId,
+                CostInspectionId = dto.CostInspectionId
+            };  
         }
 
-        public static async Task<Charge> PrepareAddAsync(this ChargeDto dto, MoCoContext moCoContext, string userId)
+        public static async Task<Charge> PrepareAddAsync(this ChargeCDto dto, MoCoContext moCoContext)
         {
-            var charge = dto.Prepare(userId);
+            var charge = dto.Prepare();
             await moCoContext.Charges.AddAsync(charge);
             return charge;
         }
@@ -65,9 +65,9 @@ namespace MocoApi.Extensions
             return revenue;
         }
 
-        public static Person Prepare(this PersonDto dto)
+        public static User Prepare(this UserDto dto)
         {
-            return new Person
+            return new User
             {
                 Id = dto.Id,
                 Email = dto.Email,
@@ -79,10 +79,10 @@ namespace MocoApi.Extensions
             };
         }
 
-        public static async Task<Person> PrepareAddAsync(this PersonDto dto, MoCoContext moCoContext)
+        public static async Task<User> PrepareAddAsync(this UserDto dto, MoCoContext moCoContext)
         {
             var person = dto.Prepare();
-            await moCoContext.Persons.AddAsync(person);
+            await moCoContext.Users.AddAsync(person);
             return person;
         }
 
@@ -118,6 +118,24 @@ namespace MocoApi.Extensions
             var groupCost = dto.Prepare();
             await moCoContext.GroupCosts.AddAsync(groupCost);
             return groupCost;
+        }
+
+        public static CheckableFixedCost Prepare(this FixedCostDto dto, int costInspectionId)
+        {
+            return new CheckableFixedCost
+            {
+                FixedCostId = dto.Id,
+                CostInspectionId = costInspectionId,
+                IsChecked = false,
+                CreatedAt = DateTime.Now,
+            };
+        }
+
+        public static CheckableFixedCost Add(this FixedCostDto dto, MoCoContext moCoContext, int inspectionId)
+        {
+            var checkableFixedCost = dto.Prepare(inspectionId);
+            moCoContext.CheckableFixedCosts.Add(checkableFixedCost);
+            return checkableFixedCost;
         }
     }
 }

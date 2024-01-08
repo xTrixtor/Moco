@@ -1,10 +1,13 @@
 <template>
-  <div class="flex flex-col px-1 mt-2 mb-4 overflow-auto max-h-[30vh]" >
+  <div class="flex flex-col px-1 mt-2 overflow-auto max-h-[30vh]" >
     <div
       v-if="!$props.fixedcosts || props.fixedcosts.length === 0"
-      class="overflow-hidden"
+      class="overflow-hidden flex-center flex-col"
     >
-      <p class="text-center">Keine Daten</p>
+      <p class="text-center underlineAnimation w-1/2">Keine Daten</p>
+      <div id="addButton" class="w-full py-1 flex-center opacity-70 hover:opacity-100" @click="() => addFixedCostModalVis = true">
+            <Icon name="gridicons:add-outline" class="ml-2 text-xl duration-500 text-white"/>
+      </div>
     </div>
     <div v-else>
       <div
@@ -12,7 +15,7 @@
         :key="key"
         class="w-full py-1 flex border-b-2 border-slate-500"
         :class="[
-          key % 2 ? '!bg-indigo-100 border-y-0' : 'bg-indigo-200',
+          key % 2 ? '!bg-secondary-light border-y-0' : 'bg-secondary',
           key == 0 ? 'rounded-tr-2xl' : '',
         ]"
       >
@@ -27,17 +30,23 @@
           <TableActionCell :unique-key="`${cost.id}-${cost.name}-${key}`" :dto="cost" label="diese Kosten" :delete-api-call="() => deleteFixedcostById(cost.id)" :edit-modal-type="EditModalType.FixedCost" />
         </div>
       </div>
+      <div id="addButton" class="w-full py-1 flex-center opacity-70 hover:opacity-100" @click="() => addFixedCostModalVis = true">
+            <Icon name="gridicons:add-outline" class="text-xl duration-500 text-white"/>
+      </div>
     </div>
   </div>
+  <AddFixedCostModal v-model="addFixedCostModalVis" :group-cost="(groupCost as GroupCostDto)"/>
 </template>
 
 <script setup lang="ts">
-import { FixedCostDto } from "~/stores/apiClient";
+import { FixedCostDto, GroupCostDto } from "~/stores/apiClient";
 import { cellStyling } from "~/metaData/styling";
 import TableActionCell from "./TableActionCell.vue"
 import { useApiStore } from "~/stores/apiStore";
 import { useFixedCostStore } from "~/stores/fixedCostStore";
-import { EditModalType } from '~/metaData/enums';
+import { EditModalType } from '@/metaData/enums';
+import AddFixedCostModal from "./AddFixedCostModal.vue"
+import { useOverviewCostStore } from "~/stores/overviewCostStore";
 
 interface ChargeTableProps {
   fixedcosts: FixedCostDto[];
@@ -46,10 +55,11 @@ interface ChargeTableProps {
 const apiStore = useApiStore();
 
 const props = defineProps<ChargeTableProps>()
-
+const addFixedCostModalVis = ref(false)
 const deleteFixedcostById = async (id: number) => {
     await apiStore.FixedcostClient.deleteFixedCostEndpoint(id)
     await useFixedCostStore().fetch();
+    await useOverviewCostStore().calulateCostOverview();
 }
 </script>
 

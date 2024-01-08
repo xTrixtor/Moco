@@ -1,6 +1,6 @@
 ﻿using MocoApi.Models.Moco.Resource;
 
-namespace Moco.Api.Models.Moco.Dto
+namespace Moco.Api.Models.Moco.Resource
 {
     public class FixedCost
     {

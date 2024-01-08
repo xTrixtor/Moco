@@ -1,8 +1,8 @@
 <template>
   <BaseFullScreenLoader v-if="loading" />
-  <div v-else class="grid justify-center items-center h-screen">
+  <div v-else class="grid justify-center items-center h-screen bg-background">
     <div
-      class="w-[500px] h-2/5 bg-[#242426] shadow-lg rounded-lg p-4 flex flex-col"
+      class="w-[400px] h-2/5 bg-foreground shadow-xl rounded-lg p-4 flex flex-col border-border border-2 shadow-primary-light"
     >
       <div class="justify-center flex my-4">
         <NuxtImg src="/logo/MoFo-Logo-Hor.png" class="h-16" />
@@ -13,20 +13,20 @@
         <CustomInput
           type="text"
           placeholder="Username"
-          styling="!border-secondary !text-white"
+          styling="!border-border !text-white"
           v-model="user.username"
         />
         <CustomInput
           type="password"
           placeholder="Password"
-          styling="!border-secondary !text-white"
+          styling="!border-border !text-white"
           v-model="user.password"
         />
         <BasePrimaryButton btnTxt="Anmelden" :onClick="handleLogin" />
         <el-button
           size="small"
           type="primary"
-          class="!bg-brand/20 !border-0"
+          class="!bg-primary/20 !border-0"
           :onClick="() => (data = true)"
           >Registieren</el-button
         >

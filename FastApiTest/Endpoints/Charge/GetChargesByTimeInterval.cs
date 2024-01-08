@@ -20,7 +20,7 @@ namespace MocoApi.Endpoints.Charge
             {
                 try
                 {
-                    var charges = dbContext.Charges.ToList().Where(x => x.TimeInterval.Equals((TimeInterval)req.TimeIntervalKey)).Select(x => x.asDto()).ToList();
+                    var charges = dbContext.Charges.ToList().Select(x => x.asDto()).ToList();
                     await SendAsync(charges);
                 }
                 catch (Exception)

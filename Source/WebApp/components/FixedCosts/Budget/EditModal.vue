@@ -1,6 +1,7 @@
 <template>
     <el-dialog
       v-if="props.modelValue"
+      :key="props.uniqueKey"
       v-model="props.modelValue"
       :title="'Bearbeitung von: ' + props.budgetDto.name"
       width="30%"
@@ -45,12 +46,13 @@
   interface ChargeCardProps {
     modelValue: boolean;
     budgetDto: BudgetDto;
+    uniqueKey: string;
   }
   const props = defineProps<ChargeCardProps>();
   const emit = defineEmits(["update:modelValue"]);
   
   const data = useVModel(props, "modelValue", emit);
-  const budgetUDto = reactive<BudgetDto>({...props.budgetDto})
+  let budgetUDto = reactive<BudgetDto>({...props.budgetDto})
   const isDirty = ref(false)
   
   const initialState = props.budgetDto;
@@ -58,10 +60,11 @@
   const handleUpdateCharge = async() => {
       await useApiStore().BudgetClient.updateButgetEndpoint({uBudgetDto:budgetUDto} as UpdateBudgetRequest)
       await useBudgetStore().fetch();
+      budgetUDto = undefined;
       data.value = false;
   }
 
-  onKeyStroke("Esc", async (e) => {
+  onKeyStroke("Escape", async (e) => {
     if(props.modelValue)
       data.value = false;
   });

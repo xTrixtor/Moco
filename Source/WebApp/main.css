@@ -8,6 +8,20 @@
     }
 }
 
+.content{
+  @apply text-slate-50;
+  font-family: 'Tektur', sans-serif !important;
+}
+
+:root{
+  font-family: 'Tektur', sans-serif !important;
+  @apply !bg-foreground;
+}
+
+.el-overlay{
+  @apply !bg-background/50;
+}
+
 .underlineAnimation{
   position: relative;
   text-decoration: none;
@@ -30,5 +44,4 @@
 .underlineAnimation:hover::before {
   transform-origin: left;
   transform: scaleX(1);
-  color:
 }

@@ -19,7 +19,7 @@
         </div>
         <button
           @click="() => (modalVis = true)"
-          class="px-2 text-brand underline"
+          class="px-2 text-primary underline"
         >
           Details
         </button>

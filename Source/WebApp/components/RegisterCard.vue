@@ -1,9 +1,9 @@
 <template>
-  <div class="grid justify-center items-center h-screen">
+  <div class="grid justify-center items-center h-screen bg-background">
     <BaseFullScreenLoader v-if="loading" />
     <div
       v-else
-      class="w-[500px] h-2/5 bg-[#242426] shadow-lg rounded-lg p-4 flex flex-col"
+      class="w-[500px] h-2/5 bg-foreground shadow-secondary-light shadow-lg rounded-lg p-4 flex flex-col"
     >
       <div class="justify-center flex my-4">
         <NuxtImg src="/logo/MoFo-Logo-Hor.png" class="h-16" />
@@ -15,13 +15,11 @@
           <CustomInput
             type="text"
             placeholder="Vorname"
-            styling="!bg-secondary !text-white"
             v-model="user.firstname"
           />
           <CustomInput
             type="text"
             placeholder="Nachname"
-            styling="!bg-secondary !text-white"
             v-model="user.lastname"
           />
         </div>
@@ -29,13 +27,11 @@
           <CustomInput
             type="text"
             placeholder="Email"
-            styling="!bg-secondary !text-white"
             v-model="user.email"
           />
           <CustomInput
             type="text"
             placeholder="Username"
-            styling="!bg-secondary !text-white"
             v-model="user.username"
           />
         </div>
@@ -43,13 +39,11 @@
           <CustomInput
             type="text"
             placeholder="Password"
-            styling="!bg-secondary !text-white"
             v-model="user.password"
           />
           <CustomInput
             type="text"
             placeholder="Bestätige Password"
-            styling="!bg-secondary !text-white"
             v-model="user.confirmpassword"
           />
         </div>
@@ -57,7 +51,7 @@
         <el-button
           size="small"
           type="primary"
-          class="!bg-brand/20 !border-0"
+          class="!bg-primary/20 !border-0"
           :onClick="() => (data = false)"
           >Anmelden</el-button
         >

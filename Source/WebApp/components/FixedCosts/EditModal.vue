@@ -7,7 +7,7 @@
       :before-close="handleClose"
     >
       <div class="w-full h-full bg-slate-50 py-4 px-1 rounded-lg">
-        <div class="flex">
+        <div class="flex-center">
           <p class="w-1/2">Name</p>
           <BaseCustomInput
             v-model="fixedCostUDto.name"
@@ -16,7 +16,7 @@
             :clearable="true"
           />
         </div>
-        <div class="flex">
+        <div class="flex-center">
           <p class="w-1/2">Kosten</p>
           <BaseCustomInput
             v-model="fixedCostUDto.value"
@@ -25,7 +25,7 @@
             :clearable="true"
           />
         </div>
-        <div class="flex">
+        <div class="flex-center">
           <p class="w-1/2">Time-Interval</p>
           <el-select
             v-model="fixedCostUDto.timeInterval"
@@ -59,7 +59,7 @@
             />
           </div>
           <p
-            v-if="monthlyCost != 0"
+            v-if="(fixedCostUDto.timeInterval != TimeInterval.Monatlich) && monthlyCost != 0"
             class="font-bold my-1 flex-center"
           >
             Monatliche Kosten: ~{{ monthlyCost }} €
@@ -96,7 +96,7 @@ const emit = defineEmits(["update:modelValue"]);
 const data = useVModel(props, "modelValue", emit);
 let fixedCostUDto = ref<FixedCostUDto>({...props.fixedcost});
 const isDirty = ref(false);
-const monthlyCost = computed(() => calculateMontlyChargeCost(props.fixedcost))
+const monthlyCost = ref(calculateMontlyChargeCost(props.fixedcost))
 
 const handleUpdateCharge = async () => {
   await useApiStore().FixedcostClient.updateFixedCostEndpoint(fixedCostUDto.value);
@@ -118,7 +118,7 @@ onKeyStroke("Enter", async (e) => {
   if (props.modelValue) await handleUpdateCharge();
 });
 
-onKeyStroke("Esc", async (e) => {
+onKeyStroke("Escape", async (e) => {
   data.value = false;
 });
 
@@ -140,6 +140,10 @@ const isDirtyCalc = (newCharge: ChargeDto): boolean => {
   });
   return isDirty;
 };
+
+watchDeep(fixedCostUDto, (newVal) => {
+  monthlyCost.value = calculateMontlyChargeCost(newVal)
+})
 
 onBeforeUnmount(()=>{
   data.value = false;

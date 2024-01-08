@@ -2,14 +2,19 @@ import { defineStore } from "pinia";
 import { useApiStore } from "./apiStore";
 import { useTimeoutStore } from "./timeOutStore";
 import { throwError } from "element-plus/es/utils";
-import { LoginRequest, RefreshAuthTokenRequest } from "./apiClient";
+import { LoginRequest, RefreshAuthTokenRequest, UserDto } from "./apiClient";
+
 
 export const useUserStore = defineStore("user", {
   state: () => {
+    const user = {} as UserDto;
+    const keycloakId = "";
     const authToken = "";
     const refreshToken = "";
 
     return {
+      user,
+      keycloakId, 
       authToken,
       refreshToken,
     };
@@ -42,6 +47,11 @@ export const useUserStore = defineStore("user", {
           this.refreshToken = result.refreshToken;
           sessionStorage.setItem("refreshToken", result.refreshToken);
         }
+        if(result.user && result.user.keycloakUserId){
+          this.user = result.user;
+          this.keycloakId = result.user.keycloakUserId;
+          sessionStorage.setItem("keycloakId", result.user.keycloakUserId)
+        }
 
         return true;
       } catch (e) {
@@ -64,8 +74,10 @@ export const useUserStore = defineStore("user", {
       sessionStorage.setItem("authToken", res.jwtToken);
       this.refreshToken = res.refreshToken ?? "";
       sessionStorage.setItem("refreshToken", res.refreshToken);
+      
     },
     async validate() {
+      this.keycloakId = sessionStorage.getItem("keycloakId");
       this.refreshToken = sessionStorage.getItem("refreshToken") ?? "";
       if (this.refreshToken) {
         await this.refreshAuthTokenAsync(this.refreshToken);
@@ -87,5 +99,11 @@ export const useUserStore = defineStore("user", {
     getAuthToken(): string {
       return this.authToken;
     },
+    getUser(): UserDto{
+      return this.user;
+    },
+    getKeycloakId():string{
+      return this.keycloakId;
+    }
   },
 });

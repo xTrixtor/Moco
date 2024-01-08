@@ -11,7 +11,7 @@ namespace MocoApi.Endpoints.Budget
         public override void Configure()
         {
             Get("/budget");
-            AllowAnonymous();
+            Policies("User");
         }
         public async override Task HandleAsync(GetBudgetsRequest req, CancellationToken ct)
         {

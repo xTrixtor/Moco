@@ -1,4 +1,3 @@
-import { useUserStore } from './stores/userStore';
 <template>
   <NuxtLayout>
     <NuxtPage />
@@ -6,9 +5,8 @@ import { useUserStore } from './stores/userStore';
 </template>
 
 <script setup>
-import { useUtilStore } from './stores/utilStore';
 
-onMounted(() => {
-  useUtilStore().calculateIsMobil();
-})
 </script>
+
+<style>
+</style>

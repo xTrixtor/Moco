@@ -21,7 +21,55 @@ namespace Moco.Api.Migrations
                 .HasAnnotation("Proxies:LazyLoading", true)
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
-            modelBuilder.Entity("Moco.Api.Models.Moco.Dto.FixedCost", b =>
+            modelBuilder.Entity("Moco.Api.Models.Moco.Resource.CheckableFixedCost", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<int>("CostInspectionId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<int>("FixedCostId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsChecked")
+                        .HasColumnType("tinyint(1)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CostInspectionId");
+
+                    b.HasIndex("FixedCostId");
+
+                    b.ToTable("CheckableFixedCosts");
+                });
+
+            modelBuilder.Entity("Moco.Api.Models.Moco.Resource.CostInspection", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("UserYearMonthKey")
+                        .IsRequired()
+                        .HasColumnType("varchar(255)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserYearMonthKey")
+                        .IsUnique();
+
+                    b.ToTable("CostInspections");
+                });
+
+            modelBuilder.Entity("Moco.Api.Models.Moco.Resource.FixedCost", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -67,13 +115,37 @@ namespace Moco.Api.Migrations
                         {
                             Id = 3,
                             GroupCostId = 2,
-                            Name = "Lebenversicherung",
+                            Name = "Renten Basis",
                             TimeInterval = 3,
                             Value = 250.0
+                        },
+                        new
+                        {
+                            Id = 4,
+                            GroupCostId = 2,
+                            Name = "Flexible",
+                            TimeInterval = 3,
+                            Value = 250.0
+                        },
+                        new
+                        {
+                            Id = 5,
+                            GroupCostId = 3,
+                            Name = "Versicherung",
+                            TimeInterval = 6,
+                            Value = 250.0
+                        },
+                        new
+                        {
+                            Id = 6,
+                            GroupCostId = 3,
+                            Name = "Kredit",
+                            TimeInterval = 3,
+                            Value = 244.0
                         });
                 });
 
-            modelBuilder.Entity("Moco.Api.Models.Moco.Dto.GroupCost", b =>
+            modelBuilder.Entity("Moco.Api.Models.Moco.Resource.GroupCost", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -102,6 +174,12 @@ namespace Moco.Api.Migrations
                         {
                             Id = 2,
                             Name = "Investieren",
+                            UserId = "75097005-23ad-4e28-994b-91fdf414b205"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Name = "Auto",
                             UserId = "75097005-23ad-4e28-994b-91fdf414b205"
                         });
                 });
@@ -171,12 +249,8 @@ namespace Moco.Api.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<int>("TimeInterval")
+                    b.Property<int>("CostInspectionId")
                         .HasColumnType("int");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("longtext");
 
                     b.Property<double>("Value")
                         .HasColumnType("double");
@@ -185,82 +259,9 @@ namespace Moco.Api.Migrations
 
                     b.HasIndex("BudgetId");
 
+                    b.HasIndex("CostInspectionId");
+
                     b.ToTable("Charges");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 2,
-                            BudgetId = 1,
-                            ChargeName = "Rewe",
-                            TimeInterval = 3,
-                            UserId = "75097005-23ad-4e28-994b-91fdf414b205",
-                            Value = 23.5
-                        },
-                        new
-                        {
-                            Id = 3,
-                            BudgetId = 1,
-                            ChargeName = "Investieren",
-                            TimeInterval = 3,
-                            UserId = "75097005-23ad-4e28-994b-91fdf414b205",
-                            Value = 250.0
-                        },
-                        new
-                        {
-                            Id = 4,
-                            BudgetId = 1,
-                            ChargeName = "Runfunk",
-                            TimeInterval = 4,
-                            UserId = "75097005-23ad-4e28-994b-91fdf414b205",
-                            Value = 42.0
-                        });
-                });
-
-            modelBuilder.Entity("MocoApi.Models.Moco.Resource.Person", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("Firstname")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("KeycloakUserId")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("LastName")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("Username")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Persons");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Email = "email@gmx.de",
-                            Firstname = "Nico",
-                            KeycloakUserId = "75097005-23ad-4e28-994b-91fdf414b205",
-                            LastName = "Böhner",
-                            Username = "boehnern"
-                        });
                 });
 
             modelBuilder.Entity("MocoApi.Models.Moco.Resource.Revenue", b =>
@@ -294,9 +295,72 @@ namespace Moco.Api.Migrations
                         });
                 });
 
-            modelBuilder.Entity("Moco.Api.Models.Moco.Dto.FixedCost", b =>
+            modelBuilder.Entity("MocoApi.Models.Moco.Resource.User", b =>
                 {
-                    b.HasOne("Moco.Api.Models.Moco.Dto.GroupCost", "GroupCost")
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Firstname")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("KeycloakUserId")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Username")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Users");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Email = "email@gmx.de",
+                            Firstname = "Nico",
+                            KeycloakUserId = "75097005-23ad-4e28-994b-91fdf414b205",
+                            LastName = "Böhner",
+                            Username = "boehnern"
+                        });
+                });
+
+            modelBuilder.Entity("Moco.Api.Models.Moco.Resource.CheckableFixedCost", b =>
+                {
+                    b.HasOne("Moco.Api.Models.Moco.Resource.CostInspection", "CostInspection")
+                        .WithMany("CheckableFixedCosts")
+                        .HasForeignKey("CostInspectionId");
+
+                    b.HasOne("Moco.Api.Models.Moco.Resource.FixedCost", "FixedCost")
+                        .WithMany()
+                        .HasForeignKey("FixedCostId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("CostInspection");
+
+                    b.Navigation("FixedCost");
+                });
+
+            modelBuilder.Entity("Moco.Api.Models.Moco.Resource.FixedCost", b =>
+                {
+                    b.HasOne("Moco.Api.Models.Moco.Resource.GroupCost", "GroupCost")
                         .WithMany("FixedCosts")
                         .HasForeignKey("GroupCostId");
 
@@ -309,10 +373,23 @@ namespace Moco.Api.Migrations
                         .WithMany("Charges")
                         .HasForeignKey("BudgetId");
 
+                    b.HasOne("Moco.Api.Models.Moco.Resource.CostInspection", "CostInspection")
+                        .WithMany("BudgetCharges")
+                        .HasForeignKey("CostInspectionId");
+
                     b.Navigation("Budget");
+
+                    b.Navigation("CostInspection");
                 });
 
-            modelBuilder.Entity("Moco.Api.Models.Moco.Dto.GroupCost", b =>
+            modelBuilder.Entity("Moco.Api.Models.Moco.Resource.CostInspection", b =>
+                {
+                    b.Navigation("BudgetCharges");
+
+                    b.Navigation("CheckableFixedCosts");
+                });
+
+            modelBuilder.Entity("Moco.Api.Models.Moco.Resource.GroupCost", b =>
                 {
                     b.Navigation("FixedCosts");
                 });

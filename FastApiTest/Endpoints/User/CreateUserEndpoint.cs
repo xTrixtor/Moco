@@ -49,7 +49,7 @@ public class CreateUserEndpoint : Endpoint<CreateUserRequest, CreateUserResponse
 
             var userId = jwtSecurityToken.Claims.First(claim => claim.Type == "sub").Value;
 
-            var personDto = new PersonDto
+            var personDto = new UserDto
             {
                 KeycloakUserId = userId,
                 Email = req.User.email,
@@ -81,5 +81,5 @@ public record CreateUserRequest
 public record CreateUserResponse
 {
     public required KeyCloakSuccessfullLoginResponse KeycloakResponse { get; set; }
-    public required PersonDto PersonInfo { get; set; }
+    public required UserDto PersonInfo { get; set; }
 }

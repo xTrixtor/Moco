@@ -549,6 +549,308 @@ export class FixedcostClient extends BaseAPIClient implements IFixedcostClient {
     }
 }
 
+export interface IInspectionClient {
+
+    /**
+     * @return Success
+     */
+    checkableFixedCostUptoDate(checkableFixedCostUptoDateRequest: CheckableFixedCostUptoDateRequest): Promise<boolean>;
+
+    /**
+     * @return Success
+     */
+    createCostInspectionEndpoint(authorization: string | null, costInspectionCRequest: CostInspectionCRequest): Promise<CostInspectionCResponse>;
+
+    /**
+     * @return Success
+     */
+    getCostInspectionEndpoint(year: number, monthNumber: number): Promise<CostInspectionGResponse>;
+
+    /**
+     * @return Success
+     */
+    initializeCostInspectionEndpoint(costInspectionIRequest: CostInspectionIRequest): Promise<CostInspectionIResponse>;
+
+    /**
+     * @return Success
+     */
+    checkFixedCost(updateCheckableFixedCostRequest: UpdateCheckableFixedCostRequest): Promise<boolean>;
+}
+
+export class InspectionClient extends BaseAPIClient implements IInspectionClient {
+    private http: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> };
+    private baseUrl: string;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+
+    constructor(baseUrl?: string, http?: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> }) {
+        super();
+        this.http = http ? http : window as any;
+        this.baseUrl = this.getBaseUrl("https://localhost:53084", baseUrl);
+    }
+
+    /**
+     * @return Success
+     */
+    checkableFixedCostUptoDate(checkableFixedCostUptoDateRequest: CheckableFixedCostUptoDateRequest): Promise<boolean> {
+        let url_ = this.baseUrl + "/api/inspection/checkableFixedCost/upToDate";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(checkableFixedCostUptoDateRequest);
+
+        let options_: RequestInit = {
+            body: content_,
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            }
+        };
+
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
+            return this.transformResult(url_, _response, (_response: Response) => this.processCheckableFixedCostUptoDate(_response));
+        });
+    }
+
+    protected processCheckableFixedCostUptoDate(response: Response): Promise<boolean> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result200 = resultData200 !== undefined ? resultData200 : <any>null;
+    
+            return result200;
+            });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            return throwException("Unauthorized", status, _responseText, _headers);
+            });
+        } else if (status === 403) {
+            return response.text().then((_responseText) => {
+            return throwException("Forbidden", status, _responseText, _headers);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<boolean>(null as any);
+    }
+
+    /**
+     * @return Success
+     */
+    createCostInspectionEndpoint(authorization: string | null, costInspectionCRequest: CostInspectionCRequest): Promise<CostInspectionCResponse> {
+        let url_ = this.baseUrl + "/api/inspection";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(costInspectionCRequest);
+
+        let options_: RequestInit = {
+            body: content_,
+            method: "POST",
+            headers: {
+                "Authorization": authorization !== undefined && authorization !== null ? "" + authorization : "",
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            }
+        };
+
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
+            return this.transformResult(url_, _response, (_response: Response) => this.processCreateCostInspectionEndpoint(_response));
+        });
+    }
+
+    protected processCreateCostInspectionEndpoint(response: Response): Promise<CostInspectionCResponse> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = CostInspectionCResponse.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            return throwException("Unauthorized", status, _responseText, _headers);
+            });
+        } else if (status === 403) {
+            return response.text().then((_responseText) => {
+            return throwException("Forbidden", status, _responseText, _headers);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<CostInspectionCResponse>(null as any);
+    }
+
+    /**
+     * @return Success
+     */
+    getCostInspectionEndpoint(year: number, monthNumber: number): Promise<CostInspectionGResponse> {
+        let url_ = this.baseUrl + "/api/inspection?";
+        if (year === undefined || year === null)
+            throw new Error("The parameter 'year' must be defined and cannot be null.");
+        else
+            url_ += "Year=" + encodeURIComponent("" + year) + "&";
+        if (monthNumber === undefined || monthNumber === null)
+            throw new Error("The parameter 'monthNumber' must be defined and cannot be null.");
+        else
+            url_ += "MonthNumber=" + encodeURIComponent("" + monthNumber) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: RequestInit = {
+            method: "GET",
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
+            return this.transformResult(url_, _response, (_response: Response) => this.processGetCostInspectionEndpoint(_response));
+        });
+    }
+
+    protected processGetCostInspectionEndpoint(response: Response): Promise<CostInspectionGResponse> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = CostInspectionGResponse.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            return throwException("Unauthorized", status, _responseText, _headers);
+            });
+        } else if (status === 403) {
+            return response.text().then((_responseText) => {
+            return throwException("Forbidden", status, _responseText, _headers);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<CostInspectionGResponse>(null as any);
+    }
+
+    /**
+     * @return Success
+     */
+    initializeCostInspectionEndpoint(costInspectionIRequest: CostInspectionIRequest): Promise<CostInspectionIResponse> {
+        let url_ = this.baseUrl + "/api/inspection/initialize";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(costInspectionIRequest);
+
+        let options_: RequestInit = {
+            body: content_,
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            }
+        };
+
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
+            return this.transformResult(url_, _response, (_response: Response) => this.processInitializeCostInspectionEndpoint(_response));
+        });
+    }
+
+    protected processInitializeCostInspectionEndpoint(response: Response): Promise<CostInspectionIResponse> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = CostInspectionIResponse.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            return throwException("Unauthorized", status, _responseText, _headers);
+            });
+        } else if (status === 403) {
+            return response.text().then((_responseText) => {
+            return throwException("Forbidden", status, _responseText, _headers);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<CostInspectionIResponse>(null as any);
+    }
+
+    /**
+     * @return Success
+     */
+    checkFixedCost(updateCheckableFixedCostRequest: UpdateCheckableFixedCostRequest): Promise<boolean> {
+        let url_ = this.baseUrl + "/api/inspection/checkableFixedCost";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(updateCheckableFixedCostRequest);
+
+        let options_: RequestInit = {
+            body: content_,
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            }
+        };
+
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
+            return this.transformResult(url_, _response, (_response: Response) => this.processCheckFixedCost(_response));
+        });
+    }
+
+    protected processCheckFixedCost(response: Response): Promise<boolean> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result200 = resultData200 !== undefined ? resultData200 : <any>null;
+    
+            return result200;
+            });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            return throwException("Unauthorized", status, _responseText, _headers);
+            });
+        } else if (status === 403) {
+            return response.text().then((_responseText) => {
+            return throwException("Forbidden", status, _responseText, _headers);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<boolean>(null as any);
+    }
+}
+
 export interface ILoginClient {
 
     /**
@@ -1262,6 +1564,14 @@ export class BudgetClient extends BaseAPIClient implements IBudgetClient {
             result200 = GetBudgetsResponse.fromJS(resultData200);
             return result200;
             });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            return throwException("Unauthorized", status, _responseText, _headers);
+            });
+        } else if (status === 403) {
+            return response.text().then((_responseText) => {
+            return throwException("Forbidden", status, _responseText, _headers);
+            });
         } else if (status !== 200 && status !== 204) {
             return response.text().then((_responseText) => {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
@@ -1419,7 +1729,7 @@ export class BudgetClient extends BaseAPIClient implements IBudgetClient {
 
 export class CreateUserResponse implements ICreateUserResponse {
     keycloakResponse?: KeyCloakSuccessfullLoginResponse;
-    personInfo?: PersonDto;
+    personInfo?: UserDto;
 
     constructor(data?: ICreateUserResponse) {
         if (data) {
@@ -1433,7 +1743,7 @@ export class CreateUserResponse implements ICreateUserResponse {
     init(_data?: any) {
         if (_data) {
             this.keycloakResponse = _data["keycloakResponse"] ? KeyCloakSuccessfullLoginResponse.fromJS(_data["keycloakResponse"]) : <any>undefined;
-            this.personInfo = _data["personInfo"] ? PersonDto.fromJS(_data["personInfo"]) : <any>undefined;
+            this.personInfo = _data["personInfo"] ? UserDto.fromJS(_data["personInfo"]) : <any>undefined;
         }
     }
 
@@ -1454,7 +1764,7 @@ export class CreateUserResponse implements ICreateUserResponse {
 
 export interface ICreateUserResponse {
     keycloakResponse?: KeyCloakSuccessfullLoginResponse;
-    personInfo?: PersonDto;
+    personInfo?: UserDto;
 }
 
 export class KeyCloakSuccessfullLoginResponse implements IKeyCloakSuccessfullLoginResponse {
@@ -1509,7 +1819,7 @@ export interface IKeyCloakSuccessfullLoginResponse {
     token_type?: string;
 }
 
-export class PersonDto implements IPersonDto {
+export class UserDto implements IUserDto {
     id?: number;
     keycloakUserId?: string;
     username?: string;
@@ -1518,7 +1828,7 @@ export class PersonDto implements IPersonDto {
     email?: string;
     createdAt?: Date;
 
-    constructor(data?: IPersonDto) {
+    constructor(data?: IUserDto) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
@@ -1539,9 +1849,9 @@ export class PersonDto implements IPersonDto {
         }
     }
 
-    static fromJS(data: any): PersonDto {
+    static fromJS(data: any): UserDto {
         data = typeof data === 'object' ? data : {};
-        let result = new PersonDto();
+        let result = new UserDto();
         result.init(data);
         return result;
     }
@@ -1559,7 +1869,7 @@ export class PersonDto implements IPersonDto {
     }
 }
 
-export interface IPersonDto {
+export interface IUserDto {
     id?: number;
     keycloakUserId?: string;
     username?: string;
@@ -2331,8 +2641,526 @@ export interface IFixedCostUDto {
     timeInterval?: TimeInterval;
 }
 
+export class CheckableFixedCostUptoDateRequest implements ICheckableFixedCostUptoDateRequest {
+    isUpgradeable?: boolean;
+    costInspectionId?: number;
+    alreadyCreatedCheckableFixedCosts?: CheckableFixedCostDto[];
+
+    constructor(data?: ICheckableFixedCostUptoDateRequest) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.isUpgradeable = _data["isUpgradeable"];
+            this.costInspectionId = _data["costInspectionId"];
+            if (Array.isArray(_data["alreadyCreatedCheckableFixedCosts"])) {
+                this.alreadyCreatedCheckableFixedCosts = [] as any;
+                for (let item of _data["alreadyCreatedCheckableFixedCosts"])
+                    this.alreadyCreatedCheckableFixedCosts!.push(CheckableFixedCostDto.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): CheckableFixedCostUptoDateRequest {
+        data = typeof data === 'object' ? data : {};
+        let result = new CheckableFixedCostUptoDateRequest();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["isUpgradeable"] = this.isUpgradeable;
+        data["costInspectionId"] = this.costInspectionId;
+        if (Array.isArray(this.alreadyCreatedCheckableFixedCosts)) {
+            data["alreadyCreatedCheckableFixedCosts"] = [];
+            for (let item of this.alreadyCreatedCheckableFixedCosts)
+                data["alreadyCreatedCheckableFixedCosts"].push(item.toJSON());
+        }
+        return data;
+    }
+}
+
+export interface ICheckableFixedCostUptoDateRequest {
+    isUpgradeable?: boolean;
+    costInspectionId?: number;
+    alreadyCreatedCheckableFixedCosts?: CheckableFixedCostDto[];
+}
+
+export class CheckableFixedCostDto implements ICheckableFixedCostDto {
+    id?: number;
+    fixedCost?: FixedCostDto;
+    isChecked?: boolean;
+    createdAt?: Date;
+
+    constructor(data?: ICheckableFixedCostDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.fixedCost = _data["fixedCost"] ? FixedCostDto.fromJS(_data["fixedCost"]) : <any>undefined;
+            this.isChecked = _data["isChecked"];
+            this.createdAt = _data["createdAt"] ? new Date(_data["createdAt"].toString()) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any): CheckableFixedCostDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new CheckableFixedCostDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["fixedCost"] = this.fixedCost ? this.fixedCost.toJSON() : <any>undefined;
+        data["isChecked"] = this.isChecked;
+        data["createdAt"] = this.createdAt ? this.createdAt.toISOString() : <any>undefined;
+        return data;
+    }
+}
+
+export interface ICheckableFixedCostDto {
+    id?: number;
+    fixedCost?: FixedCostDto;
+    isChecked?: boolean;
+    createdAt?: Date;
+}
+
+export class CostInspectionCResponse implements ICostInspectionCResponse {
+    success?: boolean;
+
+    constructor(data?: ICostInspectionCResponse) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.success = _data["success"];
+        }
+    }
+
+    static fromJS(data: any): CostInspectionCResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new CostInspectionCResponse();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["success"] = this.success;
+        return data;
+    }
+}
+
+export interface ICostInspectionCResponse {
+    success?: boolean;
+}
+
+export class CostInspectionCRequest implements ICostInspectionCRequest {
+    monthNumber?: number;
+    year?: number;
+
+    constructor(data?: ICostInspectionCRequest) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.monthNumber = _data["monthNumber"];
+            this.year = _data["year"];
+        }
+    }
+
+    static fromJS(data: any): CostInspectionCRequest {
+        data = typeof data === 'object' ? data : {};
+        let result = new CostInspectionCRequest();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["monthNumber"] = this.monthNumber;
+        data["year"] = this.year;
+        return data;
+    }
+}
+
+export interface ICostInspectionCRequest {
+    monthNumber?: number;
+    year?: number;
+}
+
+export class CostInspectionGResponse implements ICostInspectionGResponse {
+    costInspection?: CostInspectionDto;
+    cheackableFixcostsAreUpdateable?: boolean;
+
+    constructor(data?: ICostInspectionGResponse) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.costInspection = _data["costInspection"] ? CostInspectionDto.fromJS(_data["costInspection"]) : <any>undefined;
+            this.cheackableFixcostsAreUpdateable = _data["cheackableFixcostsAreUpdateable"];
+        }
+    }
+
+    static fromJS(data: any): CostInspectionGResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new CostInspectionGResponse();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["costInspection"] = this.costInspection ? this.costInspection.toJSON() : <any>undefined;
+        data["cheackableFixcostsAreUpdateable"] = this.cheackableFixcostsAreUpdateable;
+        return data;
+    }
+}
+
+export interface ICostInspectionGResponse {
+    costInspection?: CostInspectionDto;
+    cheackableFixcostsAreUpdateable?: boolean;
+}
+
+export class CostInspectionDto implements ICostInspectionDto {
+    id?: number;
+    userYearMonthKey?: string;
+    fixedCostChecklist?: CheckableFixedCostDto[] | undefined;
+    budgetCharges?: ChargeDto[] | undefined;
+    createdAt?: Date;
+
+    constructor(data?: ICostInspectionDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.userYearMonthKey = _data["userYearMonthKey"];
+            if (Array.isArray(_data["fixedCostChecklist"])) {
+                this.fixedCostChecklist = [] as any;
+                for (let item of _data["fixedCostChecklist"])
+                    this.fixedCostChecklist!.push(CheckableFixedCostDto.fromJS(item));
+            }
+            if (Array.isArray(_data["budgetCharges"])) {
+                this.budgetCharges = [] as any;
+                for (let item of _data["budgetCharges"])
+                    this.budgetCharges!.push(ChargeDto.fromJS(item));
+            }
+            this.createdAt = _data["createdAt"] ? new Date(_data["createdAt"].toString()) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any): CostInspectionDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new CostInspectionDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["userYearMonthKey"] = this.userYearMonthKey;
+        if (Array.isArray(this.fixedCostChecklist)) {
+            data["fixedCostChecklist"] = [];
+            for (let item of this.fixedCostChecklist)
+                data["fixedCostChecklist"].push(item.toJSON());
+        }
+        if (Array.isArray(this.budgetCharges)) {
+            data["budgetCharges"] = [];
+            for (let item of this.budgetCharges)
+                data["budgetCharges"].push(item.toJSON());
+        }
+        data["createdAt"] = this.createdAt ? this.createdAt.toISOString() : <any>undefined;
+        return data;
+    }
+}
+
+export interface ICostInspectionDto {
+    id?: number;
+    userYearMonthKey?: string;
+    fixedCostChecklist?: CheckableFixedCostDto[] | undefined;
+    budgetCharges?: ChargeDto[] | undefined;
+    createdAt?: Date;
+}
+
+export class ChargeDto implements IChargeDto {
+    id?: number;
+    chargeName?: string;
+    value?: number;
+    budgetId?: number;
+    costInspection?: CostInspectionDto;
+
+    constructor(data?: IChargeDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.chargeName = _data["chargeName"];
+            this.value = _data["value"];
+            this.budgetId = _data["budgetId"];
+            this.costInspection = _data["costInspection"] ? CostInspectionDto.fromJS(_data["costInspection"]) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any): ChargeDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new ChargeDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["chargeName"] = this.chargeName;
+        data["value"] = this.value;
+        data["budgetId"] = this.budgetId;
+        data["costInspection"] = this.costInspection ? this.costInspection.toJSON() : <any>undefined;
+        return data;
+    }
+}
+
+export interface IChargeDto {
+    id?: number;
+    chargeName?: string;
+    value?: number;
+    budgetId?: number;
+    costInspection?: CostInspectionDto;
+}
+
+export class CostInspectionGRequest implements ICostInspectionGRequest {
+
+    constructor(data?: ICostInspectionGRequest) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+    }
+
+    static fromJS(data: any): CostInspectionGRequest {
+        data = typeof data === 'object' ? data : {};
+        let result = new CostInspectionGRequest();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        return data;
+    }
+}
+
+export interface ICostInspectionGRequest {
+}
+
+export class CostInspectionIResponse implements ICostInspectionIResponse {
+    success?: boolean;
+
+    constructor(data?: ICostInspectionIResponse) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.success = _data["success"];
+        }
+    }
+
+    static fromJS(data: any): CostInspectionIResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new CostInspectionIResponse();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["success"] = this.success;
+        return data;
+    }
+}
+
+export interface ICostInspectionIResponse {
+    success?: boolean;
+}
+
+export class CostInspectionIRequest implements ICostInspectionIRequest {
+    userYearMonthKey?: string;
+
+    constructor(data?: ICostInspectionIRequest) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.userYearMonthKey = _data["userYearMonthKey"];
+        }
+    }
+
+    static fromJS(data: any): CostInspectionIRequest {
+        data = typeof data === 'object' ? data : {};
+        let result = new CostInspectionIRequest();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["userYearMonthKey"] = this.userYearMonthKey;
+        return data;
+    }
+}
+
+export interface ICostInspectionIRequest {
+    userYearMonthKey?: string;
+}
+
+export class UpdateCheckableFixedCostRequest implements IUpdateCheckableFixedCostRequest {
+    checkableFixedCostUDto?: CheckableFixedCostUDto;
+
+    constructor(data?: IUpdateCheckableFixedCostRequest) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.checkableFixedCostUDto = _data["checkableFixedCostUDto"] ? CheckableFixedCostUDto.fromJS(_data["checkableFixedCostUDto"]) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any): UpdateCheckableFixedCostRequest {
+        data = typeof data === 'object' ? data : {};
+        let result = new UpdateCheckableFixedCostRequest();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["checkableFixedCostUDto"] = this.checkableFixedCostUDto ? this.checkableFixedCostUDto.toJSON() : <any>undefined;
+        return data;
+    }
+}
+
+export interface IUpdateCheckableFixedCostRequest {
+    checkableFixedCostUDto?: CheckableFixedCostUDto;
+}
+
+export class CheckableFixedCostUDto implements ICheckableFixedCostUDto {
+    id?: number;
+    isChecked?: boolean;
+    createdAt?: Date;
+
+    constructor(data?: ICheckableFixedCostUDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.isChecked = _data["isChecked"];
+            this.createdAt = _data["createdAt"] ? new Date(_data["createdAt"].toString()) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any): CheckableFixedCostUDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new CheckableFixedCostUDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["isChecked"] = this.isChecked;
+        data["createdAt"] = this.createdAt ? this.createdAt.toISOString() : <any>undefined;
+        return data;
+    }
+}
+
+export interface ICheckableFixedCostUDto {
+    id?: number;
+    isChecked?: boolean;
+    createdAt?: Date;
+}
+
 export class LoginResponse implements ILoginResponse {
-    userId?: string;
+    user?: UserDto;
     success?: boolean;
     jwtToken?: string;
     refreshToken?: string;
@@ -2349,7 +3177,7 @@ export class LoginResponse implements ILoginResponse {
 
     init(_data?: any) {
         if (_data) {
-            this.userId = _data["userId"];
+            this.user = _data["user"] ? UserDto.fromJS(_data["user"]) : <any>undefined;
             this.success = _data["success"];
             this.jwtToken = _data["jwtToken"];
             this.refreshToken = _data["refreshToken"];
@@ -2366,7 +3194,7 @@ export class LoginResponse implements ILoginResponse {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["userId"] = this.userId;
+        data["user"] = this.user ? this.user.toJSON() : <any>undefined;
         data["success"] = this.success;
         data["jwtToken"] = this.jwtToken;
         data["refreshToken"] = this.refreshToken;
@@ -2376,7 +3204,7 @@ export class LoginResponse implements ILoginResponse {
 }
 
 export interface ILoginResponse {
-    userId?: string;
+    user?: UserDto;
     success?: boolean;
     jwtToken?: string;
     refreshToken?: string;
@@ -2844,7 +3672,7 @@ export interface ICreateChargeRespone {
 }
 
 export class CreateChargeRequest implements ICreateChargeRequest {
-    chargeDto?: ChargeDto;
+    chargeCDto?: ChargeCDto;
 
     constructor(data?: ICreateChargeRequest) {
         if (data) {
@@ -2857,7 +3685,7 @@ export class CreateChargeRequest implements ICreateChargeRequest {
 
     init(_data?: any) {
         if (_data) {
-            this.chargeDto = _data["chargeDto"] ? ChargeDto.fromJS(_data["chargeDto"]) : <any>undefined;
+            this.chargeCDto = _data["chargeCDto"] ? ChargeCDto.fromJS(_data["chargeCDto"]) : <any>undefined;
         }
     }
 
@@ -2870,25 +3698,22 @@ export class CreateChargeRequest implements ICreateChargeRequest {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["chargeDto"] = this.chargeDto ? this.chargeDto.toJSON() : <any>undefined;
+        data["chargeCDto"] = this.chargeCDto ? this.chargeCDto.toJSON() : <any>undefined;
         return data;
     }
 }
 
 export interface ICreateChargeRequest {
-    chargeDto?: ChargeDto;
+    chargeCDto?: ChargeCDto;
 }
 
-export class ChargeDto implements IChargeDto {
-    id?: number;
+export class ChargeCDto implements IChargeCDto {
     chargeName?: string;
-    budgetId?: number;
-    budget?: Budget;
     value?: number;
-    userId?: string;
-    timeInterval?: TimeInterval;
+    budgetId?: number;
+    costInspectionId?: number;
 
-    constructor(data?: IChargeDto) {
+    constructor(data?: IChargeCDto) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
@@ -2899,164 +3724,35 @@ export class ChargeDto implements IChargeDto {
 
     init(_data?: any) {
         if (_data) {
-            this.id = _data["id"];
-            this.chargeName = _data["chargeName"];
-            this.budgetId = _data["budgetId"];
-            this.budget = _data["budget"] ? Budget.fromJS(_data["budget"]) : <any>undefined;
-            this.value = _data["value"];
-            this.userId = _data["userId"];
-            this.timeInterval = _data["timeInterval"];
-        }
-    }
-
-    static fromJS(data: any): ChargeDto {
-        data = typeof data === 'object' ? data : {};
-        let result = new ChargeDto();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["chargeName"] = this.chargeName;
-        data["budgetId"] = this.budgetId;
-        data["budget"] = this.budget ? this.budget.toJSON() : <any>undefined;
-        data["value"] = this.value;
-        data["userId"] = this.userId;
-        data["timeInterval"] = this.timeInterval;
-        return data;
-    }
-}
-
-export interface IChargeDto {
-    id?: number;
-    chargeName?: string;
-    budgetId?: number;
-    budget?: Budget;
-    value?: number;
-    userId?: string;
-    timeInterval?: TimeInterval;
-}
-
-export class Budget implements IBudget {
-    id?: number;
-    name?: string;
-    limit?: number;
-    charges?: Charge[] | undefined;
-    userId?: string;
-
-    constructor(data?: IBudget) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.id = _data["id"];
-            this.name = _data["name"];
-            this.limit = _data["limit"];
-            if (Array.isArray(_data["charges"])) {
-                this.charges = [] as any;
-                for (let item of _data["charges"])
-                    this.charges!.push(Charge.fromJS(item));
-            }
-            this.userId = _data["userId"];
-        }
-    }
-
-    static fromJS(data: any): Budget {
-        data = typeof data === 'object' ? data : {};
-        let result = new Budget();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["name"] = this.name;
-        data["limit"] = this.limit;
-        if (Array.isArray(this.charges)) {
-            data["charges"] = [];
-            for (let item of this.charges)
-                data["charges"].push(item.toJSON());
-        }
-        data["userId"] = this.userId;
-        return data;
-    }
-}
-
-export interface IBudget {
-    id?: number;
-    name?: string;
-    limit?: number;
-    charges?: Charge[] | undefined;
-    userId?: string;
-}
-
-export class Charge implements ICharge {
-    id?: number;
-    chargeName?: string;
-    value?: number;
-    budgetId?: number;
-    budget?: Budget;
-    userId?: string;
-    timeInterval?: TimeInterval;
-
-    constructor(data?: ICharge) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.id = _data["id"];
             this.chargeName = _data["chargeName"];
             this.value = _data["value"];
             this.budgetId = _data["budgetId"];
-            this.budget = _data["budget"] ? Budget.fromJS(_data["budget"]) : <any>undefined;
-            this.userId = _data["userId"];
-            this.timeInterval = _data["timeInterval"];
+            this.costInspectionId = _data["costInspectionId"];
         }
     }
 
-    static fromJS(data: any): Charge {
+    static fromJS(data: any): ChargeCDto {
         data = typeof data === 'object' ? data : {};
-        let result = new Charge();
+        let result = new ChargeCDto();
         result.init(data);
         return result;
     }
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
         data["chargeName"] = this.chargeName;
         data["value"] = this.value;
         data["budgetId"] = this.budgetId;
-        data["budget"] = this.budget ? this.budget.toJSON() : <any>undefined;
-        data["userId"] = this.userId;
-        data["timeInterval"] = this.timeInterval;
+        data["costInspectionId"] = this.costInspectionId;
         return data;
     }
 }
 
-export interface ICharge {
-    id?: number;
+export interface IChargeCDto {
     chargeName?: string;
     value?: number;
     budgetId?: number;
-    budget?: Budget;
-    userId?: string;
-    timeInterval?: TimeInterval;
+    costInspectionId?: number;
 }
 
 export class DeleteChargesRequest implements IDeleteChargesRequest {
@@ -3230,7 +3926,7 @@ export interface IUpdateChargeResponse {
 }
 
 export class UpdateChargeRequest implements IUpdateChargeRequest {
-    uChargeDto?: ChargeDto;
+    chargeUDto?: ChargeUDto;
 
     constructor(data?: IUpdateChargeRequest) {
         if (data) {
@@ -3243,7 +3939,7 @@ export class UpdateChargeRequest implements IUpdateChargeRequest {
 
     init(_data?: any) {
         if (_data) {
-            this.uChargeDto = _data["uChargeDto"] ? ChargeDto.fromJS(_data["uChargeDto"]) : <any>undefined;
+            this.chargeUDto = _data["chargeUDto"] ? ChargeUDto.fromJS(_data["chargeUDto"]) : <any>undefined;
         }
     }
 
@@ -3256,13 +3952,65 @@ export class UpdateChargeRequest implements IUpdateChargeRequest {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["uChargeDto"] = this.uChargeDto ? this.uChargeDto.toJSON() : <any>undefined;
+        data["chargeUDto"] = this.chargeUDto ? this.chargeUDto.toJSON() : <any>undefined;
         return data;
     }
 }
 
 export interface IUpdateChargeRequest {
-    uChargeDto?: ChargeDto;
+    chargeUDto?: ChargeUDto;
+}
+
+export class ChargeUDto implements IChargeUDto {
+    id?: number;
+    chargeName?: string;
+    value?: number;
+    budgetId?: number;
+    costInspectionId?: number;
+
+    constructor(data?: IChargeUDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.chargeName = _data["chargeName"];
+            this.value = _data["value"];
+            this.budgetId = _data["budgetId"];
+            this.costInspectionId = _data["costInspectionId"];
+        }
+    }
+
+    static fromJS(data: any): ChargeUDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new ChargeUDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["chargeName"] = this.chargeName;
+        data["value"] = this.value;
+        data["budgetId"] = this.budgetId;
+        data["costInspectionId"] = this.costInspectionId;
+        return data;
+    }
+}
+
+export interface IChargeUDto {
+    id?: number;
+    chargeName?: string;
+    value?: number;
+    budgetId?: number;
+    costInspectionId?: number;
 }
 
 export class CBudgetResponse implements ICBudgetResponse {

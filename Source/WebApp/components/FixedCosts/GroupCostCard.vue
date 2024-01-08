@@ -1,26 +1,20 @@
 <template>
   <div
-    class="bg-indigo-300 max-h-[50vh] min-h-[5vh] w-full md:w-[300px] ring-2 ring-slate-300 rounded-lg rounded-bl-[2rem] rounded-tr-[2rem] m-2 shadow-lg shadow-slate-400 hover:ring-offset-2 hover:ring-brand duration-200 cursor-pointer"
-  >
+    ref="target"
+    class="bg-secondary-content max-h-[50vh] min-h-[5vh] w-full md:w-[300px] ring-2 ring-slate-300 rounded-lg rounded-bl-[2rem] rounded-tr-[2rem] my-2 shadow-lg shadow-slate-400 hover:ring-offset-2 hover:ring-primary duration-200 cursor-pointer"
+    @click="fixedCostStore.setSelectedGroupCost(props.groupCost)"
+    >
     <div class="flex-center border-b-2 py-2 mx-2">
-      <p class="ml-2 text-lg flex-1">{{ props.groupCost.name }}</p>
+      <p class="ml-2 text-lg flex-1 text-white">{{ props.groupCost.name }}</p>
       <Icon
-        class="flex justify-center items-center cursor-pointer text-red-600 duration-300 w-8 opacity-70 hover:opacity-100"
+        class="flex justify-center items-center cursor-pointer duration-300 w-8 opacity-70 hover:opacity-100 !text-red-600"
         size="1.5rem"
         name="line-md:cancel"
         @click="confirmDelete"
+        id="deleteIcon"
       />
     </div>
     <FixedCostTable :fixedcosts="props.groupCost.fixedCosts ?? []" />
-    <div
-      class="w-full bg-yellow-100 py-1 flex justify-between px-4 font-medium text-sm rounded-bl-[2rem] rounded-br-lg"
-    >
-      <div>Summe:</div>
-      <div>
-        {{ useCeil(gropucostSum, 2) }}
-        €
-      </div>
-    </div>
   </div>
 </template>
 
@@ -35,12 +29,10 @@ interface GroupCostCard {
 }
 
 const props = defineProps<GroupCostCard>();
-
-const gropucostSum = computed(() =>
-  useSumBy(props.groupCost.fixedCosts, function (o: ChargeDto) {
-    return calculateMontlyChargeCost(o);
-  })
-);
+provide("groupCost", props.groupCost)
+const fixedCostStore = useFixedCostStore();
+const target = ref(null)
+onClickOutside(target,() => fixedCostStore.setSelectedGroupCost({}))
 
 const confirmDelete = () => {
   ElMessageBox.confirm(
@@ -56,7 +48,7 @@ const confirmDelete = () => {
       await useApiStore().GroupcostClient.deleteGroupCostEndpoint(
         props.groupCost.id
       );
-      await useFixedCostStore().fetch();
+      await fixedCostStore.fetch();
       ElMessage({
         type: "success",
         message: "Erfolgreich gelöscht",

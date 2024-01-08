@@ -1,4 +1,6 @@
-﻿namespace MocoApi.Models.Moco.Resource
+﻿using Moco.Api.Models.Moco.Resource;
+
+namespace MocoApi.Models.Moco.Resource
 {
     public class Charge
     {
@@ -7,7 +9,7 @@
         public required double Value { get; set; }
         public int BudgetId { get; set; }
         public virtual Budget Budget { get; set; }
-        public required string UserId { get; set; }
-        public required TimeInterval TimeInterval { get; set; } = TimeInterval.monatlich;
+        public int CostInspectionId { get; set; }
+        public virtual CostInspection CostInspection { get; set; }
     }
 }

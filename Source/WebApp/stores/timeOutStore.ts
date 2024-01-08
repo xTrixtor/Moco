@@ -3,7 +3,7 @@ import { useUserStore } from "./userStore";
 
 export const useTimeoutStore = defineStore("timeout", {
   state: () => {
-    const defaultTime = 30 * 60 * 1000;
+    const defaultTime = 29 * 60 * 1000;
     const time = defaultTime;
     const interval = 1000;
     const text = "";

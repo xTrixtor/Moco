@@ -10,6 +10,12 @@ export default defineNuxtConfig({
     "@nuxtjs/tailwindcss",
     "@vueuse/nuxt",
     "@nuxt/image",
+    ['@nuxtjs/google-fonts', {
+        families: {
+          "Tektur": [400]
+        },
+        display: "swap"
+    }],
   ],
   vite: {
     plugins: [{

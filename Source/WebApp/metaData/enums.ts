@@ -1,4 +1,5 @@
 export enum EditModalType {
     FixedCost,
-    Budget
+    Budget,
+    Charge
 }

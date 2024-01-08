@@ -1,14 +1,16 @@
 <template>
   <div class="flex-center">
     <DxPieChart
-      v-if="costPieData"
+      v-if="pieChartData"
       id="pie"
-      :data-source="costPieData"
+      :data-source="pieChartData"
       palette="Dark"
       title="Kostenübersicht im Monat"
-      class="flex-1"
+      class="flex-1 w-full bg-foreground"
+      color="white"
+      style="color: white !important;"
     >
-      <DxSeries argument-field="name" value-field="cost">
+      <DxSeries  argument-field="name" value-field="value">
         <DxLabel
           :visible="!isMobil"
           :customize-text="formatLabel"
@@ -18,18 +20,18 @@
         </DxLabel>
       </DxSeries>
       <DxLegend
-        :column-count="4"
         orientation="horizontal"
         item-text-position="right"
         horizontal-alignment="center"
         vertical-alignment="bottom"
+        class="hallo123"
       />
     </DxPieChart>
     <div v-else class="h-[80vh] w-full grid justify-center items-center bg-gray/25">
       <div role="status">
         <svg
           aria-hidden="true"
-          class="w-8 h-8 mr-2 text-gray-200 animate-spin dark:text-gray-600 fill-brand"
+          class="w-8 h-8 mr-2 text-gray-200 animate-spin dark:text-gray-600 fill-primary"
           viewBox="0 0 100 101"
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
@@ -56,80 +58,26 @@ import DxPieChart, {
   DxLabel,
   DxLegend,
 } from "devextreme-vue/pie-chart";
-import {
-  BudgetDto,
-  FixedCostDto,
-  RevenueDto,
-} from "~/stores/apiClient";
-import { useApiStore } from "~/stores/apiStore";
+import { storeToRefs } from "pinia";
 
-import { useBudgetStore } from "~/stores/budgetStore";
-import { useFixedCostStore } from "~/stores/fixedCostStore";
+import { useOverviewCostStore } from "~/stores/overviewCostStore";
 import { useUtilStore } from "~/stores/utilStore";
 
 const { isMobil } = useUtilStore();
+const {pieChartData} = storeToRefs(useOverviewCostStore())
 
-interface PieChartData {
-  name: string;
-  cost: number;
-}
-
-const costPieData = computed(() => combineCostsForChart());
-const revenues = computedAsync(
-  async () => (await useApiStore().RevenueClient.getRevenuesEndpoint()).revenues
-);
-
-const combineCostsForChart = (): PieChartData[] => {
-  const { groupCosts } = useFixedCostStore();
-  const { budgets } = useBudgetStore();
-
-  let fixedCostSum = 0;
-  groupCosts.map((groupCost, key) => {
-    const groupCostSum = useSumBy(
-      groupCost.fixedCosts,
-      function (fixedcost: FixedCostDto) {
-        return calculateMontlyChargeCost(fixedcost);
-      }
-    );
-    fixedCostSum += groupCostSum;
-  });
-
-  const fixedCostPieData: PieChartData = {
-    name: "Fix-Kosten",
-    cost: fixedCostSum,
-  };
-
-  const groupSum = useSumBy(budgets, function (o: BudgetDto) {
-    return o.limit;
-  });
-  const budgetPieData = { name: "Variable Kosten", cost: groupSum };
-  const totalRevenue = useSumBy(revenues.value, function (revenue: RevenueDto) {
-    return revenue.value;
-  });
-  const restMoney = totalRevenue - (budgetPieData.cost + fixedCostPieData.cost);
-  const freeMoneyPieData: PieChartData = {
-    name: "Restliches Geld",
-    cost: useCeil(restMoney, 2),
-  };
-  const pieChartData = [
-    budgetPieData,
-    fixedCostPieData,
-    freeMoneyPieData,
-  ] as PieChartData[];
-
-  return pieChartData;
-};
 
 const formatLabel = ({ valueText, percentText }) =>
   `${useCeil(valueText, 2)}€ (${percentText})`;
 
-onMounted(() => {
-  combineCostsForChart();
-});
+
 </script>
 
-<style>
+<style scoped>
 #pie {
-  height: 440px;
+}
+
+.dxc-legend{
+  font-family: 'Tektur', sans-serif !important;
 }
 </style>

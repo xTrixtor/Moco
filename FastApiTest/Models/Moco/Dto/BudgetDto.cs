@@ -15,7 +15,6 @@ namespace MocoApi.Models.Moco.Dto
             Name = budget.Name;
             Limit = budget.Limit;
             UserId = budget.UserId;
-            Charges = budget.Charges?.Select(x => x.asDto()).ToArray();
         }
         public int Id { get; set; }
         public string Name { get; set; }

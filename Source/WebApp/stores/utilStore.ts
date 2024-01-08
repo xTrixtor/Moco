@@ -19,8 +19,3 @@ export const useUtilStore = defineStore("util", {
     }
   },
 );
-
-interface GroupCostOption {
-  id: number;
-  name:string;
-}

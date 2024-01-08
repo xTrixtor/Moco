@@ -1,12 +1,17 @@
 ﻿using MocoApi.Extensions;
-using MocoApi.Models.Moco.Dto;
 using FastEndpoints;
-using MocoApi.Models.Moco.Resource;
+using Moco.Api.Factories.Db;
 
 namespace MocoApi.Endpoints.Charge
 {
     public class CreateChargeEndpoint: Endpoint<CreateChargeRequest, CreateChargeRespone>
     {
+        private readonly MocoContextFactory mocoContextFactory;
+
+        public CreateChargeEndpoint(MocoContextFactory mocoContextFactory)
+        {
+            this.mocoContextFactory = mocoContextFactory;
+        }
         public override void Configure()
         {
             Post("/charge");
@@ -21,10 +26,11 @@ namespace MocoApi.Endpoints.Charge
 
         public async override Task HandleAsync(CreateChargeRequest req, CancellationToken ct)
         {
-            using(var dbContext = new MoCoContext())
+            using(var dbContext = mocoContextFactory.CreateMocoContext())
             {
-                var charge = await req.ChargeDto.PrepareAddAsync(dbContext, req.UserId);
+                var charge = await req.ChargeCDto.PrepareAddAsync(dbContext);
                 await dbContext.SaveChangesAsync();
+                dbContext.SaveChanges();
             }
 
             await SendAsync(new CreateChargeRespone { Success = true });
@@ -34,11 +40,19 @@ namespace MocoApi.Endpoints.Charge
     {
         [FromClaim("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier")]
         public string? UserId { get; set; }
-        public required ChargeDto ChargeDto { get; set; }
+        public required ChargeCDto ChargeCDto { get; set; }
     }
 
     public record CreateChargeRespone
     {
         public bool Success { get; set; }
+    }
+
+    public record ChargeCDto
+    {
+        public required string ChargeName { get; set; }
+        public required double Value { get; set; }
+        public required int BudgetId { get; set; }
+        public required int CostInspectionId { get; set; }
     }
 }

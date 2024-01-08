@@ -4,8 +4,9 @@ export class BaseAPIClient {
   getBaseUrl(defaultURL?: string, urlOverride?: string): string {
     return "https://localhost:53084";
   }
-  transformOptions(opt: any): Promise<any> {
+  transformOptions(opt:any): Promise<any> {
     const userStore = useUserStore();
+    
     if (userStore.isAuthenticated) {
       opt.headers.Authorization = "Bearer " + userStore.getAuthToken;
     }

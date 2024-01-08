@@ -2,14 +2,14 @@
 
 namespace MocoApi.Models.Moco.Dto
 {
-    public class PersonDto
+    public class UserDto
     {
-        public PersonDto()
+        public UserDto()
         {
                 
         }
 
-        public PersonDto(Person p)
+        public UserDto(User p)
         {
             Id = p.Id;
             KeycloakUserId = p.KeycloakUserId;

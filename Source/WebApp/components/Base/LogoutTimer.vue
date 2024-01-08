@@ -3,11 +3,11 @@
     v-if="hover"
     @mouseover="hover = true"
     @mouseleave="hover = false"
-    class="border-2 border-white flex w-[130px] px-2 bg-brand/50 justify-center items-center rounded-lg my-2 cursor-pointer"
+    class="border-2 border-white flex w-[130px] px-2 bg-secondary justify-center items-center rounded-lg my-2 cursor-pointer"
   >
     <div class="divide-x-2 flex h-full items-center">
       <p
-        class="text-white hover:text-secondary hover:shadow-sm font-bold flex pr-2"
+        class="text-white hover:shadow-sm font-bold flex pr-2"
         @click="useUserStore().logout()"
       >
         Logout
@@ -40,7 +40,7 @@
       <div role="status">
         <svg
           aria-hidden="true"
-          class="w-6 h-6 blur-[1px] mx-2 text-gray-200 animate-spin dark:text-gray-600 fill-brand"
+          class="w-6 h-6 blur-[1px] mx-2 text-gray-200 animate-spin dark:text-gray-600 fill-primary"
           viewBox="0 0 100 101"
           fill="none"
           xmlns="http://www.w3.org/2000/svg"

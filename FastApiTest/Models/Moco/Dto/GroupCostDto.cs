@@ -1,14 +1,13 @@
-﻿using Moco.Api.Models.Moco.Dto;
+﻿using Moco.Api.Models.Moco.Resource;
 using MocoApi.Extensions;
-using MocoApi.Models.Moco.Dto;
 
-namespace Moco.Api.Models.Moco.Resource
+namespace Moco.Api.Models.Moco.Dto
 {
     public class GroupCostDto
     {
         public GroupCostDto()
         {
-            
+
         }
         public GroupCostDto(GroupCost db)
         {

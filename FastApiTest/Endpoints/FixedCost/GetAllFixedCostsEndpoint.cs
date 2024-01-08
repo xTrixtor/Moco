@@ -1,5 +1,5 @@
 ﻿using FastEndpoints;
-using Moco.Api.Models.Moco.Resource;
+using Moco.Api.Models.Moco.Dto;
 using MocoApi.Endpoints.Budget;
 using MocoApi.Extensions;
 

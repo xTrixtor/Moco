@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import { Budget, BudgetDto, CBudgetRequest, ChargeDto, } from "./apiClient";
+import { BudgetDto, CBudgetRequest, ChargeDto, } from "./apiClient";
 import { useApiStore } from "./apiStore";
 
 export const useBudgetStore = defineStore("budget", {
@@ -15,11 +15,11 @@ export const useBudgetStore = defineStore("budget", {
     async addBudget(newBudget: BudgetDto){
 
       const cBudgetDto = {budget: newBudget} as CBudgetRequest
-      await useApiStore().BudgetClient.createBudgetEndpoint(cBudgetDto);
+      await useApiStore().BudgetClient.createBudgetEndpoint("",cBudgetDto);
     },
     async fetch(): Promise<BudgetDto[]> {
       var response = await useApiStore().BudgetClient.getBudgetsEndpoint();
-      this.budgets = response.budgets;
+      this.budgets = useOrderBy(response.budgets, ['limit'],['desc']);
 
       return response.budgets?? [];
     },

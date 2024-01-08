@@ -1,4 +1,4 @@
-﻿namespace Moco.Api.Models.Moco.Dto
+﻿namespace Moco.Api.Models.Moco.Resource
 {
     public class GroupCost
     {

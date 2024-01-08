@@ -2,6 +2,7 @@
 {
     using FastEndpoints;
     using Microsoft.EntityFrameworkCore;
+    using Moco.Api.Extensions;
     using Moco.Api.Factories.Db;
 
     public class DeleteGroupCostEndpoint : Endpoint<DeleteGroupCostRequest>
@@ -25,10 +26,18 @@
                 try
                 {
                     var selectedGroupCost = await dbContext.GroupCosts.FirstOrDefaultAsync(x => x.Id.Equals(req.GroupCostId));
-                    if (selectedGroupCost == null)
+                    if (selectedGroupCost is null)
+                    {
                         ThrowError("Could not find Group Cost with given Id");
 
+                    }
+
+                    foreach (var fixedCost in selectedGroupCost.FixedCosts)
+                    {
+                        await fixedCost.DeleteAsync(dbContext);
+                    }
                     dbContext.GroupCosts.Remove(selectedGroupCost);
+
                     await dbContext.SaveChangesAsync();
 
                     await SendOkAsync();
