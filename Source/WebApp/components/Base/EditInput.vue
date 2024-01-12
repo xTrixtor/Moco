@@ -5,12 +5,12 @@
       v-model="inputValue"
       ref="target"
       :type="props.type"
-      class="input text-base outline-none bg-transparent pl-2 py-1 caret-primary font-semibold text-success border-r-2 border-border w-full relative"
+      class="input outline-none bg-transparent py-1 caret-primary font-semibold text-success border-r-2 border-border w-full relative"
       :class="inputStyling"
     />
     <span class="underline"></span>
     </div>
-    <p v-else class="pl-2 py-1 text-base cursor-pointer h-full" :class="inputStyling" @click="handleLableClick">
+    <p v-else class="py-1 cursor-pointer h-full" :class="inputStyling" @click="handleLableClick">
       {{ inputValue + " " }}  {{ inputExtension??"" }}
     </p>
   </div>

@@ -4,7 +4,7 @@
         <div @click="previousMonth" id="datePickerIcon" class="flex-center flex-1">
             <Icon name="bxs:left-arrow" size="2rem" class="text-border"/>
         </div>
-        <input type="month" v-model="selectedMonthyYear" class="p-2 border-2 rounded-sm border-primary w-1/3 !cursor-pointer bg-foreground" />
+        <Calendar view="month" dateFormat="M-yy" v-model="selectedDate" showIcon iconDisplay="input" class="w-1/4" @date-select="handleChange" @month-change="handleChange" @year-change="handleChange"/>
         <div id="datePickerIcon" class="flex-center flex-1 duration-300" @click="nextMonth">
             <Icon name="bxs:right-arrow" class="text-border" size="2rem"/>
         </div>
@@ -12,18 +12,16 @@
 </template>
 
 <script setup lang="ts">
-import { format } from 'date-fns';
 import { addMonths } from 'date-fns';
 import { storeToRefs } from 'pinia';
 import { useInspectionStore } from '~/stores/costInspectionStore';
-
-const formatToMonthString = (date:Date): String => {
-    return format(date, "yyyy-MM")
-}
+import Calendar from 'primevue/calendar';
 
 const { selectedDate } = storeToRefs(useInspectionStore())
 
-const selectedMonthyYear = computed(() => formatToMonthString(selectedDate.value))
+const handleChange = async () => {
+    await useInspectionStore().fetch()
+}
 
 const nextMonth = async () => {
     const prevMonthDate = addMonths(selectedDate.value, 1);

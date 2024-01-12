@@ -48,13 +48,7 @@
           />
         </div>
         <BasePrimaryButton btnTxt="Registrieren" :onClick="registerUser" />
-        <el-button
-          size="small"
-          type="primary"
-          class="!bg-primary/20 !border-0"
-          :onClick="() => (data = false)"
-          >Anmelden</el-button
-        >
+        <BasePrimaryButton btn-txt="Anmelden" :on-click="() => (data = false)" class="!bg-primary/20 !border-0 w-1/4 text-xs flex-center !rounded-lg"/>
       </div>
     </div>
   </div>

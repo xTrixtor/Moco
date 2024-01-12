@@ -4,27 +4,30 @@
     class="flex flex-col p-2 border-2 border-border rounded-lg rounded-br-[2rem] rounded-tl-[2rem] shadow-lg"
     :class="calculateCardColor()"
   >
-    <div class="flex w-full justify-end ">
-      <el-tooltip 
-      content="Update Checkliste"
-      placement="right">
-        <Icon
-        v-if="isUpgradeable"
+    <div
+      v-if="isUpgradeable"
+      class="flex w-full justify-end"
+      v-tooltip="'Update Checkliste'"
+      placeholder="right"
+    >
+      <Icon
         name="grommet-icons:upgrade"
         @click="fixedCostUpToDate"
         class="rotate-180 cursor-pointer hover:!text-primary duration-300"
         size="1.5rem"
         color="white"
       />
-      </el-tooltip>
     </div>
-    <p class="text-center text-xl pb-1 border-b-2  mb-2 mx-3">Fixkosten</p>
+    <p class="text-center text-xl pb-1 border-b-2 mb-2 mx-3">Fixkosten</p>
     <div
       v-for="(fixcost, key) in selectedCostInspection.fixedCostChecklist"
       class="flex-center text-white text-md border-b-2 border-border/50 pb-1 my-1 hover:bg-slate-200/25 cursor-pointer relative"
       @click="checkedFixedCost(fixcost)"
     >
-    <div v-if="fixcost.isChecked" class="w-full absolute border-b-2 border-black"></div>
+      <div
+        v-if="fixcost.isChecked"
+        class="w-full absolute border-b-2 border-black"
+      ></div>
       <div class="w-3/5 truncate mx-1">
         {{ fixcost.fixedCost?.name }}
       </div>
@@ -32,7 +35,7 @@
         {{ calculateMontlyChargeCost(fixcost.fixedCost) }} €
       </div>
       <div class="flex-center mx-1">
-        <input type="checkbox" v-model="fixcost.isChecked" class="text-xl"/>
+        <input type="checkbox" v-model="fixcost.isChecked" class="text-xl" />
       </div>
     </div>
   </div>
@@ -69,7 +72,7 @@ const fixedCostUpToDate = async () => {
 };
 
 const checkedFixedCost = async (changedFixedCost: CheckableFixedCostDto) => {
-  changedFixedCost.isChecked = !changedFixedCost.isChecked
+  changedFixedCost.isChecked = !changedFixedCost.isChecked;
   const uDto: CheckableFixedCostUDto = {
     id: changedFixedCost.id,
     isChecked: changedFixedCost.isChecked,
@@ -78,7 +81,6 @@ const checkedFixedCost = async (changedFixedCost: CheckableFixedCostDto) => {
     checkableFixedCostUDto: uDto,
   } as UpdateCheckableFixedCostRequest);
 };
-
 
 const calculateCardColor = (): String => {
   const sum = useSumBy(
@@ -119,16 +121,16 @@ const getBgColorInProcent = (valueInProcent: number): String => {
 </script>
 
 <style scoped>
-input[type='checkbox'] {
-    width:20px;
-    height:20px;
-    background:white;
-    border-radius:5px;
-    border:2px solid #555;
-    cursor: pointer;
+input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+  background: white;
+  border-radius: 5px;
+  border: 2px solid #555;
+  cursor: pointer;
 }
 
-input[type='checkbox']:checked {
-    @apply bg-primary;
+input[type="checkbox"]:checked {
+  @apply bg-primary;
 }
 </style>

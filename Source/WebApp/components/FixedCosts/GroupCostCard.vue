@@ -1,7 +1,7 @@
 <template>
   <div
     ref="target"
-    class="bg-secondary-content max-h-[50vh] min-h-[5vh] w-full md:w-[300px] ring-2 ring-slate-300 rounded-lg rounded-bl-[2rem] rounded-tr-[2rem] my-2 shadow-lg shadow-slate-400 hover:ring-offset-2 hover:ring-primary duration-200 cursor-pointer"
+    class="bg-card max-h-[50vh] min-h-[5vh] w-full md:w-[300px] ring-2 ring-border rounded-lg rounded-bl-[2rem] rounded-tr-[2rem] my-2 shadow-lg shadow-slate-400 hover:ring-offset-2 hover:ring-primary duration-200 cursor-pointer"
     @click="fixedCostStore.setSelectedGroupCost(props.groupCost)"
     >
     <div class="flex-center border-b-2 py-2 mx-2">

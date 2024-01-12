@@ -40,17 +40,17 @@ public class MoCoContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         var budgets = new List<Budget>() {
-                new Budget { Name = "Haushalt", Id = 1, UserId = "75097005-23ad-4e28-994b-91fdf414b205", Limit = 300 },
-                new Budget { Name = "Tanken", Id = 2, UserId = "75097005-23ad-4e28-994b-91fdf414b205", Limit = 150 },
-                new Budget { Name = "Aktivität", Id = 3, UserId = "75097005-23ad-4e28-994b-91fdf414b205", Limit = 100 },
-                new Budget { Name = "Luxus", Id = 4, UserId = "75097005-23ad-4e28-994b-91fdf414b205", Limit = 100 },
+                new Budget { Name = "Haushalt", Id = 1, UserId = "459f2d33-be1a-42fd-b912-fe8daebe07c6", Limit = 300 },
+                new Budget { Name = "Tanken", Id = 2, UserId = "459f2d33-be1a-42fd-b912-fe8daebe07c6", Limit = 150 },
+                new Budget { Name = "Aktivität", Id = 3, UserId = "459f2d33-be1a-42fd-b912-fe8daebe07c6", Limit = 100 },
+                new Budget { Name = "Luxus", Id = 4, UserId = "459f2d33-be1a-42fd-b912-fe8daebe07c6", Limit = 100 },
         };
 
         var costGroups = new List<GroupCost>()
         {
-            new GroupCost { Id = 1, Name = "Wohnen", UserId = "75097005-23ad-4e28-994b-91fdf414b205"},
-            new GroupCost { Id = 2, Name = "Investieren", UserId = "75097005-23ad-4e28-994b-91fdf414b205"},
-            new GroupCost { Id = 3, Name = "Auto", UserId = "75097005-23ad-4e28-994b-91fdf414b205"},
+            new GroupCost { Id = 1, Name = "Wohnen", UserId = "459f2d33-be1a-42fd-b912-fe8daebe07c6"},
+            new GroupCost { Id = 2, Name = "Investieren", UserId = "459f2d33-be1a-42fd-b912-fe8daebe07c6"},
+            new GroupCost { Id = 3, Name = "Auto", UserId = "459f2d33-be1a-42fd-b912-fe8daebe07c6"},
         };
         var fixCosts = new List<FixedCost>()
         {
@@ -114,11 +114,11 @@ public class MoCoContext : DbContext
             .HasData(fixCosts);
 
         modelBuilder.Entity<Revenue>()
-            .HasData(new Revenue { CompanyName = "Compoany", Id = 1, UserId = "75097005-23ad-4e28-994b-91fdf414b205", Value = 2500.22 });
+            .HasData(new Revenue { CompanyName = "Compoany", Id = 1, UserId = "459f2d33-be1a-42fd-b912-fe8daebe07c6", Value = 2500.22 });
 
         modelBuilder.Entity<User>()
             .HasData(
-                new User { CreatedAt = new DateTime(), Email = "email@gmx.de", KeycloakUserId = "75097005-23ad-4e28-994b-91fdf414b205", Id = 1, Firstname = "Nico", LastName = "Böhner", Username = "boehnern" }
+                new User { CreatedAt = new DateTime(), Email = "email@gmx.de", KeycloakUserId = "459f2d33-be1a-42fd-b912-fe8daebe07c6", Id = 1, Firstname = "Nico", LastName = "Böhner", Username = "boehnern" }
             );
     }
 }

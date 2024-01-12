@@ -1,19 +1,9 @@
 import { useFixedCostStore } from "~/stores/fixedCostStore";
 
-export interface AutoCompleteSuggestion{
-    value:string;
-}
-export const groupCostSuggestions : AutoCompleteSuggestion[] = [
-  { value: "Abonnements" },
-  { value: "Auto" },
-  { value: "Allgemein" },
-  { value: "Investieren" },
-  { value: "Versicherung" },
-  { value: "Wohnen" },
-];
+export const groupCostSuggestions : string[] = [ "Abonnements", "Auto", "Allgemein", "Investieren", "Versicherung", "Wohnen"];
 
-export const getGroupcostSuggestions = () : AutoCompleteSuggestion[] => {
+export const getGroupcostSuggestions = () : string[] => {
     const {groupCostOptions} = useFixedCostStore();
-
-    return groupCostSuggestions.filter(x => !useSome(groupCostOptions, {name:x.value}))
+    const currentGroupCostNames = groupCostOptions.map(x => x.name);
+    return groupCostSuggestions.filter(x => !currentGroupCostNames.includes(x));
 }

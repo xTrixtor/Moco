@@ -25,7 +25,7 @@
     <div class="flex-1 flex justify-center items-center">
       <el-menu-item v-for="(navItem,key) in navBarItems" :key="key" :index="`${key}-${navItem.link}`" >
         <NuxtLink :to="navItem.link">
-          <p class="font-bold xl:!text-lg !text-primary underlineAnimation before:bg-primary hover:bg-none">{{ navItem.name }}</p>
+          <p class="font-bold xl:!text-lg hover:text-primary underlineAnimation before:bg-primary hover:bg-none">{{ navItem.name }}</p>
         </NuxtLink>
       </el-menu-item>
     </div>
@@ -84,6 +84,6 @@ const mobilNavItemClick = () => {
   @apply !bg-white/25;
 }
 li:has(.router-link-active){
-  @apply bg-primary-light/25 rounded-lg;
+  @apply bg-primary-light !text-highlight-text rounded-lg;
 }
 </style>

@@ -1,13 +1,12 @@
 <template>
-  <el-dialog
-    v-if="props.modelValue"
-    v-model="props.modelValue"
-    :title="'Hinzufügen von Kosten'"
-    width="30%"
-    :before-close="handleClose"
-    class="!bg-foreground"
+  <Dialog
+    v-if="data"
+    modal
+    class="w-1/4"
+    v-model:visible="data"
+    header="Hinzufügen von Kosten"
   >
-    <div class="w-full h-full py-4 px-1 rounded-lg bg-foreground">
+    <div class="w-full h-full py-4 px-1">
       <div class="flex items-center">
         <p class="w-1/2 !text-white">Name</p>
         <BaseCustomInput
@@ -28,64 +27,11 @@
       </div>
       <div class="flex">
         <p class="w-1/2 flex items-center !text-white">Time-Interval</p>
-        <el-select v-model="fixedCostCDto.timeInterval" class="m-2 w-full !bg-forground">
-          <el-option
-            v-for="(item, key) in createTimeIntervalSelectOptions()"
-            :key="key"
-            :label="item.label"
-            :value="item.value"
-          />
-        </el-select>
+        <Dropdown v-model="fixedCostCDto.timeInterval" placeholder="Auswählen" :options="createTimeIntervalSelectOptions()" option-label="label" option-value="value" :pt="{input:{class:'p-2'}}" class="w-full m-2"/>
       </div>
       <div class="flex">
         <p class="w-1/2 flex items-center !text-white">Gruppierung</p>
-        <el-select v-model="fixedCostCDto.groupCostId" class="m-2 w-full">
-          <el-option
-            v-for="(item, key) in groupCostOptions ?? []"
-            :key="key"
-            :label="item.name"
-            :value="item.id"
-          />
-          <template #footer>
-            <div
-              v-if="!isAdding"
-              id="addButton"
-              class="cursor-pointer hover:bg-primary/25 duration-300 rounded-md py-1"
-              @click="() => (isAdding = true)"
-            >
-              <Icon name="gridicons:add-outline" class="w-full text-xl" />
-            </div>
-            <div
-              v-else
-              class="flex-center bg-slate-50 border-b-2"
-              :class="newGroupCostName ? 'border-primary' : ''"
-            >
-              <BaseCustomInput
-                v-model="newGroupCostName"
-                type="text"
-                placeholder="Neue Gruppierung"
-                class="flex-1"
-                :styling="'border-none'"
-                :clearable="true"
-              />
-              <Icon
-                name="gridicons:add-outline"
-                @click="onConfirm"
-                class="ml-2 text-2xl cursor-pointer"
-                :class="
-                  newGroupCostName
-                    ? 'duration-500 rotate-180 text-green-800'
-                    : 'text-zinc-300/75'
-                "
-              />
-              <Icon
-                name="lets-icons:back"
-                @click="clear"
-                class="ml-2 text-2xl cursor-pointer duration-300"
-              />
-            </div>
-          </template>
-        </el-select>
+        <Dropdown v-model="fixedCostCDto.groupCostId" placeholder="Auswählen" :options="groupCostOptions" option-label="name" option-value="id" :pt="{input:{class:'p-2'}}" class="w-full m-2"/>
       </div>
       <div
         class="flex flex-row-reverse justify-between"
@@ -116,7 +62,7 @@
         <Icon name="eos-icons:bubble-loading" size="1.5rem" />
       </div>
     </div>
-  </el-dialog>
+  </Dialog>
 </template>
 
 <script setup lang="ts">

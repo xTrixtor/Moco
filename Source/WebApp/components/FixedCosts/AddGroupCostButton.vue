@@ -1,23 +1,16 @@
 <template>
-  <div ref="target" :class="baseButtonStyling" class="flex-center pr-1">
-      <div class="flex-center">
-        <el-autocomplete
-          effect="dark"
-          v-model="newGroupCostName"
-          :fetch-suggestions="querySearch"
-          clearable
-          placeholder="Gruppierung"
-          @select="handleSelect"
-          id="createGroupCostInput"
-          @focus="() => (inputFocused = true)"
-          @clear="handleClear"
-        />
-        <Icon
-          name="gridicons:add-outline"
-          class="text-green-500 text-xl duration-500"
-          @click="createGroupCost"
-        />
-      </div>
+  <div :class="baseButtonStyling" class="flex-center pr-1">
+    <div class="flex-center relative overflow-hidden">
+      <AutoComplete
+        v-model="newGroupCostName"
+        dropdownMode="current"
+        :completeOnFocus="true"
+        @complete="search"
+        :suggestions="suggestions"
+        :pt="{ input: { class: 'p-2' }, root: { class: 'h-8' }, panel:{class:'px-2'} }"
+        :emptySearchMessage="'Drücke Enter zum Erstellen dieser Kosten-Gruppe'"
+      />
+    </div>
   </div>
 </template>
 
@@ -25,21 +18,19 @@
 import { GroupCostCDto } from "~/stores/apiClient";
 import { useApiStore } from "~/stores/apiStore";
 import { useFixedCostStore } from "~/stores/fixedCostStore";
-import {
-  AutoCompleteSuggestion,
-  getGroupcostSuggestions,
-} from "@/metaData/suggestionData";
+import { getGroupcostSuggestions } from "@/metaData/suggestionData";
 
 const props = defineProps<{
   modelValue: boolean;
 }>();
 const emit = defineEmits(["update:modelValue"]);
+const suggestions = ref<string[]>([]);
 
 const showAutoCompleteField = useVModel(props, "modelValue", emit);
 const apiStore = useApiStore();
 const fixedCostStore = useFixedCostStore();
 
-const newGroupCostName = ref<string>("");
+const newGroupCostName = ref<string>();
 const inputFocused = ref(false);
 
 const createGroupCost = async () => {
@@ -53,22 +44,13 @@ const createGroupCost = async () => {
   }
 };
 
-const querySearch = (queryString: string, cb: any) => {
-  const results = queryString
-    ? getGroupcostSuggestions().filter(createFilter(queryString))
+const search = (event: any) => {
+  const copy = [...suggestions.value];
+  suggestions.value = event.query
+    ? copy.filter((x) =>
+        x.toLocaleLowerCase().includes(event.query.toLocaleLowerCase())
+      )
     : getGroupcostSuggestions();
-  cb(results);
-};
-const createFilter = (queryString: string) => {
-  return (groupcost: AutoCompleteSuggestion) => {
-    return (
-      groupcost.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0
-    );
-  };
-};
-
-const handleSelect = (item: AutoCompleteSuggestion) => {
-  newGroupCostName.value = item.value;
 };
 
 const clear = () => {
@@ -82,16 +64,14 @@ const baseButtonStyling =
 const target = ref(null);
 
 onClickOutside(target, () => {
-  if(!inputFocused.value && !newGroupCostName.value){
+  if (!inputFocused.value && !newGroupCostName.value) {
     clear();
   }
 
   inputFocused.value = false;
 });
 
-const handleClear= () =>{
-  clear();
-}
+watch(newGroupCostName, (newVal) => {});
 
 onKeyStroke("Enter", async (e) => {
   if (props.modelValue && newGroupCostName.value) {
@@ -104,7 +84,7 @@ onKeyStroke("Escape", async (e) => {
 });
 
 onMounted(() => {
-  getGroupcostSuggestions();
+  suggestions.value = getGroupcostSuggestions();
 });
 </script>
 

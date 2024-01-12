@@ -1,8 +1,13 @@
-// https://nuxt.com/docs/api/configuration/nuxt-config
+import Tailwind from "primevue/passthrough/tailwind";
 export default defineNuxtConfig({
   devtools: { enabled: true },
-  css: ["~/main.css",'devextreme/dist/css/dx.light.css'],
+  css: [
+    "~/main.css",
+    "devextreme/dist/css/dx.light.css",
+    "primevue/resources/themes/lara-dark-teal/theme.css"
+  ],
   modules: [
+    "nuxt-primevue",
     "nuxt-icon",
     "nuxt-lodash",
     "@element-plus/nuxt",
@@ -10,21 +15,32 @@ export default defineNuxtConfig({
     "@nuxtjs/tailwindcss",
     "@vueuse/nuxt",
     "@nuxt/image",
-    ['@nuxtjs/google-fonts', {
+    [
+      "@nuxtjs/google-fonts",
+      {
         families: {
-          "Tektur": [400]
+          Tektur: [400],
         },
-        display: "swap"
-    }],
+        display: "swap",
+      },
+    ],
   ],
+  primevue: {
+    usePrimeVue: true,
+    options: {
+      ripple:true,
+    }
+  },
   vite: {
-    plugins: [{
+    plugins: [
+      {
         name: "no-treeshake",
         transform(_, id) {
-            if (id.includes("ui/")) {
-                return { moduleSideEffects: "no-treeshake" };
-            }
-        }
-    }]
-}
+          if (id.includes("ui/")) {
+            return { moduleSideEffects: "no-treeshake" };
+          }
+        },
+      },
+    ],
+  },
 });

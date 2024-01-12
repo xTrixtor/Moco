@@ -1,12 +1,12 @@
 <template>
-    <el-dialog
-      :key="props.uniqueKey"
-      v-model="props.modelValue"
-      :title="'Bearbeitung von: ' + props.fixedcost.name"
-      width="30%"
-      :before-close="handleClose"
+    <Dialog
+      v-model:visible="data"
+      modal 
+      :header="'Bearbeitung von: ' + props.fixedcost.name"
+      :closable="true"
+      class=""
     >
-      <div class="w-full h-full bg-slate-50 py-4 px-1 rounded-lg">
+      <div class="w-full h-full py-4 px-1 rounded-lg">
         <div class="flex-center">
           <p class="w-1/2">Name</p>
           <BaseCustomInput
@@ -27,35 +27,25 @@
         </div>
         <div class="flex-center">
           <p class="w-1/2">Time-Interval</p>
-          <el-select
-            v-model="fixedCostUDto.timeInterval"
-            class="m-2 w-full"
-            :placeholder="TimeInterval[+props.fixedcost.timeInterval]"
-          >
-            <el-option
-              v-for="(item, key) in createTimeIntervalSelectOptions()"
-              :key="key"
-              :label="item.label"
-              :value="item.value"
-            />
-          </el-select>
+          <Dropdown :pt="{input:{class:'p-3'}}" v-model="fixedCostUDto.timeInterval" :options="createTimeIntervalSelectOptions()" option-label="label" option-value="value" placeholder="Auswählen" class="text-xs m-2"/>
         </div>
         <div
           class="flex flex-row-reverse justify-between"
           v-if="props.fixedcost.value != 0"
         >
           <div
-            class="w-10 h-10 flex items-center justify-center rounded-full mt-2"
+            class="w-8 h-8 flex items-center justify-center rounded-full mt-2"
             :class="
               !isDirty
                 ? ' bg-slate-300 !cursor-not-allowed duration-500 '
-                : ' bg-indigo-700 border-2 border-violet-900 hover:-translate-y-1 duration-300 hover:shadow-indigo-400 shadow-lg hover:cursor-pointer hover:bg-indigo-600'
+                : ' bg-secondary border-2 border-border hover:-translate-y-1 duration-300 hover:shadow-indigo-400 shadow-lg hover:cursor-pointer hover:bg-secondary-light'
             "
           >
             <Icon
               name="material-symbols:save-outline"
-              class="text-white w-full h-full p-1"
+              class="text-white"
               @click="handleUpdateCharge()"
+              size="1.5rem"
             />
           </div>
           <p
@@ -69,7 +59,7 @@
           <Icon name="eos-icons:bubble-loading" size="1.5rem" />
         </div>
       </div>
-    </el-dialog>
+    </Dialog>
 </template>
 
 <script setup lang="ts">
@@ -90,6 +80,7 @@ interface SelectOption {
   label: string;
   value: TimeInterval;
 }
+const target = ref();
 const props = defineProps<ChargeCardProps>();
 const emit = defineEmits(["update:modelValue"]);
 
@@ -113,6 +104,8 @@ const createTimeIntervalSelectOptions = (): SelectOption[] => {
     return { label: TimeInterval[+key], value: +key } as SelectOption;
   });
 };
+
+onClickOutside(target,() => data.value = false)
 
 onKeyStroke("Enter", async (e) => {
   if (props.modelValue) await handleUpdateCharge();

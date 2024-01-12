@@ -7,7 +7,7 @@
     </div>
     <div
       v-for="(charge, key) in charges"
-      class="flex-center justify-between border-b-2 border-border h-9"
+      class="flex-center justify-between border-b-2 border-border h-9 px-1"
       :class="[
         key % 2 ? '!bg-secondary border-y-0' : 'bg-secondary-light',
         key == 0 ? 'rounded-tr-2xl' : '',
@@ -47,13 +47,10 @@ const costInspectionStore = useInspectionStore();
 const { selectedBudget, selectedCostInspection } =
   storeToRefs(costInspectionStore);
 
-const charges = computed(() => getCharges(selectedBudget?.value?.charges??[]));
+const charges = computed(() => getCharges(selectedCostInspection?.value?.budgetCharges??[]));
 
-const getCharges = (budgetCharges: BudgetDto[]): BudgetDto[] =>{
-    if(!budgetCharges){
-      return [];
-    }
-    const filteredArray =  selectedCostInspection.value.budgetCharges?.filter(
+const getCharges = (budgetCharges?: ChargeDto[]): ChargeDto[] =>{
+    const filteredArray =  budgetCharges?.filter(
     (x) => x.budgetId === selectedBudget.value.id);
     return filteredArray;
 }

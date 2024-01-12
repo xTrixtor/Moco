@@ -1,18 +1,14 @@
 <template>
   <NuxtErrorBoundary @error="handleError">
     <template #error="{ error, clearError }">
-      <el-dialog
-        :model-value="error !== undefined"
-        title="Fehler beim Laden"
-        :align-center="true"
+      <Dialog
+        :visible="error !== undefined"
+        modal header="Fehler beim Laden"
         :before-close="clearError"
       >
         Fehler: {{ error }}
-        <el-button type="primary" @click="clearError">Ok</el-button>
-        <el-button type="info" @click="() => showError(error)"
-          >Details</el-button
-        >
-      </el-dialog>
+        <Button  @click="clearError">Ok</Button>
+      </Dialog>
     </template>
     <template #default>
       <slot />

@@ -1,25 +1,13 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@layer primevue, tailwind-utilities, tailwind-base, primevue;
 
-@layer components {
-    .flex-center {
-      @apply flex justify-center items-center;
-    }
-}
-
-.content{
-  @apply text-slate-50;
+  
+body{
+  @apply bg-background text-primary-text;
   font-family: 'Tektur', sans-serif !important;
 }
 
 :root{
   font-family: 'Tektur', sans-serif !important;
-  @apply !bg-foreground;
-}
-
-.el-overlay{
-  @apply !bg-background/50;
 }
 
 .underlineAnimation{
@@ -28,12 +16,12 @@
 }
 
 .underlineAnimation::before {
+  @apply bg-primary;
   content: '';
   position: absolute;
   width: 100%;
   height: 2px;
   border-radius: 2px;
-  background-color: #18272F;
   bottom: 0;
   left: 0;
   transform-origin: right;

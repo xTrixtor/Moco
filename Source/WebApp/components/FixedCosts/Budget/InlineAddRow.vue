@@ -19,7 +19,7 @@
       <div
         :class="
           allowedToSafe
-            ? 'bg-indigo-700 border-violet-900 hover:shadow-indigo-400 hover:bg-indigo-600 hover:cursor-pointer hover:scale-110 hover:-translate-y-1 duration-300 shadow-lg'
+            ? 'bg-secondary border-border hover:shadow-secondary hover:bg-secondary-light hover:cursor-pointer hover:scale-110 hover:-translate-y-1 duration-300 shadow-lg'
             : 'bg-gray-300 border-slate-300 cursor-not-allowed'
         "
         class="flex-center rounded-full border-2 mr-1"

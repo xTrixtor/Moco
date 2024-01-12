@@ -1,9 +1,9 @@
 <template>
-    <div class="w-full h-8 px-1 flex items-center ">
-        <div class="w-2/3">
+    <div class="h-8 px-1 flex items-center hover:bg-secondary hover:text-highlight-text hover:cursor-default duration-300 border-hightlight-bg text-secondary">
+        <div class="w-1/2 pl-2">
             <p class="truncate">{{ props.name }}</p>
         </div>
-        <div class="w-1/3">
+        <div class="w-1/2">
             <p class="truncate ...">{{ props.value }} €</p>
         </div>
     </div>

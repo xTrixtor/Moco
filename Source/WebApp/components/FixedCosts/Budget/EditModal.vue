@@ -1,9 +1,8 @@
 <template>
-    <el-dialog
+    <Dialog 
       v-if="props.modelValue"
       :key="props.uniqueKey"
       v-model="props.modelValue"
-      :title="'Bearbeitung von: ' + props.budgetDto.name"
       width="30%"
       :before-close="handleClose"
     >
@@ -35,7 +34,7 @@
           </div>
         </div>
       </div>
-    </el-dialog>
+    </Dialog>
   </template>
   
   <script setup lang="ts">
