@@ -1,35 +1,39 @@
 <template>
   <div v-if="createModus" class="flex-col">
     <div
-      class="flex my-1 !border-2 py-1 border-border bg-foreground divide-x-2 divide-border rounded-lg"
+      class="my-1 py-1 bg-foreground rounded-lg flex w-full content-center justify-between"
       ref="target"
     >
-      <input
+      <InputText 
         v-model="chargeCDto.chargeName"
-        class="input text-sm outline-none bg-transparent pl-2 font-semibold text-success w-[45%] relative"
+        size="small"
+        class="input text-sm outline-none bg-transparent pl-2 font-semibold text-primary w-[45%] relative"
         placeholder="Name"
       />
-      <input
+      <InputText 
         v-model="chargeCDto.value"
-        class="input text-sm outline-none bg-transparent pl-2 font-semibold text-success w-[45%] relative"
+        size="small"
+        class="input text-sm outline-none bg-transparent pl-2 font-semibold text-primary w-[45%] relative"
         type="number"
         placeholder="Wert"
       />
 
-      <div
+      <div class="flex-1 ml-2 flex-center">
+        <div
         :class="
           allowedToSafe
-            ? 'bg-secondary border-border hover:shadow-secondary hover:bg-secondary-light hover:cursor-pointer hover:scale-110 hover:-translate-y-1 duration-300 shadow-lg'
-            : 'bg-gray-300 border-slate-300 cursor-not-allowed'
+            ? 'bg-primary text-highlight-text border-border hover:shadow-secondary hover:bg-primary-light hover:cursor-pointer duration-300 shadow-lg'
+            : 'bg-copy-light border-slate-300 cursor-not-allowed'
         "
-        class="flex-center rounded-full border-2 mr-1"
+        class="rounded-full border-2 flex-center w-8 h-8"
+        @click="handleCreateCharge()"
       >
         <Icon
           name="material-symbols:save-outline"
-          class="text-white p-1"
-          @click="handleCreateCharge()"
-          size="2rem"
+          class="text-highlight-text p-1"
+          size="1.8rem"
         />
+      </div>
       </div>
     </div>
     <p class="text-red-600">{{ error }}</p>

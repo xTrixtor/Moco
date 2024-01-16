@@ -1,12 +1,11 @@
 <template>
-  <div class="h-full2:h-screen py-4">
     <div class="flex flex-col 2xl:flex-row gap-2">
       <div v-if="!loading" class="flex-1">
         <FixedCostsInfoRow />
         <div
           class="bg-foreground h-full flex-1 md:h-[72vh] flex flex-col md:flex-wrap items-start border-2 border-border rounded-lg rounded-br-[2rem] rounded-tl-[2rem] p-4 shadow-xl"
         >
-          <GroupCostCard :groupCost="group" v-for="group in groupCosts" />
+          <GroupCostCard :groupCost="group" v-for="(group,key) in groupCosts" :key="key" />
           <AddGroupCostCard />
           <BudgetCard />
         </div>
@@ -18,7 +17,6 @@
         <FixedCostsCostOverviewChart />
       </div>
     </div>
-  </div>
 </template>
 
 <script setup lang="ts">

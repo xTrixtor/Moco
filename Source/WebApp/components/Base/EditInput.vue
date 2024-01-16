@@ -5,7 +5,7 @@
       v-model="inputValue"
       ref="target"
       :type="props.type"
-      class="input outline-none bg-transparent py-1 caret-primary font-semibold text-success border-r-2 border-border w-full relative"
+      class="input outline-none bg-transparent py-1 caret-primary font-semibold text-primary border-r-2 border-border w-full relative"
       :class="inputStyling"
     />
     <span class="underline"></span>
@@ -63,7 +63,7 @@ onClickOutside(target, async () => {
 }
 
 .underline {
-  background-color: #70c2e7;
+  background-color: var(--primary-color);
   height: 2px;
   transform: translateX(0%);
   position: absolute;

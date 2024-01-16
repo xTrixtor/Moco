@@ -7,6 +7,7 @@
 </template>
 
 <script setup lang="ts">
+import Sidebar from 'primevue/sidebar';
 const props = defineProps<{
   modelValue: boolean;
 }>();

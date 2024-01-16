@@ -18,24 +18,29 @@
         color="white"
       />
     </div>
-    <p class="text-center text-xl pb-1 border-b-2 mb-2 mx-3">Fixkosten</p>
+    <p class="text-center text-xl pb-1 border-b-2 mb-2 mx-3 text-highlight-text">Fixkosten</p>
     <div
-      v-for="(fixcost, key) in selectedCostInspection.fixedCostChecklist"
-      class="flex-center text-white text-md border-b-2 border-border/50 pb-1 my-1 hover:bg-slate-200/25 cursor-pointer relative"
-      @click="checkedFixedCost(fixcost)"
+      v-for="fixcost in selectedCostInspection.fixedCostChecklist"
+      :key="fixcost.id"
+      class="flex-center relative border-b-[1px] border-border py-1 cursor-pointer"
     >
       <div
         v-if="fixcost.isChecked"
-        class="w-full absolute border-b-2 border-black"
-      ></div>
-      <div class="w-3/5 truncate mx-1">
-        {{ fixcost.fixedCost?.name }}
+        class="w-full absolute h-full z-10"
+        @click="checkedFixedCost(fixcost)"
+      >
+        <div class="border-b-2 border-background h-1/2" />
       </div>
-      <div class="w-1/4 truncate mx-1">
-        {{ calculateMontlyChargeCost(fixcost.fixedCost) }} €
-      </div>
-      <div class="flex-center mx-1">
-        <input type="checkbox" v-model="fixcost.isChecked" class="text-xl" />
+      <Checkbox
+        v-model="fixcost.isChecked"
+        :inputId="fixcost.id"
+        :value="fixcost.fixedCost?.name"
+        :binary="true"
+        @click="checkedFixedCost(fixcost)"
+      />
+      <div class="flex-center justify-between w-full mx-2">
+        <label :for="fixcost.id" class="flex-1">{{ fixcost.fixedCost?.name }}</label>
+        <label :for="fixcost.id">{{ fixcost.fixedCost?.value }} €</label>
       </div>
     </div>
   </div>
@@ -71,7 +76,7 @@ const fixedCostUpToDate = async () => {
   await costInspectionStore.fetch();
 };
 
-const checkedFixedCost = async (changedFixedCost: CheckableFixedCostDto) => {
+const checkedFixedCost = async (changedFixedCost: any) => {
   changedFixedCost.isChecked = !changedFixedCost.isChecked;
   const uDto: CheckableFixedCostUDto = {
     id: changedFixedCost.id,
@@ -109,13 +114,13 @@ const calculateCardColor = (): String => {
 const getBgColorInProcent = (valueInProcent: number): String => {
   switch (true) {
     case valueInProcent > 50 && valueInProcent < 75:
-      return "bg-yellow-500/75";
+      return "bg-warning-content";
     case valueInProcent > 75 && valueInProcent < 100:
-      return "bg-green-300/75";
+      return "bg-success-content";
     case valueInProcent >= 100:
-      return "bg-green-500/75";
+      return "bg-success-content";
     default:
-      return "bg-red-600/75";
+      return "bg-error-content";
   }
 };
 </script>

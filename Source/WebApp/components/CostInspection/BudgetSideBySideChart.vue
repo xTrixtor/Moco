@@ -1,68 +1,80 @@
 <template>
-  <DxChart v-if="budgets" id="chart" :data-source="chartData" >
-    <DxCommonSeriesSettings
-      argument-field="name"
-      type="bar"
-    >
-      <DxLabel :visible="true">
-        <DxFormat :precision="0" />
-      </DxLabel>
-    </DxCommonSeriesSettings>
-    <DxSeries value-field="limit" name="Limit" color="#70c2e7"/>
-    <DxSeries value-field="currentValue" name="Aktueller Wert" color="#d070e7"/>
-    <DxLegend vertical-alignment="bottom" horizontal-alignment="center" />
-  </DxChart>
+  <div class="flex w-full h-full p-4 bg-foreground">
+      <Chart type="bar" :data="chartData" :options="chartOptions" class="w-full h-full" />
+  </div>
 </template>
-<script setup lang="ts">
-import {
-  DxChart,
-  DxSeries,
-  DxCommonSeriesSettings,
-  DxLabel,
-  DxFormat,
-  DxLegend,
-  DxTitle,
-} from "devextreme-vue/chart";
-import { storeToRefs } from "pinia";
-import { ChargeDto } from "~/stores/apiClient";
-import { useBudgetStore } from "~/stores/budgetStore";
-import { useInspectionStore } from "~/stores/costInspectionStore";
 
-const budgetStore = useBudgetStore();
-const costInspectionStore = useInspectionStore();
+<script setup>
+import Chart from 'primevue/chart';
 
-const budgets = computed(() => budgetStore.budgets);
-const {selectedCostInspection } =
-  storeToRefs(costInspectionStore);
+onMounted(() => {
+  chartData.value = setChartData();
+  chartOptions.value = setChartOptions();
+});
 
-const chartData = computed(() => createBudgetChargesData());
+const chartData = ref();
+const chartOptions = ref();
 
-const createBudgetChargesData = () => {
-  return budgets.value.map((budget) => {
-    const filteredBudgetCharges =
-      selectedCostInspection.value.budgetCharges?.filter(
-        (x) => x.budgetId === budget.id
-      );
-    return {
-      name: budget.name,
-      limit: budget.limit,
-      currentValue: useSumBy(
-        filteredBudgetCharges,
-        function (charge: ChargeDto) {
-          return charge.value;
-        }
-      ),
-    };
-  });
+const setChartData = () => {
+  const documentStyle = getComputedStyle(document.documentElement);
+
+  return {
+      labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+      datasets: [
+          {
+              label: 'My First dataset',
+              backgroundColor: documentStyle.getPropertyValue('--blue-500'),
+              borderColor: documentStyle.getPropertyValue('--blue-500'),
+              data: [65, 59, 80, 81, 56, 55, 40]
+          },
+          {
+              label: 'My Second dataset',
+              backgroundColor: documentStyle.getPropertyValue('--pink-500'),
+              borderColor: documentStyle.getPropertyValue('--pink-500'),
+              data: [28, 48, 40, 19, 86, 27, 90]
+          }
+      ]
+  };
 };
+const setChartOptions = () => {
+  const documentStyle = getComputedStyle(document.documentElement);
+  const textColor = documentStyle.getPropertyValue('--text-color');
+  const textColorSecondary = documentStyle.getPropertyValue('--text-color-secondary');
+  const surfaceBorder = documentStyle.getPropertyValue('--surface-border');
 
-const calculateChargeBarColor = (value:any) => {
-  console.log(value)
-  return "#e7e770"
+  return {
+      maintainAspectRatio: false,
+      aspectRatio: 0.8,
+      plugins: {
+          legend: {
+              labels: {
+                  color: textColor
+              }
+          }
+      },
+      scales: {
+          x: {
+              ticks: {
+                  color: textColorSecondary,
+                  font: {
+                      weight: 500
+                  }
+              },
+              grid: {
+                  display: false,
+                  drawBorder: false
+              }
+          },
+          y: {
+              ticks: {
+                  color: textColorSecondary
+              },
+              grid: {
+                  color: surfaceBorder,
+                  drawBorder: false
+              }
+          }
+      }
+  };
 }
 </script>
-<style>
-#chart {
-  @apply w-full bg-foreground rounded-lg px-2 h-full !text-primary;
-}
-</style>

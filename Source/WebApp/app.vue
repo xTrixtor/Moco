@@ -1,4 +1,5 @@
 <template>
+  <ConfirmDialog />
   <NuxtLayout>
     <NuxtPage />
   </NuxtLayout>
@@ -7,6 +8,7 @@
 <script setup>
 import { usePrimeVue } from "primevue/config";
 import { de } from "@/primevue/config/de.json"
+
 
 onMounted(() => {
   const pvue = usePrimeVue();

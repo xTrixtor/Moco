@@ -1,5 +1,6 @@
 <template>
   <div
+    id="addButton"
     @click="() => showAutoCompleteField = true"
     class="h-[70px] w-full md:w-[300px] bg-gradient-to-r from-white to-secondary-content rounded-lg flex-center my-2 cursor-pointer border-dashed border-2 duration-300 border-primary opacity-30 hover:opacity-100"
   >
@@ -7,7 +8,7 @@
     <Icon
       v-else
       name="gridicons:add-outline"
-      class="ml-2 text-2xl duration-500"
+      class="ml-2 text-2xl duration-500 text-highlight-text"
     />
   </div>
 </template>

@@ -1,5 +1,5 @@
 ﻿using FastEndpoints;
-
+using Moco.Api.Extensions;
 
 namespace MocoApi.Endpoints.Budget
 {
@@ -20,6 +20,11 @@ namespace MocoApi.Endpoints.Budget
                     var budget = dbContext.Budgets.FirstOrDefault(x => x.Id.Equals(req.BudgetId));
                     if (budget == null)
                         ThrowError("Could not find Budget with given Id");
+
+                    foreach (var charge in budget.Charges)
+                    {
+                        await charge.DeleteAsync(dbContext);
+                    }
 
                     dbContext.Budgets.Remove(budget);
                     await dbContext.SaveChangesAsync();

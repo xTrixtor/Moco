@@ -3,3 +3,9 @@ export enum EditModalType {
     Budget,
     Charge
 }
+
+export enum ModalType{
+    Show,
+    Edit,
+    Create
+}

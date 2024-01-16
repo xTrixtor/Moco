@@ -1,11 +1,11 @@
 <template>
   <div
-    class="flex-col p-2 ml-2 border-l-2 border-y-2 border-border rounded-lg shadow-xl bg-foreground"
+    class="flex-col p-2 border-l-2 border-y-2 border-border rounded-lg shadow-xl bg-foreground"
   >
-    <p class="text-center text-xl pb-1 border-b-2 mb-2 mx-3">Variable Kosten</p>
+    <p class="text-center text-xl pb-1 border-b-2 mb-2 mx-3 text-highlight-text">Variable Kosten</p>
     <div v-for="budget in budgets">
       <div
-        class="flex-center py-3 hover:bg-primary/50 hover:font-bold hover:text-white cursor-pointer border-b-2 border-border "
+        class="flex-center py-3 bg-primary-hover relative hover:font-bold hover:text-white cursor-pointer border-b-2 border-border "
         @click="setBudget(budget)"
       >
         {{ budget.name }}
@@ -37,4 +37,7 @@ onMounted(async () => {
 });
 </script>
 
-<style scoped></style>
+<style scoped>
+
+</style>
+

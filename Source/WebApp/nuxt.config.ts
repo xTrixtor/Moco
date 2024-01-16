@@ -1,4 +1,3 @@
-import Tailwind from "primevue/passthrough/tailwind";
 export default defineNuxtConfig({
   devtools: { enabled: true },
   css: [
@@ -10,7 +9,6 @@ export default defineNuxtConfig({
     "nuxt-primevue",
     "nuxt-icon",
     "nuxt-lodash",
-    "@element-plus/nuxt",
     "@pinia/nuxt",
     "@nuxtjs/tailwindcss",
     "@vueuse/nuxt",
@@ -29,7 +27,7 @@ export default defineNuxtConfig({
     usePrimeVue: true,
     options: {
       ripple:true,
-    }
+    },
   },
   vite: {
     plugins: [

@@ -8,6 +8,8 @@
 
 <script setup lang="ts">
 import { EditModalType } from '~/metaData/enums';
+import { useConfirm } from "primevue/useconfirm";
+import { useToast } from "primevue/usetoast";
 
 interface SpecialCellProps{
     uniqueKey:string
@@ -20,30 +22,22 @@ interface SpecialCellProps{
 const props = defineProps<SpecialCellProps>()
 const modalVis = ref(false);
 
+const confirm = useConfirm();
+const toast = useToast();
 
 const confirmDelete = () =>{
-    ElMessageBox.confirm(
-    `Willst du ${props.label} wirklich löschen?`,
-    'Warning',
-    {
-      confirmButtonText: 'OK',
-      cancelButtonText: 'Schließen',
-      type: 'warning',
-    }
-  )
-    .then(async() => {
-        await props.deleteApiCall();
-      ElMessage({
-        type: 'success',
-        message: 'Erfolgreich gelöscht',
-      })
-    })
-    .catch(() => {
-      ElMessage({
-        type: 'info',
-        message: 'Löschen abgebrochen',
-      })
-    })
+  confirm.require({
+        message: `Willst du ${props.label} wirklich löschen?`,
+        header: 'Achtung!',
+        icon: 'pi pi-exclamation-triangle',
+        accept: async() => {
+            await props.deleteApiCall();
+            toast.add({ severity: 'info', summary: 'Confirmed', detail: 'You have accepted', life: 3000 });
+        },
+        reject: () => {
+            toast.add({ severity: 'error', summary: 'Rejected', detail: 'You have rejected', life: 3000 });
+        }
+    });
 }
 
 </script>

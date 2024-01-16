@@ -9,9 +9,8 @@
         <div v-else>
           <div
             v-for="(budget, key) in budgets"
-            class="w-full flex border-b-2 border-border"
+            class="w-full flex border-b-2 border-border text-highlight-text"
             :class="[
-              key % 2 ? '!bg-secondary-light border-y-0' : 'bg-secondary',
               key == 0 ? 'rounded-tr-2xl' : '',
             ]"
             :key="`${budget.id}-${key}`"

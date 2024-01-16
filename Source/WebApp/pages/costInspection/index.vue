@@ -1,11 +1,11 @@
 <template>
-  <div class="flex-center flex-col w-full">
+  <div class="flex-center flex-col w-full ">
     <CostInspectionDatePickerRow />
     <CostInspectionCreateInspectionButton v-if="!selectedCostInspection" />
-    <div v-else class="grid grid-cols-5 w-full h-[80vh] my-2">
+    <div v-else class="grid grid-cols-5 w-full h-[80vh] gap-3">
       <CostInspectionFixedCostChecklist />
       <CostInspectionBudgetInspection/>
-      <div class="col-span-3 bg-background/10 w-full mx-2 border-2 border-border rounded-lg">
+      <div class="col-span-3 bg-background/10 w-full border-2 border-border rounded-lg">
         <CostInspectionBudgetSideBySideChart/>
       </div>
     </div>

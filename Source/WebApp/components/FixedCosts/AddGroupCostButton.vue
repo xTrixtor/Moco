@@ -7,9 +7,20 @@
         :completeOnFocus="true"
         @complete="search"
         :suggestions="suggestions"
-        :pt="{ input: { class: 'p-2' }, root: { class: 'h-8' }, panel:{class:'px-2'} }"
+        :pt="{
+          input: { class: 'p-2 relative' },
+          root: { class: 'h-8 relative' },
+          panel: { class: 'px-2 relative' },
+        }"
         :emptySearchMessage="'Drücke Enter zum Erstellen dieser Kosten-Gruppe'"
       />
+      <div v-if="newGroupCostName" class="absolute h-full flex-center right-0 mr-2" v-tooltip="'Drücke Enter zum Erstellen dieser Kosten-Gruppe'">
+        <Icon
+          name="gridicons:add-outline"
+          class="text-2xl duration-500 text-highlight-text"
+          @click="createGroupCost"
+        />
+      </div>
     </div>
   </div>
 </template>

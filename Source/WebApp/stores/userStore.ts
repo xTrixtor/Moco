@@ -1,7 +1,6 @@
 import { defineStore } from "pinia";
 import { useApiStore } from "./apiStore";
 import { useTimeoutStore } from "./timeOutStore";
-import { throwError } from "element-plus/es/utils";
 import { LoginRequest, RefreshAuthTokenRequest, UserDto } from "./apiClient";
 
 
@@ -68,7 +67,7 @@ export const useUserStore = defineStore("user", {
           request as RefreshAuthTokenRequest
         );
       if (res === undefined) {
-        throwError("Refreshedfaild", "Refreshedfaild");
+        throw new Error("Refreshedfaild");
       }
       this.authToken = res.jwtToken ?? "";
       sessionStorage.setItem("authToken", res.jwtToken);

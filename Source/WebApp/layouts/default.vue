@@ -1,24 +1,24 @@
 <template>
   <BaseMocoErrorBoundry>
     <Transition v-if="!loggedIn">
-        <RegisterCard v-if="register" v-model="register" />
-        <LoginCard v-else v-model="register" />
+      <RegisterCard v-if="register" v-model="register" />
+      <LoginCard v-else v-model="register" />
     </Transition>
 
-    <div v-else>
+    <div v-else class="bg-background h-screen relative">
       <Navbar/>
-      <div class="px-4 bg-background content h-[92vh]">
-        <slot/>
+      <div class="px-2">
+        <slot />
       </div>
-      <BaseScrollButton v-if="isMobil"/>
     </div>
+    <BaseScrollButton v-if="isMobil" />
   </BaseMocoErrorBoundry>
 </template>
 
 <script lang="ts" setup>
 import { storeToRefs } from "pinia";
 import { useUserStore } from "~/stores/userStore";
-import { useUtilStore } from '~/stores/utilStore';
+import { useUtilStore } from "~/stores/utilStore";
 
 const { isMobil } = storeToRefs(useUtilStore());
 
@@ -29,7 +29,7 @@ const register = ref(false);
 
 onMounted(() => {
   useUtilStore().calculateIsMobil();
-})
+});
 </script>
 
 <style scoped>

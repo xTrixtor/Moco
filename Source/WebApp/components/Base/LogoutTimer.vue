@@ -3,7 +3,7 @@
     v-if="hover"
     @mouseover="hover = true"
     @mouseleave="hover = false"
-    class="border-2 border-white flex w-[130px] px-2 bg-secondary justify-center items-center rounded-lg my-2 cursor-pointer"
+    class="border-2 border-white flex w-[150px] p-2 bg-primary-dark justify-center items-center rounded-lg my-2 cursor-pointer"
   >
     <div class="divide-x-2 flex h-full items-center">
       <p
@@ -27,7 +27,7 @@
     v-else
     @mouseover="hover = true"
     @mouseleave="hover = false"
-    class="border-2 border-white flex w-[130px] px-2 bg-white/20 justify-center items-center rounded-lg my-2"
+    class="border-2 border-white flex w-[150px] p-2 bg-white/20 justify-center items-center rounded-lg my-2"
   >
     <div v-if="text" class="divide-x-2 flex h-full items-center">
       <p class="text-white font-bold flex pr-2">Logout</p>

@@ -4,7 +4,7 @@
       v-if="!$props.fixedcosts || props.fixedcosts.length === 0"
       class="overflow-hidden flex-center flex-col"
     >
-      <p class="text-center underlineAnimation w-1/2">Keine Daten</p>
+      <p class="text-center underlineAnimation w-1/2 text-highlight-text">Keine Daten</p>
       <div id="addButton" class="w-full py-1 flex-center opacity-70 hover:opacity-100" @click="() => addFixedCostModalVis = true">
             <Icon name="gridicons:add-outline" class="ml-2 text-xl duration-500 text-white"/>
       </div>
@@ -13,9 +13,8 @@
       <div
         v-for="(cost, key) in props.fixedcosts"
         :key="key"
-        class="w-full py-1 flex border-b-2 border-slate-500"
+        class="w-full py-1 flex border-b-2 border-border text-highlight-text"
         :class="[
-          key % 2 ? '!bg-secondary-light border-y-0' : 'bg-secondary',
           key == 0 ? 'rounded-tr-2xl' : '',
         ]"
       >
@@ -30,7 +29,7 @@
           <TableActionCell :unique-key="`${cost.id}-${cost.name}-${key}`" :dto="cost" label="diese Kosten" :delete-api-call="() => deleteFixedcostById(cost.id)" :edit-modal-type="EditModalType.FixedCost" />
         </div>
       </div>
-      <div id="addButton" class="w-full py-1 flex-center opacity-70 hover:opacity-100" @click="() => addFixedCostModalVis = true">
+      <div id="addButton" class="w-full my-2 flex-center opacity-70 hover:opacity-100" @click="() => addFixedCostModalVis = true">
             <Icon name="gridicons:add-outline" class="text-xl duration-500 text-white"/>
       </div>
     </div>
