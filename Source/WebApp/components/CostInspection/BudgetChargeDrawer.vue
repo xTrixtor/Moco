@@ -1,8 +1,6 @@
 <template>
-  <Sidebar v-model:visible="drawerVis" position="right">
-    <div class="flex flex-1 justify-start flex-col h-3/4">
+  <Sidebar v-model:visible="drawerVis" position="right" class="h-screen">
       <CostInspectionChargeTable/>
-    </div>
   </Sidebar>
 </template>
 

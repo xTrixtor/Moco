@@ -1,6 +1,7 @@
 <template>
   <ConfirmDialog />
   <NuxtLayout>
+    <div id="editModal"></div>
     <NuxtPage />
   </NuxtLayout>
 </template>

@@ -7,6 +7,7 @@ export interface GenericInputProps{
     workObject: any;
     bindProperty:string;
     type:string;
+    placeholder?: string;
 }
 
 const props = defineProps<GenericInputProps>()

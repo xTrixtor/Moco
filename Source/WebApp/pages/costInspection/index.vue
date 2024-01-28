@@ -5,8 +5,11 @@
     <div v-else class="grid grid-cols-5 w-full h-[80vh] gap-3">
       <CostInspectionFixedCostChecklist />
       <CostInspectionBudgetInspection/>
-      <div class="col-span-3 bg-background/10 w-full border-2 border-border rounded-lg">
-        <CostInspectionBudgetSideBySideChart/>
+      <div class="col-span-3 flex-col flex">
+        <!-- <OverviewRow/> -->
+        <div class="bg-background/10 flex-1 w-full border-2 border-border rounded-lg">
+          <CostInspectionBudgetSideBySideChart/>
+        </div>
       </div>
     </div>
   </div>
@@ -14,6 +17,7 @@
 
 <script setup lang="ts">
 import { storeToRefs } from "pinia";
+import OverviewRow from "~/components/CostInspection/OverviewRow.vue";
 import { useInspectionStore } from "~/stores/costInspectionStore";
 
 const { selectedCostInspection } = storeToRefs(

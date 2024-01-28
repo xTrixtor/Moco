@@ -2,7 +2,6 @@ export default defineNuxtConfig({
   devtools: { enabled: true },
   css: [
     "~/main.css",
-    "devextreme/dist/css/dx.light.css",
     "primevue/resources/themes/lara-dark-teal/theme.css"
   ],
   modules: [

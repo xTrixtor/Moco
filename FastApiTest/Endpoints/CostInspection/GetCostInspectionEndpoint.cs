@@ -36,7 +36,7 @@ namespace Moco.Api.Endpoints.CostInspection
                         return;
                     }
                     var count = dbContext.GroupCosts.Where(x => x.UserId == req.UserId).SelectMany(x => x.FixedCosts).Count();
-                    var updateable = count > costInspection.CheckableFixedCosts.Count;
+                    var updateable = false; // TODO
                     await SendAsync(new CostInspectionGResponse {CostInspection = costInspection.asDto(), CheackableFixcostsAreUpdateable = updateable});
                 }
             }

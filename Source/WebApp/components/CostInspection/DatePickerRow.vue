@@ -23,14 +23,6 @@ const handleChange = async () => {
     await useInspectionStore().fetch()
 }
 
-onKeyStroke("ArrowLeft", async () =>{
-    await previousMonth();
-})
-
-onKeyStroke("ArrowRight", async () =>{
-    await nextMonth();
-})
-
 const nextMonth = async () => {
     const prevMonthDate = addMonths(selectedDate.value, 1);
     selectedDate.value = prevMonthDate;

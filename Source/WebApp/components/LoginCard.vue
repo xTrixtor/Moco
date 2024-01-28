@@ -10,8 +10,8 @@
       <div
         class="w-full h-full flex-1 flex flex-col justify-evenly items-center"
       >
-        <InputText type="text" v-model="user.username"  />
-        <Password v-model="user.password" :feedback="false" />
+        <InputText type="text" v-model="user.username" placeholder="Username"  />
+        <Password v-model="user.password" :feedback="false" placeholder="Password" />
         <Button label="Anmelden" @click="handleLogin" outlined/>
         <BasePrimaryButton btn-txt="Registirieren" :on-click="() => (data = true)" class="!bg-primary/20 !border-0 w-1/4 text-xs flex-center !rounded-lg"/>
       </div>

@@ -11,7 +11,6 @@ public class MoCoContext : DbContext
     public DbSet<FixedCost> FixedCosts { get; set; }
     public DbSet<GroupCost> GroupCosts { get; set; }
     public DbSet<CostInspection> CostInspections { get; set; }
-    public DbSet<CheckableFixedCost> CheckableFixedCosts { get; set; }
 
     public MoCoContext()
     {
@@ -85,12 +84,6 @@ public class MoCoContext : DbContext
             .HasMany(x => x.Charges)
             .WithOne(x => x.Budget)
             .HasForeignKey(x => x.BudgetId)
-            .IsRequired(false);
-
-        modelBuilder.Entity<CostInspection>()
-            .HasMany(x => x.CheckableFixedCosts)
-            .WithOne(x => x.CostInspection)
-            .HasForeignKey(x => x.CostInspectionId)
             .IsRequired(false);
 
         modelBuilder.Entity<CostInspection>()

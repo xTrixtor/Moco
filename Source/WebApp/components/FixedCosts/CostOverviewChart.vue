@@ -1,33 +1,7 @@
 <template>
   <div class="flex-center">
-    <DxPieChart
-      v-if="pieChartData"
-      id="pie"
-      :data-source="pieChartData"
-      palette="Dark"
-      title="Kostenübersicht im Monat"
-      class="flex-1 w-full bg-foreground"
-      color="white"
-      style="color: white !important;"
-    >
-      <DxSeries  argument-field="name" value-field="value">
-        <DxLabel
-          :visible="!isMobil"
-          :customize-text="formatLabel"
-          position="columns"
-        >
-          <DxConnector :visible="true" :width="0.5" />
-        </DxLabel>
-      </DxSeries>
-      <DxLegend
-        orientation="horizontal"
-        item-text-position="right"
-        horizontal-alignment="center"
-        vertical-alignment="bottom"
-        class="hallo123"
-      />
-    </DxPieChart>
-    <div v-else class="h-[80vh] w-full grid justify-center items-center bg-gray/25">
+  
+    <div class="h-[80vh] w-full grid justify-center items-center bg-gray/25">
       <div role="status">
         <svg
           aria-hidden="true"

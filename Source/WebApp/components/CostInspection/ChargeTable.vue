@@ -1,11 +1,12 @@
 <template>
-  <div v-if="selectedBudget" class="flex-1">
+  <div v-if="selectedBudget" class="h-full">
     <div class="flex-center">
       <p class="underlineAnimation w-full text-xl text-center mb-4">
         {{ selectedBudget.name }}
       </p>
     </div>
-    <div
+    <div class="h-5/6 overflow-auto">
+      <div
       v-for="(charge, key) in charges"
       class="flex-center justify-between border-b-2 border-border h-9 px-1"
       :class="[
@@ -26,6 +27,7 @@
         label="diese Kosten"
         :delete-api-call="() => deleteCharge(charge.id)"
       />
+    </div>
     </div>
     <CostInspectionAddInlineCharge/>
     <div class="flex-center" :class="calculateSumBgColor()">

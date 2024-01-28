@@ -1,21 +1,44 @@
 <template>
-  <div class="w-1/2">
-    <BaseGenericModal :genericModalInput="opsModalInputs" :workObject="testObject" :modalType="ModalType.Create" :actionCall="() => console.log('Erstellt')"/>
-  </div>
-  {{ testObject }}
+    <!-- <BaseGenericModal
+      :genericModalInput="opsModalInputs"
+      :workObject="testObject"
+      :modalType="ModalType.Create"
+      :actionCall="() => console.log('Erstellt')"
+    /> -->
+  <div @click="handleClick" class="p-4 bg-primary">Open</div>
+  <Icon name="ic:baseline-close" size="2rem" />
 </template>
 
 <script setup lang="ts">
-import { GenericModalInput } from '~/components/Base/GenericModal.vue';
-import { ModalType } from '~/metaData/enums';
-const testObject = ref<Ops>({});
-const userTest = ref({})
+import { GenericEditModalProps, GenericModalInput } from "~/components/Base/GenericModal.vue";
+import { ModalType } from "~/metaData/enums";
+import { createApp } from "vue";
+import GenericInput from "@/components/Base/GenericInput.vue";
+import PrimaryButton from "~/components/Base/PrimaryButton.vue";
+import { GenericModalInstance } from "~/components/Instance/GenericModal";
 
-import GenericInput from "@/components/Base/GenericInput.vue"
+const testObject = ref<Ops>({});
+const userTest = ref({});
 
 const opsModalInputs: GenericModalInput[] = [
-  { label:"Ops-Kode", component: GenericInput, componentBinding: {bindProperty: "code", type:"text", workObject:testObject, } },
-  { label:"Description", component: GenericInput, componentBinding: {bindProperty: "desc", type:"text", workObject:testObject, } },
+  {
+    label: "Ops-Kode",
+    component: GenericInput,
+    componentBinding: {
+      bindProperty: "code",
+      type: "text",
+      workObject: testObject,
+    },
+  },
+  {
+    label: "Description",
+    component: GenericInput,
+    componentBinding: {
+      bindProperty: "desc",
+      type: "text",
+      workObject: testObject,
+    },
+  },
 ];
 
 // const userModalInputs: GenericModalInput[] = [
@@ -27,4 +50,10 @@ interface Ops {
   code: string;
   desc: string;
 }
+
+const handleClick = () => {
+  const props : GenericEditModalProps = {title:"Edit-Modal",workObject: testObject, actionBtnTxt:"Create", actionCall: () => console.log('Erstellt'), genericModalInput:opsModalInputs}
+  GenericModalInstance.open(props);
+};
+
 </script>

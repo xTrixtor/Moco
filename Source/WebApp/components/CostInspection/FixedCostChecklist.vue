@@ -21,7 +21,7 @@
     <p class="text-center text-xl pb-1 border-b-2 mb-2 mx-3 text-highlight-text">Fixkosten</p>
     <div
       v-for="fixcost in selectedCostInspection.fixedCostChecklist"
-      :key="fixcost.id"
+      :key="fixcost.key"
       class="flex-center relative border-b-[1px] border-border py-1 cursor-pointer"
     >
       <div
@@ -33,14 +33,14 @@
       </div>
       <Checkbox
         v-model="fixcost.isChecked"
-        :inputId="fixcost.id"
-        :value="fixcost.fixedCost?.name"
+        :inputId="fixcost.key"
+        :value="fixcost.name"
         :binary="true"
         @click="checkedFixedCost(fixcost)"
       />
       <div class="flex-center justify-between w-full mx-2">
-        <label :for="fixcost.id" class="flex-1">{{ fixcost.fixedCost?.name }}</label>
-        <label :for="fixcost.id">{{ fixcost.fixedCost?.value }} €</label>
+        <label :for="fixcost.key" class="flex-1">{{ fixcost.name }}</label>
+        <label :for="fixcost.key">{{ fixcost.value }} €</label>
       </div>
     </div>
   </div>
@@ -76,10 +76,11 @@ const fixedCostUpToDate = async () => {
   await costInspectionStore.fetch();
 };
 
-const checkedFixedCost = async (changedFixedCost: any) => {
+const checkedFixedCost = async (changedFixedCost: CheckableFixedCostDto) => {
   changedFixedCost.isChecked = !changedFixedCost.isChecked;
   const uDto: CheckableFixedCostUDto = {
-    id: changedFixedCost.id,
+    checkableFixcostKey: changedFixedCost.key,
+    costInspectionId: selectedCostInspection.value.id,
     isChecked: changedFixedCost.isChecked,
   } as CheckableFixedCostUDto;
   await useApiStore().InspectionClient.checkFixedCost({
@@ -91,7 +92,7 @@ const calculateCardColor = (): String => {
   const sum = useSumBy(
     selectedCostInspection.value.fixedCostChecklist,
     function (fixedCost: CheckableFixedCostDto) {
-      return fixedCost.fixedCost?.value;
+      return fixedCost?.value;
     }
   );
   const checkedFixedCosts = useFilter(

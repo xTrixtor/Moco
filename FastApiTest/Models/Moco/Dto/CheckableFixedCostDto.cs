@@ -5,19 +5,9 @@ namespace Moco.Api.Models.Moco.Dto
 {
     public class CheckableFixedCostDto
     {
-        public CheckableFixedCostDto()
-        {
-
-        }
-        public CheckableFixedCostDto(CheckableFixedCost db)
-        {
-            this.Id = db.Id;
-            this.FixedCost = db.FixedCost.asDto();
-            this.IsChecked = db.IsChecked;
-            this.CreatedAt = db.CreatedAt;
-        }
-        public int Id { get; set; }
-        public FixedCostDto FixedCost { get; set; }
+        public int Key { get; set; }
+        public string Name { get; set; }
+        public double Value { get; set; }
         public bool IsChecked { get; set; }
         public DateTime CreatedAt { get; set; }
     }

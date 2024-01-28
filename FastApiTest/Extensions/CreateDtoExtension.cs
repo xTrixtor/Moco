@@ -4,6 +4,7 @@ using Moco.Api.Extensions;
 using Moco.Api.Models.Moco.Dto;
 using Moco.Api.Models.Moco.Resource;
 using MocoApi.Endpoints.Charge;
+using MocoApi.Endpoints.Revenue;
 using MocoApi.Models.Moco.Dto;
 using MocoApi.Models.Moco.Resource;
 
@@ -118,24 +119,6 @@ namespace MocoApi.Extensions
             var groupCost = dto.Prepare();
             await moCoContext.GroupCosts.AddAsync(groupCost);
             return groupCost;
-        }
-
-        public static CheckableFixedCost Prepare(this FixedCostDto dto, int costInspectionId)
-        {
-            return new CheckableFixedCost
-            {
-                FixedCostId = dto.Id,
-                CostInspectionId = costInspectionId,
-                IsChecked = false,
-                CreatedAt = DateTime.Now,
-            };
-        }
-
-        public static CheckableFixedCost Add(this FixedCostDto dto, MoCoContext moCoContext, int inspectionId)
-        {
-            var checkableFixedCost = dto.Prepare(inspectionId);
-            moCoContext.CheckableFixedCosts.Add(checkableFixedCost);
-            return checkableFixedCost;
         }
     }
 }

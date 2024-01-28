@@ -38,8 +38,8 @@ namespace Moco.Api.Endpoints.CostInspection
 
     public record CheckableFixedCostUDto
     {
-        public int Id { get; set; }
+        public int CheckableFixcostKey { get; set; }
+        public int CostInspectionId { get; set; }
         public bool IsChecked { get; set; }
-        public DateTime CreatedAt { get; set; }
     }
 }

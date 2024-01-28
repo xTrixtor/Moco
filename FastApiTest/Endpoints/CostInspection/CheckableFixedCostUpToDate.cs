@@ -25,14 +25,14 @@ namespace Moco.Api.Endpoints.CostInspection
 
             using (var context = mocoContextFactory.CreateMocoContext())
             {
-                var createdFixedCostIds = req.AlreadyCreatedCheckableFixedCosts.Select(x => x.Id).ToList();
+                //var createdFixedCostIds = req.AlreadyCreatedCheckableFixedCosts.Select(x => x.Id).ToList();
 
-                var createableFixedCosts = context.GroupCosts.Where(x => x.UserId == req.UserId).SelectMany(x => x.FixedCosts).Where(x => !createdFixedCostIds.Contains(x.Id)).ToArray();
-                foreach (var createableFixedCost in createableFixedCosts)
-                {
-                    context.CheckableFixedCosts.Add(createableFixedCost.toCheckable(req.CostInspectionId));
-                }
-                await context.SaveChangesAsync();
+                //var createableFixedCosts = context.GroupCosts.Where(x => x.UserId == req.UserId).SelectMany(x => x.FixedCosts).Where(x => !createdFixedCostIds.Contains(x.Id)).ToArray();
+                //foreach (var createableFixedCost in createableFixedCosts)
+                //{
+                //    context.CheckableFixedCosts.Add(createableFixedCost.toCheckable(req.CostInspectionId));
+                //}
+                //await context.SaveChangesAsync();
             }
             await SendAsync(true);
         }

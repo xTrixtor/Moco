@@ -7,6 +7,8 @@ using Moco.Api.Endpoints.FixedCost;
 using MocoApi.Endpoints.Charge;
 using Moco.Api.Endpoints.CostInspection;
 using System.Runtime.CompilerServices;
+using Moco.Api.Models.Moco.Dto;
+using Newtonsoft.Json;
 
 namespace MocoApi.Extensions
 {
@@ -90,17 +92,19 @@ namespace MocoApi.Extensions
         }
         public static async Task UpdateAsync(this CheckableFixedCostUDto uDto, MoCoContext dbContext)
         {
-            var selectedCheckableFixedCost = await dbContext.CheckableFixedCosts.FindAsync(uDto.Id);
-            if (selectedCheckableFixedCost is null)
+            var selectedCostInspection = await dbContext.CostInspections.FirstOrDefaultAsync(x => x.Id == uDto.CostInspectionId);
+            if (selectedCostInspection is null)
                 throw new Exception("Checkable FC data couldnt be found");
 
-            selectedCheckableFixedCost.IsChecked = uDto.IsChecked;
+            var dto = selectedCostInspection.asDto();
+            dto.FixedCostChecklist.First(x => x.Key == uDto.CheckableFixcostKey).IsChecked = uDto.IsChecked;
+            selectedCostInspection.MonthlyFixedcostsJson = JsonConvert.SerializeObject(dto.FixedCostChecklist);
 
         }
 
-        public static CheckableFixedCost toCheckable(this FixedCost fixedCost, int costInspectionId)
+        public static CheckableFixedCostDto toCheckable(this FixedCostDto fixedCost, int key)
         {
-            return new CheckableFixedCost { FixedCostId = fixedCost.Id, CostInspectionId = costInspectionId, IsChecked = false, CreatedAt = DateTime.Now };
+            return new CheckableFixedCostDto { Key = key, Name = fixedCost.Name, Value = fixedCost.Value, IsChecked = false, CreatedAt = DateTime.Now };
         }
     }
 }
