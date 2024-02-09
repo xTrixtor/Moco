@@ -5,33 +5,45 @@
         {{ selectedBudget.name }}
       </p>
     </div>
-    <div class="h-5/6 overflow-auto">
-      <div
-      v-for="(charge, key) in charges"
-      class="flex-center justify-between border-b-2 border-border h-9 px-1"
-      :class="[
-        key % 2 ? '!bg-secondary border-y-0' : 'bg-secondary-light',
-        key == 0 ? 'rounded-tr-2xl' : '',
-      ]"
-    >
-      <div class="w-3/5">
-        <BaseEditInput v-model="charge.chargeName" @leave="updateBudgetCharge(charge)" />
+    <div class="h-5/6 overflow-auto flex"
+    :class="charges.length>0?'flex-col-reverse':'flex-col'">
+      <CostInspectionAddInlineCharge />
+      <div class="flex-1">
+        <div
+          v-for="(charge, key) in charges"
+          class="flex-center justify-between border-b-2 border-border h-9 px-1"
+          :class="[
+            key % 2 ? '!bg-secondary border-y-0' : 'bg-secondary-light',
+            key == 0 ? 'rounded-tr-2xl' : '',
+          ]"
+        >
+          <div class="w-3/5">
+            <BaseEditInput
+              v-model="charge.chargeName"
+              @leave="updateBudgetCharge(charge)"
+            />
+          </div>
+          <div class="w-1/5">
+            <BaseEditInput
+              v-model="charge.value"
+              @leave="updateBudgetCharge(charge)"
+              input-extension="€"
+              type="number"
+            />
+          </div>
+          <TableActionCell
+            class="w-1/5"
+            :unique-key="`${key}`"
+            :dto="charge"
+            label="diese Kosten"
+            :delete-api-call="() => deleteCharge(charge.id)"
+          />
+        </div>
       </div>
-      <div class="w-1/5">
-        <BaseEditInput v-model="charge.value" @leave="updateBudgetCharge(charge)" input-extension="€" type="number"/>
-      </div>
-      <TableActionCell
-        class="w-1/5"
-        :unique-key="`${key}`"
-        :dto="charge"
-        label="diese Kosten"
-        :delete-api-call="() => deleteCharge(charge.id)"
-      />
     </div>
-    </div>
-    <CostInspectionAddInlineCharge/>
+
     <div class="flex-center" :class="calculateSumBgColor()">
-      {{ useFloor(sum,2) }}
+      {{ useFloor(sum, 2) }}
       € / {{ selectedBudget.limit }} €
     </div>
   </div>
@@ -39,7 +51,12 @@
 
 <script setup lang="ts">
 import { storeToRefs } from "pinia";
-import { BudgetDto, ChargeDto, ChargeUDto, UpdateChargeRequest } from "~/stores/apiClient";
+import {
+  BudgetDto,
+  ChargeDto,
+  ChargeUDto,
+  UpdateChargeRequest,
+} from "~/stores/apiClient";
 import { useInspectionStore } from "~/stores/costInspectionStore";
 import TableActionCell from "../FixedCosts/TableActionCell.vue";
 import { useApiStore } from "~/stores/apiStore";
@@ -49,13 +66,16 @@ const costInspectionStore = useInspectionStore();
 const { selectedBudget, selectedCostInspection } =
   storeToRefs(costInspectionStore);
 
-const charges = computed(() => getCharges(selectedCostInspection?.value?.budgetCharges??[]));
+const charges = computed(() =>
+  getCharges(selectedCostInspection?.value?.budgetCharges ?? [])
+);
 
-const getCharges = (budgetCharges?: ChargeDto[]): ChargeDto[] =>{
-    const filteredArray =  budgetCharges?.filter(
-    (x) => x.budgetId === selectedBudget.value.id);
-    return filteredArray;
-}
+const getCharges = (budgetCharges?: ChargeDto[]): ChargeDto[] => {
+  const filteredArray = budgetCharges?.filter(
+    (x) => x.budgetId === selectedBudget.value.id
+  );
+  return filteredArray;
+};
 
 const sum = computed(() =>
   useSumBy(charges.value, function (charge: ChargeDto) {
@@ -67,10 +87,17 @@ const deleteCharge = async (id: number) => {
   await useInspectionStore().fetch();
 };
 
-const updateBudgetCharge = async(charge: ChargeDto) => {
-  const chargeUDto: ChargeUDto = {budgetId: charge.budgetId, costInspectionId: charge.costInspection?.id, id: charge.id, chargeName: charge.chargeName};
-  useApiStore().ChargeClient.updateChargeEndpoint({chargeUDto} as UpdateChargeRequest)
-}
+const updateBudgetCharge = async (charge: ChargeDto) => {
+  const chargeUDto: ChargeUDto = {
+    budgetId: charge.budgetId,
+    costInspectionId: charge.costInspection?.id,
+    id: charge.id,
+    chargeName: charge.chargeName,
+  };
+  useApiStore().ChargeClient.updateChargeEndpoint({
+    chargeUDto,
+  } as UpdateChargeRequest);
+};
 
 const calculateSumBgColor = () => {
   const procent = sum.value / selectedBudget.value.limit;

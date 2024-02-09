@@ -19,7 +19,6 @@ namespace Moco.Api.Models.Moco.Dto
                 this.UserYearMonthKey = db.UserYearMonthKey;
                 this.CreatedAt = db.CreatedAt;
                 this.CreatedAt = db.CreatedAt;
-                this.Credits = JsonConvert.DeserializeObject<CreditDto[]>(db.MonthlyCreditJson);
                 this.FixedCostChecklist = JsonConvert.DeserializeObject<CheckableFixedCostDto[]>(db.MonthlyFixedcostsJson);
                 this.BudgetCharges = db.BudgetCharges?.Select(x => x.asDto()).ToArray();
             }

@@ -1,7 +1,7 @@
 <template>
   <div class="flex-center">
-  
-    <div class="h-[80vh] w-full grid justify-center items-center bg-gray/25">
+    <Chart type="pie" :data="chartData" :options="chartOptions" class="w-full p-10" />
+    <div v-if="false" class="h-[80vh] w-full grid justify-center items-center bg-gray/25">
       <div role="status">
         <svg
           aria-hidden="true"
@@ -26,25 +26,47 @@
 </template>
 
 <script setup lang="ts">
-import DxPieChart, {
-  DxSeries,
-  DxConnector,
-  DxLabel,
-  DxLegend,
-} from "devextreme-vue/pie-chart";
 import { storeToRefs } from "pinia";
-
+import Chart from 'primevue/chart';
 import { useOverviewCostStore } from "~/stores/overviewCostStore";
 import { useUtilStore } from "~/stores/utilStore";
 
 const { isMobil } = useUtilStore();
 const {pieChartData} = storeToRefs(useOverviewCostStore())
 
+const chartData = computed(() => setChartData());
+const chartOptions = computed(() => setChartOptions());
 
-const formatLabel = ({ valueText, percentText }) =>
-  `${useCeil(valueText, 2)}€ (${percentText})`;
+const setChartData = () => {
+    const documentStyle = getComputedStyle(document.body);
+  
+    return {
+        labels: pieChartData.value.labels,
+        datasets: [
+            {
+                data: pieChartData.value.datasets,
+                backgroundColor: [documentStyle.getPropertyValue('--cyan-500'), documentStyle.getPropertyValue('--orange-500'), documentStyle.getPropertyValue('--gray-500')],
+                hoverBackgroundColor: [documentStyle.getPropertyValue('--cyan-400'), documentStyle.getPropertyValue('--orange-400'), documentStyle.getPropertyValue('--gray-400')]
+            }
+        ]
+    };
+};
 
+const setChartOptions = () => {
+    const documentStyle = getComputedStyle(document.documentElement);
+    const textColor = documentStyle.getPropertyValue('--text-color');
 
+    return {
+        plugins: {
+            legend: {
+                labels: {
+                    usePointStyle: true,
+                    color: textColor
+                }
+            }
+        }
+    };
+};
 </script>
 
 <style scoped>

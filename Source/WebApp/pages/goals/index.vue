@@ -10,6 +10,11 @@
 </template>
 
 <script setup lang="ts">
+definePageMeta({
+  middleware:['under-construction-gloabl'],
+  underConstruction: true,
+});
+
 import { GenericEditModalProps, GenericModalInput } from "~/components/Base/GenericModal.vue";
 import { ModalType } from "~/metaData/enums";
 import { createApp } from "vue";
@@ -55,5 +60,6 @@ const handleClick = () => {
   const props : GenericEditModalProps = {title:"Edit-Modal",workObject: testObject, actionBtnTxt:"Create", actionCall: () => console.log('Erstellt'), genericModalInput:opsModalInputs}
   GenericModalInstance.open(props);
 };
+
 
 </script>

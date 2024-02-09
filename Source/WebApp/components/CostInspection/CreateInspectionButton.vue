@@ -1,6 +1,6 @@
 <template>
     <div @click="initializeCostInspection" id="addButton" class="grid place-content-center w-96 h-96 rounded-lg border-2 border-dashed border-primary bg-foreground cursor-pointer opacity-30 hover:opacity-100 duration-300 my-4">
-      <Icon name="gridicons:add-outline" size="3rem" class=""/>
+      <Icon name="gridicons:add-outline" size="3rem" color="white"/>
     </div>
 </template>
 

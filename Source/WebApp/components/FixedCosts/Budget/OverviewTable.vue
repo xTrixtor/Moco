@@ -2,9 +2,10 @@
     <div class="flex-1 flex-col px-1 mt-2 overflow-auto max-h-[30vh]">
         <div
           v-if="!budgets || budgets.length === 0"
-          class="overflow-hidden"
+          class="overflow-hidden flex-center flex-col"
         >
-          <p class="text-center">Keine Daten</p>
+        <p class="text-center underlineAnimation w-1/2 text-highlight-text">Keine Daten</p>
+          <InlineAddRow model="createBudgetModalVis" />
         </div>
         <div v-else>
           <div

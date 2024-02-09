@@ -5,6 +5,7 @@ using Moco.Api.Factories.Db;
 using Moco.Api.Models.Moco.Dto;
 using Moco.Api.Models.Moco.Resource;
 using MocoApi.Extensions;
+using Newtonsoft.Json;
 
 namespace Moco.Api.Endpoints.CostInspection
 {
@@ -35,8 +36,10 @@ namespace Moco.Api.Endpoints.CostInspection
                         await SendAsync(new CostInspectionGResponse { });
                         return;
                     }
-                    var count = dbContext.GroupCosts.Where(x => x.UserId == req.UserId).SelectMany(x => x.FixedCosts).Count();
-                    var updateable = false; // TODO
+                    var fixedCostCount = dbContext.GroupCosts.Where(x => x.UserId == req.UserId).SelectMany(x => x.FixedCosts).Count();
+                    var currentMonthFixedCosts = JsonConvert.DeserializeObject<CheckableFixedCostDto[]>(costInspection.MonthlyFixedcostsJson);
+
+                    var updateable = fixedCostCount > currentMonthFixedCosts?.Count();
                     await SendAsync(new CostInspectionGResponse {CostInspection = costInspection.asDto(), CheackableFixcostsAreUpdateable = updateable});
                 }
             }

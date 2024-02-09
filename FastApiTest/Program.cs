@@ -30,7 +30,7 @@ bld.Services.AddCors(options =>
 bld.Services
    .AddFastEndpoints()
    .AddAuthorization()
-   .SwaggerDocument(o => o.ShortSchemaNames = true) ;
+   .SwaggerDocument(o => o.ShortSchemaNames = true);
 
 bld.Services.AddKeycloakAuthentication(bld.Configuration);
 
@@ -82,7 +82,7 @@ app.UseCors(builder => builder
 .AllowAnyOrigin()
 .AllowAnyMethod()
 .AllowAnyHeader()
-) ;
+);
 
 app.UseAuthentication() //add this
    .UseAuthorization() //add this
@@ -96,11 +96,13 @@ app.UseAuthentication() //add this
 
 #if DEBUGCLEAN
 {
-using(var dbContext = new MoCoContext())
-{
-    dbContext.Database.EnsureDeleted();
-    dbContext.Database.EnsureCreated();
-}
+    using (var dbContext = new MoCoContext())
+    {
+        Console.WriteLine("Start Deleting");
+        dbContext.Database.EnsureDeleted();
+        dbContext.Database.EnsureCreated();
+        Console.WriteLine("Start Created");
+    }
 }
 #endif
 {
@@ -113,7 +115,8 @@ enum AppsettingsSection
     Keycloak,
 }
 
-public sealed class KeycloakSettings {
+public sealed class KeycloakSettings
+{
     public required string BaseURL { get; set; }
     public required string LoginPath { get; set; }
     public required string CreatePath { get; set; }

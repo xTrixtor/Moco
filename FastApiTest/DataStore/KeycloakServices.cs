@@ -29,8 +29,9 @@ namespace MocoApi.DataStore
                 new KeyValuePair<string, string>("username", username),
                 new KeyValuePair<string, string>("password", password),
             };
+            client.BaseAddress = new Uri(keycloakSettings.BaseURL);
 
-            var response = await client.PostAsync(keycloakSettings.BaseURL + keycloakSettings.LoginPath, new FormUrlEncodedContent(data));
+            var response = await client.PostAsync(keycloakSettings.LoginPath, new FormUrlEncodedContent(data));
 
             if (!response.IsSuccessStatusCode)
             {

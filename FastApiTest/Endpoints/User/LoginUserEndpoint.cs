@@ -52,10 +52,17 @@ namespace MocoApi.Endpoints.User
             {
                 ThrowError("Es konnten keine Daten aus den Appsettings gelesen werden");
             }
+            KeyCloakSuccessfullLoginResponse keyCloakResponse = new KeyCloakSuccessfullLoginResponse();
+            try
+            {
+                keyCloakResponse = await _keycloakServices.GetTokensAsync(req.Username, req.Password, keycloakSettings);
+            }
+            catch (Exception e)
+            {
+                ThrowError(e.Message);
+            }
 
-            var keyCloakResponse = await _keycloakServices.GetTokensAsync(req.Username, req.Password, keycloakSettings);
-
-            if (keyCloakResponse.access_token is null) ThrowError("JWT Token ist null");
+            if (keyCloakResponse.access_token is null) ThrowError("JWT Token ist null" + keycloakSettings.BaseURL);
             if (keyCloakResponse.refresh_token is null) ThrowError("Refresh Token ist null");
 
             var handler = new JwtSecurityTokenHandler();
@@ -68,10 +75,8 @@ namespace MocoApi.Endpoints.User
 
             using (var context = mocoContextFactory.CreateMocoContext())
             {
-                var userdb = await context.Users.FirstOrDefaultAsync(x => x.KeycloakUserId == userId);
                 await SendAsync(new()
                 {
-                    User = userdb.asDto(),
                     JWTToken = keyCloakResponse.access_token,
                     RefreshToken = keyCloakResponse.refresh_token,
                     Success = true,
@@ -90,7 +95,6 @@ namespace MocoApi.Endpoints.User
 
     public record LoginResponse
     {
-        public UserDto User { get; set; }
         public bool Success { get; set; }
         public string JWTToken { get; set; }
         public string RefreshToken { get; set; }

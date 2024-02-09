@@ -71,6 +71,7 @@ import {
 } from "~/stores/apiClient";
 import { useApiStore } from "~/stores/apiStore";
 import { useFixedCostStore } from "~/stores/fixedCostStore";
+import { useOverviewCostStore } from "~/stores/overviewCostStore";
 interface ChargeCardProps {
   modelValue: boolean;
   fixedcost: FixedCostDto;
@@ -92,6 +93,7 @@ const monthlyCost = ref(calculateMontlyChargeCost(props.fixedcost))
 const handleUpdateCharge = async () => {
   await useApiStore().FixedcostClient.updateFixedCostEndpoint(fixedCostUDto.value);
   await useFixedCostStore().fetch();
+  await useOverviewCostStore().calulateCostOverview();
   data.value = false;
 };
 

@@ -36,11 +36,7 @@ namespace Moco.Api.Endpoints.CostInspection
                 var checkableFixcost = groupCosts.SelectMany(x => x.FixedCosts).Select((x,key) => x.toCheckable(key)).ToArray();
                 var checkableFixcostJson = JsonConvert.SerializeObject(checkableFixcost);
 
-                var revenues = dbContext.Revenue.Where(x => x.UserId == req.UserId).ToList();
-                var credit = revenues.Select((x, key) => new CreditDto { Key = key, Name = x.CompanyName, Value = x.Value }).ToArray();
-                var creditJson = JsonConvert.SerializeObject(credit);   
-
-                var newCostInspection = new MocoApi.Models.Moco.Resource.CostInspection { UserYearMonthKey = userYearMonthKey,MonthlyFixedcostsJson = checkableFixcostJson, MonthlyCreditJson= creditJson, CreatedAt = DateTime.Now };
+                var newCostInspection = new MocoApi.Models.Moco.Resource.CostInspection { UserYearMonthKey = userYearMonthKey,MonthlyFixedcostsJson = checkableFixcostJson, CreatedAt = DateTime.Now };
                 dbContext.CostInspections.Add(newCostInspection);
 
                 await dbContext.SaveChangesAsync();

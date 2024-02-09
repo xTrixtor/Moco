@@ -10,17 +10,30 @@ export interface OverviewCost {
   value: number;
 }
 
+export interface ChartData {
+  labels: string[];
+  datasets: number[];
+}
+
 export const useOverviewCostStore = defineStore("costOverview", {
   state: () => {
-    const totalRevenue: OverviewCost = { id:1, name: "Gehalt", value: 0 };
-    const fixedCost: OverviewCost = { id:2, name: "Fix Kosten", value: 0 };
-    const budgetCost: OverviewCost = { id:3, name: "Variable Kosten", value: 0 };
-    const availibleMoney: OverviewCost = { id: 4, name: "Verfügbares Geld", value: 0 };
+    const totalRevenue: OverviewCost = { id: 1, name: "Gehalt", value: 0 };
+    const fixedCost: OverviewCost = { id: 2, name: "Fix Kosten", value: 0 };
+    const budgetCost: OverviewCost = {
+      id: 3,
+      name: "Variable Kosten",
+      value: 0,
+    };
+    const availibleMoney: OverviewCost = {
+      id: 4,
+      name: "Verfügbares Geld",
+      value: 0,
+    };
 
     const overviewCosts: OverviewCost[] = [];
-    const pieChartData: OverviewCost[] = [];
+    const pieChartData: ChartData = {} as ChartData;
 
-    const selectedOverviewCost: OverviewCost = {} as OverviewCost; 
+    const selectedOverviewCost: OverviewCost = {} as OverviewCost;
     return {
       totalRevenue,
       fixedCost,
@@ -28,18 +41,18 @@ export const useOverviewCostStore = defineStore("costOverview", {
       availibleMoney,
       overviewCosts,
       pieChartData,
-      selectedOverviewCost
+      selectedOverviewCost,
     };
   },
   actions: {
     async calulateCostOverview() {
-      this.pieChartData = {};
+      this.pieChartData = {} as ChartData;
       await this.setTotalRevenue();
       this.setFixedCostSum();
       this.setBudgetSum();
       this.setAvailibleMoney();
       this.setCostOverview();
-      this.setCostPieChartData();      
+      this.setCostPieChartData();
     },
     setFixedCostSum() {
       const { groupCosts } = useFixedCostStore();
@@ -72,11 +85,13 @@ export const useOverviewCostStore = defineStore("costOverview", {
       );
     },
     setAvailibleMoney() {
-      this.availibleMoney.value =
-        useCeil(this.totalRevenue.value -
-          (this.budgetCost.value + this.fixedCost.value),2)
+      this.availibleMoney.value = useCeil(
+        this.totalRevenue.value -
+          (this.budgetCost.value + this.fixedCost.value),
+        2
+      );
     },
-    setCostOverview(){
+    setCostOverview() {
       this.overviewCosts = [
         this.totalRevenue,
         this.fixedCost,
@@ -85,17 +100,22 @@ export const useOverviewCostStore = defineStore("costOverview", {
       ];
     },
     setCostPieChartData() {
-      this.pieChartData = [
-        this.fixedCost,
-        this.budgetCost,
-        this.availibleMoney,
-      ];
+      const pieData = [this.fixedCost, this.budgetCost, this.availibleMoney];
+
+      this.pieChartData = {
+        labels: pieData.map((dataSet) => {
+          return dataSet.name;
+        }),
+        datasets: pieData.map((dataSet) => {
+          return dataSet.value;
+        }),
+      } as ChartData;
     },
-    setSelectedOverviewCostById(id:number){
-      this.selectedOverviewCost = this.overviewCosts.filter(x => x.id === id)[0]
-    }
+    setSelectedOverviewCostById(id: number) {
+      this.selectedOverviewCost = this.overviewCosts.filter(
+        (x) => x.id === id
+      )[0];
+    },
   },
-  getters: {
-    
-  },
+  getters: {},
 });
