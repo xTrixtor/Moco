@@ -10,6 +10,7 @@ namespace MocoApi.Endpoints.Budget
         public override void Configure()
         {
             Get("/budget/{BudgetId}");
+            Policies("User");
             Summary(s =>
             {
                 s.Summary = "Gets Budget with Charges";

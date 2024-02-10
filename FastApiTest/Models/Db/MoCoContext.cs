@@ -11,6 +11,7 @@ public class MoCoContext : DbContext
     public DbSet<FixedCost> FixedCosts { get; set; }
     public DbSet<GroupCost> GroupCosts { get; set; }
     public DbSet<CostInspection> CostInspections { get; set; }
+    public DbSet<SavingGoal> SavingGoals { get; set; }
 
     public MoCoContext()
     {

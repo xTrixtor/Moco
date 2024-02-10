@@ -21,6 +21,7 @@ namespace MocoApi.Endpoints.Charge
                 s.Responses[200] = "Returns true";
                 s.Responses[403] = "Return false";
             });
+            Policies("User");
         }
         public async override Task HandleAsync(UpdateChargeRequest req, CancellationToken ct)
         {

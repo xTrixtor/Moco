@@ -9,6 +9,7 @@ namespace MocoApi.Endpoints.Budget
         public override void Configure()
         {
             Post("/budget");
+            Policies("User");
         }
 
         public async override Task HandleAsync(CBudgetRequest req, CancellationToken ct)

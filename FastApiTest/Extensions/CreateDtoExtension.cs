@@ -1,10 +1,8 @@
 ﻿using Moco.Api.Endpoints.FixedCost;
 using Moco.Api.Endpoints.GroupCost;
-using Moco.Api.Extensions;
-using Moco.Api.Models.Moco.Dto;
+using Moco.Api.Endpoints.SavingGoals;
 using Moco.Api.Models.Moco.Resource;
 using MocoApi.Endpoints.Charge;
-using MocoApi.Endpoints.Revenue;
 using MocoApi.Models.Moco.Dto;
 using MocoApi.Models.Moco.Resource;
 
@@ -119,6 +117,27 @@ namespace MocoApi.Extensions
             var groupCost = dto.Prepare();
             await moCoContext.GroupCosts.AddAsync(groupCost);
             return groupCost;
+        }
+
+        public static SavingGoal Prepare(this SavingGoalCDto cDto, string depositsJson)
+        {
+            return new SavingGoal
+            {
+                Name = cDto.Name,
+                DepositRate = cDto.DepositRate,
+                DepositsJson = depositsJson,
+                EndDate = cDto.EndDate,
+                StartDate = cDto.StartDate,
+                Value = cDto.Value,
+                UserId = cDto.UserId
+            };
+        }
+
+        public static async Task<SavingGoal> PrepareAddAsync(this SavingGoalCDto cDto, string depositsJson ,MoCoContext moCoContext)
+        {
+            var savingGoal = cDto.Prepare(depositsJson);
+            await moCoContext.SavingGoals.AddAsync(savingGoal);
+            return savingGoal;
         }
     }
 }
