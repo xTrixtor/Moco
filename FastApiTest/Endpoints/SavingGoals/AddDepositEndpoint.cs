@@ -1,5 +1,6 @@
 ﻿using FastEndpoints;
 using Moco.Api.Models.Moco.Dto;
+using Moco.Api.Models.Moco.Resource;
 using MocoApi.Extensions;
 using Newtonsoft.Json;
 
@@ -20,12 +21,18 @@ namespace Moco.Api.Endpoints.SavingGoals
                 var savingGoal = dbContext.SavingGoals.FirstOrDefault(x => x.Id == req.SavingGoalId);
 
                 var deposits = savingGoal.asDto().DepositRates;
-                foreach (var deposit in deposits)
+                foreach (var depositDto in deposits)
                 {
-                    if (deposit.Key == req.DepositUDto.Key)
-                        deposit.Value = req.DepositUDto.Value;  
+                    var deposit = new DepositRate
+                    {
+                        Key = depositDto.Key,
+                        SavingMonth = depositDto.SavingMonth,
+                        Value = depositDto.Value,
+                        SavingGoalId = req.SavingGoalId,
+                       
+                    };
+                    dbContext.DepositRates.Add(deposit);
                 }
-                savingGoal.DepositsJson = JsonConvert.SerializeObject(deposits);
                 dbContext.SaveChanges();
 
                 await SendAsync(new UpdateDepositsResponse { Deposits = deposits });

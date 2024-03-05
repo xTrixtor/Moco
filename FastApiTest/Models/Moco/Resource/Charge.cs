@@ -5,11 +5,9 @@ namespace MocoApi.Models.Moco.Resource
     public class Charge
     {
         public int Id { get; set; }
-        public required string ChargeName { get; set; }
+        public required string Name { get; set; }
         public required double Value { get; set; }
-        public int BudgetId { get; set; }
-        public virtual Budget Budget { get; set; }
-        public int CostInspectionId { get; set; }
-        public virtual CostInspection CostInspection { get; set; }
+        public int MonthlyBudgetId { get; set; }
+        public virtual MonthlyBudget MonthlyBudget { get; set; }
     }
 }

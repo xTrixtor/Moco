@@ -6,7 +6,6 @@ namespace MocoApi.Endpoints.Revenue
 {
     public class CreateRevenueEndpoint: Endpoint<CreateRevenueRequest, CreateRevenueResponse>
     {
-
         public override void Configure()
         {
             Post("/revenue");

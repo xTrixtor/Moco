@@ -6,24 +6,21 @@
 <script setup lang="ts">
 import { storeToRefs } from "pinia";
 import { ChargeDto } from "~/stores/apiClient";
-import { useBudgetStore } from "~/stores/budgetStore";
 import { useInspectionStore } from "~/stores/costInspectionStore";
 import Chart from 'primevue/chart';
 
-const budgetStore = useBudgetStore();
 const costInspectionStore = useInspectionStore();
 
-const budgets = computed(() => budgetStore.budgets);
 const { selectedCostInspection } = storeToRefs(costInspectionStore);
 
-const chartData2= computed(() => createBudgetChargesData());
+const chartValue= computed(() => createBudgetChargesData());
 
 const createBudgetChargesData = () => {
-  return budgets.value.map((budget) => {
+  return selectedCostInspection.value.monthlyBudgets.map((budget) => {
     const filteredBudgetCharges =
-      selectedCostInspection.value.budgetCharges?.filter(
-        (x) => x.budgetId === budget.id
-      );
+      selectedCostInspection.value.monthlyBudgets?.filter(
+        (x) => x?.id === budget.id
+      )[0]?.charges??[];
     return {
       name: budget.name,
       limit: budget.limit,
@@ -43,20 +40,20 @@ const chartOptions = computed(() => setChartOptions())
 const setChartData = () => {
   const documentStyle = getComputedStyle(document.documentElement);
   return {
-      labels: chartData2.value.map((budget) => budget.name),
+      labels: chartValue.value.map((budget) => budget.name),
       datasets: [
           {
               label: 'Limit',
               backgroundColor: ['rgba(45, 212, 191, 0.2)'],
               borderColor: ['rgb(45, 212, 191)'],
-              data: chartData2.value.map((budget) => budget.limit),
+              data: chartValue.value.map((budget) => budget.limit),
               borderWidth: 1
           },
           {
               label: 'Aktuell ausgegeben',
               backgroundColor: ["rgb(100, 116, 139, 0.2)"],
               borderColor: ["rgb(100, 116, 139)"],
-              data: chartData2.value.map((budget) => budget.currentValue),
+              data: chartValue.value.map((budget) => budget.currentValue),
               borderWidth: 1
           }
       ]

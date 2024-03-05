@@ -1,11 +1,11 @@
 <template>
   <div
     v-if="isMobil"
-    class="flex-center justify-between !h-[70px] !bg-background px-4"
+    class="flex-center justify-between !h-[70px] !bg-background px-4 "
     id="navbar"
   >
     <NuxtLink to="/">
-      <NuxtImg class="h-12" src="/logo/MoFo-Logo-Hor.png" alt="Moco Logo" />
+      <NuxtImg class="h-12" src="/logo/logo.jpg" alt="Moco Logo" />
     </NuxtLink>
     <div
       class="duration-300 rounded-full p-2 flex-center"
@@ -19,17 +19,13 @@
       />
     </div>
   </div>
-  <div v-else id="navbar" class="flex-center h-[10vh] bg-foreground mb-2 border-border border-b-2 rounded-b-sm">
+  <div v-else id="navbar" class="flex-center h-[10vh] bg-foreground border-border border-b-2 rounded-b-sm">
     <div class="flex w-full justify-between">
-      <div class="w-1/3 flex flex-1 items-center">
-        <BaseSideBar />
-      </div>
       <NuxtLink to="/" class="flex-1 flex-center">
-        <NuxtImg class="h-16" src="/logo/MoFo-Logo-Hor.png" alt="Moco Logo" />
+        <h1 class="text-4xl font-bold text-highlight-text tracking-widest">Finanz</h1>
+        <h1 class="text-4xl font-bold text-primary tracking-widest">Horus</h1>
       </NuxtLink>
-      <div class="w-1/3 flex justify-end items-center mr-2">
-        <BaseLogoutTimer v-if="!isMobil" />
-      </div>
+      
     </div>
   </div>
   <div v-if="mobilMenuClick" class="bg-slate-200">
@@ -54,7 +50,6 @@ import { ref } from "vue";
 import { useUserStore } from "~/stores/userStore";
 import { navBarItems } from "../metaData/navaBarData";
 import { useUtilStore } from "~/stores/utilStore";
-import BaseSideBar from "@/components/Sidebar.vue";
 
 const logout = () => {
   useUserStore().logout();

@@ -9,6 +9,8 @@ using Moco.Api.Endpoints.CostInspection;
 using System.Runtime.CompilerServices;
 using Moco.Api.Models.Moco.Dto;
 using Newtonsoft.Json;
+using Moco.Api.Endpoints.SavingGoals.Deposits;
+using Moco.Api.Endpoints.Credit;
 
 namespace MocoApi.Extensions
 {
@@ -20,9 +22,8 @@ namespace MocoApi.Extensions
             if (target is null)
                 throw new Exception("Charge data couldnt be found");
 
-            if(uDto.BudgetId is not 0) target.BudgetId = uDto.BudgetId;
-            if(uDto.CostInspectionId is not 0) target.CostInspectionId = uDto.CostInspectionId;
-            if(uDto.ChargeName is not null) target.ChargeName = uDto.ChargeName;
+            if(uDto.MonthlyBudgetId is not 0) target.MonthlyBudgetId = uDto.MonthlyBudgetId;
+            if(uDto.Name is not null) target.Name = uDto.Name;
             if(uDto.Value is not 0.0) target.Value = uDto.Value;
 
             return target;
@@ -34,7 +35,7 @@ namespace MocoApi.Extensions
             if (target is null)
                 throw new Exception("Revenue data couldnt be found");
 
-            if (dto.CompanyName is not null) target.CompanyName = dto.CompanyName;
+            if (dto.Source is not null) target.Source = dto.Source;
             if (dto.Value is not 0.0) target.Value = dto.Value;
 
             return target;
@@ -94,7 +95,7 @@ namespace MocoApi.Extensions
         {
             var selectedCostInspection = await dbContext.CostInspections.FirstOrDefaultAsync(x => x.Id == uDto.CostInspectionId);
             if (selectedCostInspection is null)
-                throw new Exception("Checkable FC data couldnt be found");
+                throw new Exception("Cost Inspection data couldnt be found");
 
             var dto = selectedCostInspection.asDto();
             dto.FixedCostChecklist.First(x => x.Key == uDto.CheckableFixcostKey).IsChecked = uDto.IsChecked;
@@ -102,9 +103,32 @@ namespace MocoApi.Extensions
 
         }
 
+        public static async Task<DepositRate> UpdateAsync(this DepositRateUDto uDto, MoCoContext dbContext)
+        {
+            var selectedDepositRate = await dbContext.DepositRates.FirstOrDefaultAsync(x => x.Id == uDto.Id);
+            if (selectedDepositRate is null)
+                throw new Exception("DepositRate data couldnt be found");
+
+            if (selectedDepositRate.Value is not 0.0) selectedDepositRate.Value = uDto.Value;
+
+            return selectedDepositRate;
+        }
+
         public static CheckableFixedCostDto toCheckable(this FixedCostDto fixedCost, int key)
         {
             return new CheckableFixedCostDto { Key = key, Name = fixedCost.Name, Value = fixedCost.Value, IsChecked = false, CreatedAt = DateTime.Now };
+        }
+
+        public static async Task<Credit> UpdateAsync(this CreditUDto uDto, MoCoContext dbContext)
+        {
+            var selectedCredit = await dbContext.Credits.FirstOrDefaultAsync(x => x.Id == uDto.Id);
+            if (selectedCredit is null)
+                throw new Exception("DepositRate data couldnt be found");
+
+            if (selectedCredit.Name is not null) selectedCredit.Name = uDto.Name;
+            if (selectedCredit.Value is not 0.0) selectedCredit.Value = uDto.Value;
+
+            return selectedCredit;
         }
     }
 }

@@ -117,9 +117,6 @@ onKeyStroke("Escape", async (e) => {
   data.value = false;
 });
 
-const handleClose = () => {
-  data.value = false;
-};
 
 watchDeep(fixedCostUDto, (newVal) => {
   isDirty.value = isDirtyCalc(newVal as ChargeDto);

@@ -1,17 +1,17 @@
 <template>
     <div v-if="createModus" class="flex-col">
       <div
-        class="my-1 py-1 bg-foreground rounded-lg flex w-full content-center justify-between"
+        class="my-1 py-1 bg-transparent rounded-lg flex w-full content-center justify-between gap-1"
         ref="target"
       >
         <InputText 
-          v-model="creditDto.name"
+          v-model="creditCDto.name"
           size="small"
           class="input text-sm outline-none bg-transparent pl-2 font-semibold text-primary w-[45%] relative"
           placeholder="Name"
         />
         <InputText 
-          v-model="creditDto.value"
+          v-model="creditCDto.value"
           size="small"
           class="input text-sm outline-none bg-transparent pl-2 font-semibold text-primary w-[45%] relative"
           type="number"
@@ -26,7 +26,7 @@
               : 'bg-copy-light border-slate-300 cursor-not-allowed'
           "
           class="rounded-full border-2 flex-center w-8 h-8"
-          @click="handleCreateCharge()"
+          @click="() => handleCreateCharge()"
         >
           <Icon
             name="material-symbols:save-outline"
@@ -50,7 +50,7 @@
   
   <script setup lang="ts">
   import { storeToRefs } from "pinia";
-  import { ChargeCDto, CreateChargeRequest, CreditDto } from "~/stores/apiClient";
+  import { ChargeCDto, CreateChargeRequest, CreditCDto, CreditDto } from "~/stores/apiClient";
   import { useApiStore } from "~/stores/apiStore";
   import { useInspectionStore } from "~/stores/costInspectionStore";
   
@@ -60,29 +60,29 @@
   
   const createModus = ref(false);
   const emit = defineEmits(["leave"]);
-  const creditDto = reactive<CreditDto>({});
+  const creditCDto = reactive<CreditCDto>({});
   const target = ref(null);
   const allowedToSafe = ref(false);
   const error = ref("");
   
   const validateValueInput = (): boolean => {
     const regexPattern = /^\d+(\.\d{1,2})?$/;
-    return regexPattern.test(creditDto.value);
+    return regexPattern.test(creditCDto.value);
   };
   
   const handleCreateCharge = async () => {
     if (allowedToSafe.value) {
-      //Call
+      await useApiStore().CreditClient.createCreditEndpoint({creditCDto: {name: creditCDto.name, value: creditCDto.value, costInspectionId: selectedCostInspection.value.id}});
       await useInspectionStore().fetch();
     }
-    creditDto.value = undefined;
-    creditDto.name = undefined;
+    creditCDto.value = undefined;
+    creditCDto.name = undefined;
   };
   
   onClickOutside(target, async () => {
     createModus.value = false;
-    creditDto.value = undefined;
-    creditDto.name = undefined;
+    creditCDto.value = undefined;
+    creditCDto.name = undefined;
     emit("leave");
   });
   
@@ -90,7 +90,7 @@
     handleCreateCharge();
   })
   
-  watchDeep(creditDto, (newValue) => {
+  watchDeep(creditCDto, (newValue) => {
     if (newValue.value && newValue.name) {
       if (!validateValueInput()) {
         error.value = "Bitte nur zwei stellen nach dem Komma!";

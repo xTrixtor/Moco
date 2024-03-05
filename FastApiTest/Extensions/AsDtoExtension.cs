@@ -13,7 +13,10 @@ namespace MocoApi.Extensions
         public static GroupCostDto asDto(this GroupCost db) => new GroupCostDto(db);
         public static UserDto asDto(this User db) => new UserDto(db);
         public static CostInspectionDto asDto(this CostInspection db, bool firstCreation = true) => new CostInspectionDto(db, firstCreation);
+        public static MonthlyBudgetDto asDto(this MonthlyBudget db, bool firstCreation = true) => new MonthlyBudgetDto(db);
         public static ChargeDto asDto(this Charge db) => new ChargeDto(db);
         public static SavingGoalDto asDto(this SavingGoal db) => new SavingGoalDto(db);
+        public static DepositRateDto asDto(this DepositRate db) => new DepositRateDto(db);
+        public static CreditDto asDto(this Credit db) => new CreditDto(db);
     }
 }

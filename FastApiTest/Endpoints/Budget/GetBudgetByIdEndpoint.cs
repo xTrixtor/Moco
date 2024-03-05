@@ -26,7 +26,7 @@ namespace MocoApi.Endpoints.Budget
             using (var dbContext = new MoCoContext())
             {
                 var budget = await dbContext.Budgets.FindAsync(budgetId);
-                await SendAsync(new GetBudgetWithChargesResponse { Charges = budget.Charges.Select(x => x.asDto()).ToArray() });
+                await SendAsync(new GetBudgetWithChargesResponse { Charges = new List<ChargeDto>().ToArray() });
             }
         }
     }

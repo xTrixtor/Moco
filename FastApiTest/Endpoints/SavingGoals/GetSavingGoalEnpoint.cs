@@ -10,7 +10,7 @@ namespace Moco.Api.Endpoints.SavingGoals
     {
         public override void Configure()
         {
-            Get("/savingGoals");
+            Get("/savingGoals/{SavingGoalId}");
             Policies("User");
         }
 
@@ -19,7 +19,6 @@ namespace Moco.Api.Endpoints.SavingGoals
             using (var dbContext = new MoCoContext())
             {
                 var savingGoal = await dbContext.SavingGoals.FirstOrDefaultAsync(x => x.Id == req.SavingGoalId && x.UserId == req.UserId);
-
                 await SendAsync(new GetSavingGoalResponse { SavingGoalDto = savingGoal.asDto() });
             }
         }

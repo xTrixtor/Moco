@@ -5,7 +5,7 @@
       ref="target"
     >
       <InputText 
-        v-model="chargeCDto.chargeName"
+        v-model="chargeCDto.name"
         size="small"
         class="input text-sm outline-none bg-transparent pl-2 font-semibold text-primary w-[45%] relative"
         placeholder="Name"
@@ -50,12 +50,12 @@
 
 <script setup lang="ts">
 import { storeToRefs } from "pinia";
-import { ChargeCDto, CreateChargeRequest } from "~/stores/apiClient";
+import { ChargeCDto, CreateChargeRequest, UpdateBudgetChargeRequest } from "~/stores/apiClient";
 import { useApiStore } from "~/stores/apiStore";
 import { useInspectionStore } from "~/stores/costInspectionStore";
 
 const costInspectionStore = useInspectionStore();
-const { selectedBudget, selectedCostInspection } =
+const { selectedMontlyBudget } =
   storeToRefs(costInspectionStore);
 
 const createModus = ref(false);
@@ -72,21 +72,20 @@ const validateValueInput = (): boolean => {
 
 const handleCreateCharge = async () => {
   if (allowedToSafe.value) {
-    chargeCDto.budgetId = selectedBudget.value.id;
-    chargeCDto.costInspectionId = selectedCostInspection.value.id;
+    chargeCDto.monthlyBudgetId = selectedMontlyBudget.value.id;
     await useApiStore().ChargeClient.createChargeEndpoint({
       chargeCDto,
     } as CreateChargeRequest);
     await useInspectionStore().fetch();
   }
   chargeCDto.value = undefined;
-  chargeCDto.chargeName = undefined;
+  chargeCDto.name = undefined;
 };
 
 onClickOutside(target, async () => {
   createModus.value = false;
   chargeCDto.value = undefined;
-  chargeCDto.chargeName = undefined;
+  chargeCDto.name = undefined;
   emit("leave");
 });
 
@@ -95,7 +94,7 @@ onKeyStroke("Enter", () =>{
 })
 
 watchDeep(chargeCDto, (newValue) => {
-  if (newValue.value && newValue.chargeName) {
+  if (newValue.value && newValue.name) {
     if (!validateValueInput(newValue.value)) {
       error.value = "Bitte nur zwei stellen nach dem Komma!";
       allowedToSafe.value = false;

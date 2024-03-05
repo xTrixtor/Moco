@@ -5,7 +5,7 @@
       class="w-[400px] h-96 shadow-xl rounded-lg p-4 flex flex-col border-2 shadow-primary-light bg-foreground"
     >
       <div class="justify-center flex my-4">
-        <NuxtImg src="/logo/MoFo-Logo-Hor.png" class="h-16" />
+        <NuxtImg src="/logo/logo.jpg" class="w-28 object-cover mix-blend-multiply" />
       </div>
       <div
         class="w-full h-full flex-1 flex flex-col justify-evenly items-center"

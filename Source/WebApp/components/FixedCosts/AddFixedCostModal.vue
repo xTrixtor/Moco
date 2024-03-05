@@ -2,7 +2,7 @@
   <Dialog
     v-if="data"
     modal
-    class="w-1/4"
+    class="w-1/3"
     v-model:visible="data"
     header="Hinzufügen von Kosten"
   >
@@ -85,8 +85,6 @@ interface SelectOption {
   value: TimeInterval;
 }
 
-const groupCost = inject<GroupCostDto>("groupCost");
-
 const apiStore = useApiStore();
 const fixedCostStore = useFixedCostStore();
 const { groupCostOptions } = storeToRefs(fixedCostStore);
@@ -96,7 +94,6 @@ const emit = defineEmits(["update:modelValue"]);
 
 const data = useVModel(props, "modelValue", emit);
 let fixedCostCDto = reactive<CreateFixedCDto>({
-  groupCostId: groupCost?.id,
 } as CreateFixedCDto);
 const newGroupCostName = ref<String>("");
 
@@ -130,6 +127,7 @@ const handleCreateCharge = async () => {
     data.value = false;
   }
   await useOverviewCostStore().calulateCostOverview();
+  clear();
 };
 
 const createTimeIntervalSelectOptions = (): SelectOption[] => {

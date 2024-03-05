@@ -5,10 +5,17 @@
       <LoginCard v-else v-model="register" />
     </Transition>
 
-    <div v-else class="bg-background h-screen relative">
-      <Navbar/>
-      <div class="px-2">
-        <slot />
+    <div v-else class="bg-background h-screen">
+      <div class="grid-cols-5 flex">
+        <div class="col-span-2">
+          <Sidebar/>
+        </div>
+        <div class="col-span-3 flex-1">
+          <Navbar/>
+          <div class="flex w-full h-[90svh] p-6">
+            <slot/>
+          </div>
+        </div>
       </div>
     </div>
     <BaseScrollButton v-if="isMobil" />

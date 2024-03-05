@@ -12,12 +12,12 @@ namespace MocoApi.Models.Moco.Dto
         public RevenueDto(Revenue revenue)
         {
             Id = revenue.Id;
-            CompanyName = revenue.CompanyName;
+            Source = revenue.Source;
             Value = revenue.Value;
             UserId = revenue.UserId;
         }
         public int Id { get; set; }
-        public string CompanyName { get; set; }
+        public string Source { get; set; }
         public double Value { get; set; }
         public string UserId { get; set; }
     }

@@ -6,7 +6,7 @@ namespace MocoApi.Models.Moco.Resource
     {
         public int Id { get; set; }
         [Required]
-        public string CompanyName { get; set; }
+        public string Source { get; set; }
         [Required]
         public double Value { get; set; }
         [Required]

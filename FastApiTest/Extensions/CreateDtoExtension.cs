@@ -1,10 +1,13 @@
-﻿using Moco.Api.Endpoints.FixedCost;
+﻿using Moco.Api.Endpoints.Credit;
+using Moco.Api.Endpoints.FixedCost;
 using Moco.Api.Endpoints.GroupCost;
 using Moco.Api.Endpoints.SavingGoals;
+using Moco.Api.Endpoints.SavingGoals.Deposits;
 using Moco.Api.Models.Moco.Resource;
 using MocoApi.Endpoints.Charge;
 using MocoApi.Models.Moco.Dto;
 using MocoApi.Models.Moco.Resource;
+using Newtonsoft.Json;
 
 namespace MocoApi.Extensions
 {
@@ -14,10 +17,9 @@ namespace MocoApi.Extensions
         {
             return new Charge
             {
-                ChargeName = dto.ChargeName,
+                Name = dto.Name,
                 Value = dto.Value,
-                BudgetId = dto.BudgetId,
-                CostInspectionId = dto.CostInspectionId
+                MonthlyBudgetId = dto.MonthlyBudgetId,
             };  
         }
 
@@ -33,7 +35,7 @@ namespace MocoApi.Extensions
             return new Revenue
             {
                 Id = dto.Id,
-                CompanyName = dto.CompanyName,
+                Source = dto.Source,
                 Value = dto.Value,
                 UserId = dto.UserId
             };
@@ -119,25 +121,59 @@ namespace MocoApi.Extensions
             return groupCost;
         }
 
-        public static SavingGoal Prepare(this SavingGoalCDto cDto, string depositsJson)
+        public static SavingGoal Prepare(this SavingGoalCDto cDto)
         {
             return new SavingGoal
             {
                 Name = cDto.Name,
                 DepositRate = cDto.DepositRate,
-                DepositsJson = depositsJson,
                 EndDate = cDto.EndDate,
                 StartDate = cDto.StartDate,
-                Value = cDto.Value,
-                UserId = cDto.UserId
+                GoalValue = cDto.GoalValue,
+                InitialCapital = cDto.InitialCapital,
+                UserId = cDto.UserId,
             };
         }
 
-        public static async Task<SavingGoal> PrepareAddAsync(this SavingGoalCDto cDto, string depositsJson ,MoCoContext moCoContext)
+        public static async Task<SavingGoal> PrepareAddAsync(this SavingGoalCDto cDto ,MoCoContext moCoContext)
         {
-            var savingGoal = cDto.Prepare(depositsJson);
+            var savingGoal = cDto.Prepare();
             await moCoContext.SavingGoals.AddAsync(savingGoal);
             return savingGoal;
+        }
+
+        public static DepositRate Prepare(this DepositRateCDto cDto)
+        {
+            return new DepositRate
+            {
+                Key = cDto.Key,
+                SavingMonth = cDto.SavingMonth,
+                Value = cDto.Value,
+            };
+        }
+
+        public static async Task<DepositRate> PrepareAddAsync(this DepositRateCDto cDto, MoCoContext moCoContext)
+        {
+            var depositRate = cDto.Prepare();
+            await moCoContext.DepositRates.AddAsync(depositRate);
+            return depositRate;
+        }
+
+        public static Credit Prepare(this CreditCDto cDto)
+        {
+            return new Credit
+            {
+                Name = cDto.Name,
+                Value = cDto.Value,
+                CostInspectionId = cDto.CostInspectionId,
+            };
+        }
+
+        public static async Task<Credit> PrepareAddAsync(this CreditCDto cDto, MoCoContext moCoContext)
+        {
+            var credit = cDto.Prepare();
+            await moCoContext.Credits.AddAsync(credit);
+            return credit;
         }
     }
 }

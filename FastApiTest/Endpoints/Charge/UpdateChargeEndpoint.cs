@@ -16,7 +16,7 @@ namespace MocoApi.Endpoints.Charge
             {
                 s.Summary = "Updates Charge Data";
                 s.Description = "Updates ";
-                s.ExampleRequest = new UpdateChargeRequest { ChargeUDto = new ChargeUDto { ChargeName = "test", Id = 1} };
+                s.ExampleRequest = new UpdateChargeRequest { ChargeUDto = new ChargeUDto { Name = "test", Id = 1} };
                 s.ResponseExamples[200] = new UpdateChargeResponse { Success = true };
                 s.Responses[200] = "Returns true";
                 s.Responses[403] = "Return false";
@@ -38,10 +38,9 @@ namespace MocoApi.Endpoints.Charge
     public record ChargeUDto
     {
         public int Id { get; set; }
-        public string ChargeName { get; set; }
+        public string Name { get; set; }
         public double Value { get; set; }
-        public int BudgetId { get; set; }
-        public int CostInspectionId { get; set; }
+        public int MonthlyBudgetId { get; set; }
     }
 
     public record UpdateChargeRequest

@@ -11,7 +11,10 @@ public class MoCoContext : DbContext
     public DbSet<FixedCost> FixedCosts { get; set; }
     public DbSet<GroupCost> GroupCosts { get; set; }
     public DbSet<CostInspection> CostInspections { get; set; }
+    public DbSet<MonthlyBudget> MonthlyBudgets { get; set; }
+    public DbSet<Credit> Credits { get; set; }
     public DbSet<SavingGoal> SavingGoals { get; set; }
+    public DbSet<DepositRate> DepositRates { get; set; }
 
     public MoCoContext()
     {
@@ -81,22 +84,25 @@ public class MoCoContext : DbContext
             .HasForeignKey(x => x.GroupCostId)
             .IsRequired(false);
 
-        modelBuilder.Entity<Budget>()
+        modelBuilder.Entity<MonthlyBudget>()
             .HasMany(x => x.Charges)
-            .WithOne(x => x.Budget)
-            .HasForeignKey(x => x.BudgetId)
-            .IsRequired(false);
-
-        modelBuilder.Entity<CostInspection>()
-            .HasMany(x => x.BudgetCharges)
-            .WithOne(x => x.CostInspection)
-            .HasForeignKey(x => x.CostInspectionId)
+            .WithOne(x => x.MonthlyBudget)
+            .HasForeignKey(x => x.MonthlyBudgetId)
             .IsRequired(false);
 
         modelBuilder.Entity<CostInspection>()
             .HasIndex(c => c.UserYearMonthKey)
             .IsUnique(true);
+        modelBuilder.Entity<CostInspection>()
+           .HasMany(x => x.MonthlyBudgets)
+           .WithOne(x => x.CostInspection) 
+           .HasForeignKey(x => x.CostInspectionId)
+           .IsRequired();
 
+        modelBuilder.Entity<SavingGoal>()
+            .HasMany(x => x.DepositRates)
+            .WithOne(x => x.SavingGoal)
+            .HasForeignKey(x => x.SavingGoalId);
 
         modelBuilder.Entity<Budget>()
             .HasData(budgets);
@@ -108,7 +114,7 @@ public class MoCoContext : DbContext
             .HasData(fixCosts);
 
         modelBuilder.Entity<Revenue>()
-            .HasData(new Revenue { CompanyName = "Compoany", Id = 1, UserId = "67f4dc76-02f5-4cf1-bbe8-85edbc2af1ed", Value = 2500.22 });
+            .HasData(new Revenue { Source = "Compoany", Id = 1, UserId = "67f4dc76-02f5-4cf1-bbe8-85edbc2af1ed", Value = 2500.22 });
 
         modelBuilder.Entity<User>()
             .HasData(

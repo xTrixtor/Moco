@@ -17,7 +17,11 @@ import {
   GroupcostClient,
   IGroupcostClient,
   IInspectionClient,
-  InspectionClient
+  InspectionClient,
+  SavinggoalsClient,
+  ISavinggoalsClient,
+  ICreditClient,
+  CreditClient
 } from "./apiClient";
 
 export const useApiStore = defineStore("api", {
@@ -48,6 +52,12 @@ export const useApiStore = defineStore("api", {
     },
     InspectionClient(): IInspectionClient{
       return new InspectionClient();
+    },
+    SavingGoalsClient(): ISavinggoalsClient{
+      return new SavinggoalsClient();
+    },
+    CreditClient(): ICreditClient{
+      return new CreditClient();
     },
   },
 });

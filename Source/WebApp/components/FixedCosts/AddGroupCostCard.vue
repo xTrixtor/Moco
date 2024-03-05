@@ -2,7 +2,7 @@
   <div
     id="addButton"
     @click="() => showAutoCompleteField = true"
-    class="h-[70px] w-full md:w-[300px] bg-gradient-to-r from-white to-secondary-content rounded-lg flex-center my-2 cursor-pointer border-dashed border-2 duration-300 border-primary opacity-30 hover:opacity-100"
+    class="h-[70px] w-full bg-gradient-to-r from-white to-secondary-content rounded-lg flex-center my-2 cursor-pointer border-dashed border-2 duration-300 border-primary opacity-30 hover:opacity-100"
   >
     <FixedCostsAddGroupCostButton v-if="showAutoCompleteField" v-model="showAutoCompleteField" />
     <Icon

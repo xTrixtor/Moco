@@ -2,13 +2,6 @@
     <div class="flex flex-col 2xl:flex-row gap-2">
       <div v-if="!loading" class="flex-1">
         <FixedCostsInfoRow />
-        <div
-          class="bg-foreground h-full flex-1 md:h-[72vh] flex flex-col md:flex-wrap items-start border-2 border-border rounded-lg rounded-br-[2rem] rounded-tl-[2rem] p-4 shadow-xl"
-        >
-          <GroupCostCard :groupCost="group" v-for="(group,key) in groupCosts" :key="key" />
-          <AddGroupCostCard />
-          <BudgetCard />
-        </div>
       </div>
       <BaseFullScreenLoader v-else />
       <div
@@ -20,15 +13,10 @@
 </template>
 
 <script setup lang="ts">
-import { storeToRefs } from "pinia";
-import GroupCostCard from "~/components/FixedCosts/GroupCostCard.vue";
 import { useBudgetStore } from "~/stores/budgetStore";
 import { useOverviewCostStore } from "~/stores/overviewCostStore";
 import { useFixedCostStore } from "~/stores/fixedCostStore";
-import BudgetCard from "~/components/FixedCosts/Budget/BudgetCard.vue";
-import AddGroupCostCard from "~/components/FixedCosts/AddGroupCostCard.vue";
 
-const { groupCosts } = storeToRefs(useFixedCostStore());
 
 export interface SmartIntervalKey {
   timeIntervalKey: number;

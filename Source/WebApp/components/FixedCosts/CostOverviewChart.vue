@@ -1,7 +1,7 @@
 <template>
   <div class="flex-center">
     <Chart type="pie" :data="chartData" :options="chartOptions" class="w-full p-10" />
-    <div v-if="false" class="h-[80vh] w-full grid justify-center items-center bg-gray/25">
+    <div v-if="false" class="h-full w-full grid justify-center items-center bg-gray/25">
       <div role="status">
         <svg
           aria-hidden="true"

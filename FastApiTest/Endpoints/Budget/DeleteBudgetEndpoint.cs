@@ -21,11 +21,6 @@ namespace MocoApi.Endpoints.Budget
                     if (budget == null)
                         ThrowError("Could not find Budget with given Id");
 
-                    foreach (var charge in budget.Charges)
-                    {
-                        await charge.DeleteAsync(dbContext);
-                    }
-
                     dbContext.Budgets.Remove(budget);
                     await dbContext.SaveChangesAsync();
 

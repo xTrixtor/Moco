@@ -1,12 +1,14 @@
 ﻿using FastEndpoints;
+using Microsoft.EntityFrameworkCore;
 using Moco.Api.Factories.Db;
 using Moco.Api.Models.Moco.Dto;
 using Moco.Api.Models.Moco.Resource;
 using MocoApi.Extensions;
+using Newtonsoft.Json;
 
 namespace Moco.Api.Endpoints.CostInspection
 {
-    public class CheckableFixedCostUptoDate : Endpoint<CheckableFixedCostUptoDateRequest, bool>
+    public class CheckableFixedCostUptoDate : Endpoint<CheckableFixedCostUptoDateRequest,bool>
     {
         private readonly MocoContextFactory mocoContextFactory;
 
@@ -21,18 +23,18 @@ namespace Moco.Api.Endpoints.CostInspection
         }
         public async override Task HandleAsync(CheckableFixedCostUptoDateRequest req, CancellationToken ct)
         {
-            if(!req.IsUpgradeable) await SendAsync(false);
 
             using (var context = mocoContextFactory.CreateMocoContext())
             {
-                //var createdFixedCostIds = req.AlreadyCreatedCheckableFixedCosts.Select(x => x.Id).ToList();
+                var costInspection = await context.CostInspections.FirstOrDefaultAsync(x => x.Id == req.CostInspectionId);
 
-                //var createableFixedCosts = context.GroupCosts.Where(x => x.UserId == req.UserId).SelectMany(x => x.FixedCosts).Where(x => !createdFixedCostIds.Contains(x.Id)).ToArray();
-                //foreach (var createableFixedCost in createableFixedCosts)
-                //{
-                //    context.CheckableFixedCosts.Add(createableFixedCost.toCheckable(req.CostInspectionId));
-                //}
-                //await context.SaveChangesAsync();
+                var groupCosts = context.GroupCosts.ToList().Where(x => x.UserId == req.UserId).Select(x => x.asDto()).ToArray();
+                var checkableFixcost = groupCosts.SelectMany(x => x.FixedCosts).Select((x, key) => x.toCheckable(key)).ToArray();
+                var checkableFixcostJson = JsonConvert.SerializeObject(checkableFixcost);
+
+                costInspection.MonthlyFixedcostsJson = checkableFixcostJson;
+
+                context.SaveChanges();
             }
             await SendAsync(true);
         }
@@ -41,8 +43,6 @@ namespace Moco.Api.Endpoints.CostInspection
     {
         [FromClaim("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier")]
         public string UserId { get; set; }
-        public bool IsUpgradeable { get; set; }
         public int CostInspectionId { get; set; }
-        public CheckableFixedCostDto[] AlreadyCreatedCheckableFixedCosts { get; set; }
     }
 }

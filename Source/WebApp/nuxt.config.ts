@@ -28,16 +28,4 @@ export default defineNuxtConfig({
       ripple:true,
     },
   },
-  vite: {
-    plugins: [
-      {
-        name: "no-treeshake",
-        transform(_, id) {
-          if (id.includes("ui/")) {
-            return { moduleSideEffects: "no-treeshake" };
-          }
-        },
-      },
-    ],
-  },
 });

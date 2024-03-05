@@ -1,4 +1,5 @@
 ﻿using Moco.Api.Models.Moco.Resource;
+using MocoApi.Extensions;
 using Newtonsoft.Json;
 
 namespace Moco.Api.Models.Moco.Dto
@@ -13,18 +14,20 @@ namespace Moco.Api.Models.Moco.Dto
         {
             this.Id = savingGoal.Id;
             this.Name = savingGoal.Name;
-            this.Value = savingGoal.Value;
+            this.GoalValue = savingGoal.GoalValue;
+            this.InitialCapital = savingGoal.InitialCapital;
             this.DepositRate = savingGoal.DepositRate;
             this.EndDate = savingGoal.EndDate;
             this.StartDate   = savingGoal.StartDate;
-            this.DepositRates = JsonConvert.DeserializeObject<DepositRateDto[]>(savingGoal.DepositsJson);
+            this.DepositRates = savingGoal?.DepositRates?.Select(x => x.asDto()).ToArray();
         }
         public int Id { get; set; }
         public string Name { get; set; }
-        public double Value { get; set; } = 0;
-        public double DepositRate { get; set; } = 0;
-        public DateOnly StartDate { get; set; }
-        public DateOnly EndDate { get; set; }
+        public double GoalValue { get; set; }
+        public double InitialCapital { get; set; }
+        public double DepositRate { get; set; }
+        public DateTime StartDate { get; set; }
+        public DateTime EndDate { get; set; }
         public DepositRateDto[]? DepositRates { get; set; }
         public string UserId { get; set; }
     }

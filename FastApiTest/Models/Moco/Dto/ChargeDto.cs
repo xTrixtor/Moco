@@ -14,14 +14,14 @@ namespace MocoApi.Models.Moco.Dto
         public ChargeDto(Charge charge)
         {
             Id = charge.Id;
-            ChargeName = charge.ChargeName;
+            Name = charge.Name;
             Value = charge.Value;
-            BudgetId = charge.BudgetId; 
+            MonthlyBudgetId = charge.MonthlyBudgetId; 
         }
         public int Id { get; set; }
-        public string ChargeName { get; set; }
+        public string Name { get; set; }
         public double Value { get; set; }
-        public int BudgetId { get; set; }
+        public int MonthlyBudgetId { get; set; }
         public CostInspectionDto CostInspection { get; set; }
     }
 }

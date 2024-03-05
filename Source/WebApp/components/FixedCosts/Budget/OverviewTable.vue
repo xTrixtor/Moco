@@ -17,11 +17,11 @@
             :key="`${budget.id}-${key}`"
           >
             <div class="w-[60%]" :class="cellStyling">
-              <BaseEditInput v-model="budget.name" type="text" @leave="handleUpdateCharge(budget)" class="truncate flex-1" />
+              <BaseEditInput v-model="budget.name" type="text" @leave="handleUpdateCharge(budget)" class="truncate flex-1 text-md p-1 items-center flex justify-start" />
             </div>
     
             <div class="w-[35%] flex-1" :class="cellStyling">
-              <BaseEditInput v-model="budget.limit" type="number" @leave="handleUpdateCharge(budget)" class="truncate flex-1" input-extension="€"/>
+              <BaseEditInput v-model="budget.limit" type="number" @leave="handleUpdateCharge(budget)" class="truncate flex-1 text-md p-1 items-center flex justify-center" input-extension="€"/>
             </div>
             <div class="flex justify-center items-center">
               <TableActionCell :unique-key="`${key}`" :dto="budget" label="dieses Budget" :delete-api-call="() => deleteBudgetById(budget.id)" />

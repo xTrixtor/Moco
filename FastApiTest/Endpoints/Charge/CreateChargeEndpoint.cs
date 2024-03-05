@@ -51,9 +51,8 @@ namespace MocoApi.Endpoints.Charge
 
     public record ChargeCDto
     {
-        public required string ChargeName { get; set; }
+        public required string Name { get; set; }
         public required double Value { get; set; }
-        public required int BudgetId { get; set; }
-        public required int CostInspectionId { get; set; }
+        public required int MonthlyBudgetId { get; set; }
     }
 }

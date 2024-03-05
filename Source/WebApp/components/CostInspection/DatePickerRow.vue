@@ -1,6 +1,6 @@
 
 <template>
-    <div class="w-full flex-1 flex-center my-4 !cursor-pointer h-20">
+    <div class="w-full flex justify-center items-center my-4 !cursor-pointer h-20">
         <div @click="previousMonth" id="datePickerIcon" class="flex-center flex-1">
             <Icon name="bxs:left-arrow" size="2rem" class="text-border"/>
         </div>

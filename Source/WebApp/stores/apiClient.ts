@@ -65,6 +65,352 @@ export class UserClient extends BaseAPIClient implements IUserClient {
     }
 }
 
+export interface ISavinggoalsClient {
+
+    /**
+     * @return Success
+     */
+    addDepositEndpoint(depositsUDto: DepositsUDto): Promise<UpdateDepositsResponse>;
+
+    /**
+     * @return Success
+     */
+    createSavingGoalEndpoint(savingGoalCDto: SavingGoalCDto): Promise<SavingGoalCResponse>;
+
+    /**
+     * @return Success
+     */
+    getAllSavingGoalsEndpoint(): Promise<GetAllSavingGoalsResponse>;
+
+    /**
+     * @return Success
+     */
+    getSavingGoalEnpoint(savingGoalId: number): Promise<GetSavingGoalResponse>;
+
+    /**
+     * @return Success
+     */
+    createDepositRateEndpoint(depositRateCDto: DepositRateCDto): Promise<DepositRatelCResponse>;
+
+    /**
+     * @return Success
+     */
+    updateDepositRateEndpoint(depositRateUDto: DepositRateUDto): Promise<DepositRatelUResponse>;
+}
+
+export class SavinggoalsClient extends BaseAPIClient implements ISavinggoalsClient {
+    private http: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> };
+    private baseUrl: string;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+
+    constructor(baseUrl?: string, http?: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> }) {
+        super();
+        this.http = http ? http : window as any;
+        this.baseUrl = this.getBaseUrl("https://localhost:53084", baseUrl);
+    }
+
+    /**
+     * @return Success
+     */
+    addDepositEndpoint(depositsUDto: DepositsUDto): Promise<UpdateDepositsResponse> {
+        let url_ = this.baseUrl + "/api/savingGoals/deposits";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(depositsUDto);
+
+        let options_: RequestInit = {
+            body: content_,
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            }
+        };
+
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
+            return this.transformResult(url_, _response, (_response: Response) => this.processAddDepositEndpoint(_response));
+        });
+    }
+
+    protected processAddDepositEndpoint(response: Response): Promise<UpdateDepositsResponse> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = UpdateDepositsResponse.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            return throwException("Unauthorized", status, _responseText, _headers);
+            });
+        } else if (status === 403) {
+            return response.text().then((_responseText) => {
+            return throwException("Forbidden", status, _responseText, _headers);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<UpdateDepositsResponse>(null as any);
+    }
+
+    /**
+     * @return Success
+     */
+    createSavingGoalEndpoint(savingGoalCDto: SavingGoalCDto): Promise<SavingGoalCResponse> {
+        let url_ = this.baseUrl + "/api/savingGoals";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(savingGoalCDto);
+
+        let options_: RequestInit = {
+            body: content_,
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            }
+        };
+
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
+            return this.transformResult(url_, _response, (_response: Response) => this.processCreateSavingGoalEndpoint(_response));
+        });
+    }
+
+    protected processCreateSavingGoalEndpoint(response: Response): Promise<SavingGoalCResponse> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = SavingGoalCResponse.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            return throwException("Unauthorized", status, _responseText, _headers);
+            });
+        } else if (status === 403) {
+            return response.text().then((_responseText) => {
+            return throwException("Forbidden", status, _responseText, _headers);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<SavingGoalCResponse>(null as any);
+    }
+
+    /**
+     * @return Success
+     */
+    getAllSavingGoalsEndpoint(): Promise<GetAllSavingGoalsResponse> {
+        let url_ = this.baseUrl + "/api/savingGoals";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: RequestInit = {
+            method: "GET",
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
+            return this.transformResult(url_, _response, (_response: Response) => this.processGetAllSavingGoalsEndpoint(_response));
+        });
+    }
+
+    protected processGetAllSavingGoalsEndpoint(response: Response): Promise<GetAllSavingGoalsResponse> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = GetAllSavingGoalsResponse.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            return throwException("Unauthorized", status, _responseText, _headers);
+            });
+        } else if (status === 403) {
+            return response.text().then((_responseText) => {
+            return throwException("Forbidden", status, _responseText, _headers);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<GetAllSavingGoalsResponse>(null as any);
+    }
+
+    /**
+     * @return Success
+     */
+    getSavingGoalEnpoint(savingGoalId: number): Promise<GetSavingGoalResponse> {
+        let url_ = this.baseUrl + "/api/savingGoals/{SavingGoalId}";
+        if (savingGoalId === undefined || savingGoalId === null)
+            throw new Error("The parameter 'savingGoalId' must be defined.");
+        url_ = url_.replace("{SavingGoalId}", encodeURIComponent("" + savingGoalId));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: RequestInit = {
+            method: "GET",
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
+            return this.transformResult(url_, _response, (_response: Response) => this.processGetSavingGoalEnpoint(_response));
+        });
+    }
+
+    protected processGetSavingGoalEnpoint(response: Response): Promise<GetSavingGoalResponse> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = GetSavingGoalResponse.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            return throwException("Unauthorized", status, _responseText, _headers);
+            });
+        } else if (status === 403) {
+            return response.text().then((_responseText) => {
+            return throwException("Forbidden", status, _responseText, _headers);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<GetSavingGoalResponse>(null as any);
+    }
+
+    /**
+     * @return Success
+     */
+    createDepositRateEndpoint(depositRateCDto: DepositRateCDto): Promise<DepositRatelCResponse> {
+        let url_ = this.baseUrl + "/api/savingGoals/depositRate";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(depositRateCDto);
+
+        let options_: RequestInit = {
+            body: content_,
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            }
+        };
+
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
+            return this.transformResult(url_, _response, (_response: Response) => this.processCreateDepositRateEndpoint(_response));
+        });
+    }
+
+    protected processCreateDepositRateEndpoint(response: Response): Promise<DepositRatelCResponse> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = DepositRatelCResponse.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            return throwException("Unauthorized", status, _responseText, _headers);
+            });
+        } else if (status === 403) {
+            return response.text().then((_responseText) => {
+            return throwException("Forbidden", status, _responseText, _headers);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<DepositRatelCResponse>(null as any);
+    }
+
+    /**
+     * @return Success
+     */
+    updateDepositRateEndpoint(depositRateUDto: DepositRateUDto): Promise<DepositRatelUResponse> {
+        let url_ = this.baseUrl + "/api/savingGoals/depositRate";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(depositRateUDto);
+
+        let options_: RequestInit = {
+            body: content_,
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            }
+        };
+
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
+            return this.transformResult(url_, _response, (_response: Response) => this.processUpdateDepositRateEndpoint(_response));
+        });
+    }
+
+    protected processUpdateDepositRateEndpoint(response: Response): Promise<DepositRatelUResponse> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = DepositRatelUResponse.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            return throwException("Unauthorized", status, _responseText, _headers);
+            });
+        } else if (status === 403) {
+            return response.text().then((_responseText) => {
+            return throwException("Forbidden", status, _responseText, _headers);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<DepositRatelUResponse>(null as any);
+    }
+}
+
 export interface IGroupcostClient {
 
     /**
@@ -539,6 +885,189 @@ export class FixedcostClient extends BaseAPIClient implements IFixedcostClient {
     }
 }
 
+export interface ICreditClient {
+
+    /**
+     * @return Success
+     */
+    createCreditEndpoint(createCreditRequest: CreateCreditRequest): Promise<CreateCreditResponse>;
+
+    /**
+     * @return Success
+     */
+    updateCreditEndpoint(updateCreditRequest: UpdateCreditRequest): Promise<UpdateBudgetResponse>;
+
+    /**
+     * @return Success
+     */
+    deleteCreditEndpoint(creditId: number): Promise<any>;
+}
+
+export class CreditClient extends BaseAPIClient implements ICreditClient {
+    private http: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> };
+    private baseUrl: string;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+
+    constructor(baseUrl?: string, http?: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> }) {
+        super();
+        this.http = http ? http : window as any;
+        this.baseUrl = this.getBaseUrl("https://localhost:53084", baseUrl);
+    }
+
+    /**
+     * @return Success
+     */
+    createCreditEndpoint(createCreditRequest: CreateCreditRequest): Promise<CreateCreditResponse> {
+        let url_ = this.baseUrl + "/api/credit";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(createCreditRequest);
+
+        let options_: RequestInit = {
+            body: content_,
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            }
+        };
+
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
+            return this.transformResult(url_, _response, (_response: Response) => this.processCreateCreditEndpoint(_response));
+        });
+    }
+
+    protected processCreateCreditEndpoint(response: Response): Promise<CreateCreditResponse> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = CreateCreditResponse.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            return throwException("Unauthorized", status, _responseText, _headers);
+            });
+        } else if (status === 403) {
+            return response.text().then((_responseText) => {
+            return throwException("Forbidden", status, _responseText, _headers);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<CreateCreditResponse>(null as any);
+    }
+
+    /**
+     * @return Success
+     */
+    updateCreditEndpoint(updateCreditRequest: UpdateCreditRequest): Promise<UpdateBudgetResponse> {
+        let url_ = this.baseUrl + "/api/credit";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(updateCreditRequest);
+
+        let options_: RequestInit = {
+            body: content_,
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            }
+        };
+
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
+            return this.transformResult(url_, _response, (_response: Response) => this.processUpdateCreditEndpoint(_response));
+        });
+    }
+
+    protected processUpdateCreditEndpoint(response: Response): Promise<UpdateBudgetResponse> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = UpdateBudgetResponse.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            return throwException("Unauthorized", status, _responseText, _headers);
+            });
+        } else if (status === 403) {
+            return response.text().then((_responseText) => {
+            return throwException("Forbidden", status, _responseText, _headers);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<UpdateBudgetResponse>(null as any);
+    }
+
+    /**
+     * @return Success
+     */
+    deleteCreditEndpoint(creditId: number): Promise<any> {
+        let url_ = this.baseUrl + "/api/credit/{CreditId}";
+        if (creditId === undefined || creditId === null)
+            throw new Error("The parameter 'creditId' must be defined.");
+        url_ = url_.replace("{CreditId}", encodeURIComponent("" + creditId));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: RequestInit = {
+            method: "DELETE",
+            headers: {
+                "Accept": "text/plain"
+            }
+        };
+
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
+            return this.transformResult(url_, _response, (_response: Response) => this.processDeleteCreditEndpoint(_response));
+        });
+    }
+
+    protected processDeleteCreditEndpoint(response: Response): Promise<any> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result200 = resultData200 !== undefined ? resultData200 : <any>null;
+    
+            return result200;
+            });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            return throwException("Unauthorized", status, _responseText, _headers);
+            });
+        } else if (status === 403) {
+            return response.text().then((_responseText) => {
+            return throwException("Forbidden", status, _responseText, _headers);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<any>(null as any);
+    }
+}
+
 export interface IInspectionClient {
 
     /**
@@ -559,12 +1088,12 @@ export interface IInspectionClient {
     /**
      * @return Success
      */
-    initializeCostInspectionEndpoint(costInspectionIRequest: CostInspectionIRequest): Promise<CostInspectionIResponse>;
+    checkFixedCost(updateCheckableFixedCostRequest: UpdateCheckableFixedCostRequest): Promise<boolean>;
 
     /**
      * @return Success
      */
-    checkFixedCost(updateCheckableFixedCostRequest: UpdateCheckableFixedCostRequest): Promise<boolean>;
+    updateMonthlyBudgetEnpoint(monthlyBudgetUDto: MonthlyBudgetUDto): Promise<MonthlyBudgetUResponse>;
 }
 
 export class InspectionClient extends BaseAPIClient implements IInspectionClient {
@@ -739,57 +1268,6 @@ export class InspectionClient extends BaseAPIClient implements IInspectionClient
     /**
      * @return Success
      */
-    initializeCostInspectionEndpoint(costInspectionIRequest: CostInspectionIRequest): Promise<CostInspectionIResponse> {
-        let url_ = this.baseUrl + "/api/inspection/initialize";
-        url_ = url_.replace(/[?&]$/, "");
-
-        const content_ = JSON.stringify(costInspectionIRequest);
-
-        let options_: RequestInit = {
-            body: content_,
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                "Accept": "application/json"
-            }
-        };
-
-        return this.transformOptions(options_).then(transformedOptions_ => {
-            return this.http.fetch(url_, transformedOptions_);
-        }).then((_response: Response) => {
-            return this.transformResult(url_, _response, (_response: Response) => this.processInitializeCostInspectionEndpoint(_response));
-        });
-    }
-
-    protected processInitializeCostInspectionEndpoint(response: Response): Promise<CostInspectionIResponse> {
-        const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
-        if (status === 200) {
-            return response.text().then((_responseText) => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = CostInspectionIResponse.fromJS(resultData200);
-            return result200;
-            });
-        } else if (status === 401) {
-            return response.text().then((_responseText) => {
-            return throwException("Unauthorized", status, _responseText, _headers);
-            });
-        } else if (status === 403) {
-            return response.text().then((_responseText) => {
-            return throwException("Forbidden", status, _responseText, _headers);
-            });
-        } else if (status !== 200 && status !== 204) {
-            return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-            });
-        }
-        return Promise.resolve<CostInspectionIResponse>(null as any);
-    }
-
-    /**
-     * @return Success
-     */
     checkFixedCost(updateCheckableFixedCostRequest: UpdateCheckableFixedCostRequest): Promise<boolean> {
         let url_ = this.baseUrl + "/api/inspection/checkableFixedCost";
         url_ = url_.replace(/[?&]$/, "");
@@ -837,6 +1315,57 @@ export class InspectionClient extends BaseAPIClient implements IInspectionClient
             });
         }
         return Promise.resolve<boolean>(null as any);
+    }
+
+    /**
+     * @return Success
+     */
+    updateMonthlyBudgetEnpoint(monthlyBudgetUDto: MonthlyBudgetUDto): Promise<MonthlyBudgetUResponse> {
+        let url_ = this.baseUrl + "/api/inspection/monthlyBudget";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(monthlyBudgetUDto);
+
+        let options_: RequestInit = {
+            body: content_,
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            }
+        };
+
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
+            return this.transformResult(url_, _response, (_response: Response) => this.processUpdateMonthlyBudgetEnpoint(_response));
+        });
+    }
+
+    protected processUpdateMonthlyBudgetEnpoint(response: Response): Promise<MonthlyBudgetUResponse> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = MonthlyBudgetUResponse.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            return throwException("Unauthorized", status, _responseText, _headers);
+            });
+        } else if (status === 403) {
+            return response.text().then((_responseText) => {
+            return throwException("Forbidden", status, _responseText, _headers);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<MonthlyBudgetUResponse>(null as any);
     }
 }
 
@@ -1221,6 +1750,10 @@ export class ChargeClient extends BaseAPIClient implements IChargeClient {
             return response.text().then((_responseText) => {
             return throwException("Unauthorized", status, _responseText, _headers);
             });
+        } else if (status === 403) {
+            return response.text().then((_responseText) => {
+            return throwException("Return false", status, _responseText, _headers);
+            });
         } else if (status !== 200 && status !== 204) {
             return response.text().then((_responseText) => {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
@@ -1315,6 +1848,10 @@ export class ChargeClient extends BaseAPIClient implements IChargeClient {
         } else if (status === 401) {
             return response.text().then((_responseText) => {
             return throwException("Unauthorized", status, _responseText, _headers);
+            });
+        } else if (status === 403) {
+            return response.text().then((_responseText) => {
+            return throwException("Return false", status, _responseText, _headers);
             });
         } else if (status !== 200 && status !== 204) {
             return response.text().then((_responseText) => {
@@ -1450,7 +1987,7 @@ export interface IBudgetClient {
      * Updates Charge Data
      * @return Returns true
      */
-    updateButgetEndpoint(updateBudgetRequest: UpdateBudgetRequest): Promise<UpdateBudgetResponse>;
+    updateButgetEndpoint(updateBudgetRequest: UpdateBudgetRequest): Promise<UpdateBudgetResponse2>;
 
     /**
      * @return Success
@@ -1514,6 +2051,10 @@ export class BudgetClient extends BaseAPIClient implements IBudgetClient {
             return response.text().then((_responseText) => {
             return throwException("Unauthorized", status, _responseText, _headers);
             });
+        } else if (status === 403) {
+            return response.text().then((_responseText) => {
+            return throwException("Forbidden", status, _responseText, _headers);
+            });
         } else if (status !== 200 && status !== 204) {
             return response.text().then((_responseText) => {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
@@ -1573,7 +2114,7 @@ export class BudgetClient extends BaseAPIClient implements IBudgetClient {
      * Updates Charge Data
      * @return Returns true
      */
-    updateButgetEndpoint(updateBudgetRequest: UpdateBudgetRequest): Promise<UpdateBudgetResponse> {
+    updateButgetEndpoint(updateBudgetRequest: UpdateBudgetRequest): Promise<UpdateBudgetResponse2> {
         let url_ = this.baseUrl + "/api/budget";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -1595,26 +2136,30 @@ export class BudgetClient extends BaseAPIClient implements IBudgetClient {
         });
     }
 
-    protected processUpdateButgetEndpoint(response: Response): Promise<UpdateBudgetResponse> {
+    protected processUpdateButgetEndpoint(response: Response): Promise<UpdateBudgetResponse2> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
             return response.text().then((_responseText) => {
             let result200: any = null;
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = UpdateBudgetResponse.fromJS(resultData200);
+            result200 = UpdateBudgetResponse2.fromJS(resultData200);
             return result200;
             });
         } else if (status === 401) {
             return response.text().then((_responseText) => {
             return throwException("Unauthorized", status, _responseText, _headers);
             });
+        } else if (status === 403) {
+            return response.text().then((_responseText) => {
+            return throwException("Return false", status, _responseText, _headers);
+            });
         } else if (status !== 200 && status !== 204) {
             return response.text().then((_responseText) => {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
-        return Promise.resolve<UpdateBudgetResponse>(null as any);
+        return Promise.resolve<UpdateBudgetResponse2>(null as any);
     }
 
     /**
@@ -1706,6 +2251,10 @@ export class BudgetClient extends BaseAPIClient implements IBudgetClient {
         } else if (status === 401) {
             return response.text().then((_responseText) => {
             return throwException("Unauthorized", status, _responseText, _headers);
+            });
+        } else if (status === 403) {
+            return response.text().then((_responseText) => {
+            return throwException("Return false", status, _responseText, _headers);
             });
         } else if (status !== 200 && status !== 204) {
             return response.text().then((_responseText) => {
@@ -2010,6 +2559,630 @@ export interface ICredential {
     type?: string;
     value?: string;
     temporary?: boolean;
+}
+
+export class UpdateDepositsResponse implements IUpdateDepositsResponse {
+    deposits?: DepositRateDto[];
+
+    constructor(data?: IUpdateDepositsResponse) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            if (Array.isArray(_data["deposits"])) {
+                this.deposits = [] as any;
+                for (let item of _data["deposits"])
+                    this.deposits!.push(DepositRateDto.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): UpdateDepositsResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new UpdateDepositsResponse();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        if (Array.isArray(this.deposits)) {
+            data["deposits"] = [];
+            for (let item of this.deposits)
+                data["deposits"].push(item.toJSON());
+        }
+        return data;
+    }
+}
+
+export interface IUpdateDepositsResponse {
+    deposits?: DepositRateDto[];
+}
+
+export class DepositRateDto implements IDepositRateDto {
+    id?: number;
+    key?: string;
+    value?: number;
+    savingMonth?: Date;
+
+    constructor(data?: IDepositRateDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.key = _data["key"];
+            this.value = _data["value"];
+            this.savingMonth = _data["savingMonth"] ? new Date(_data["savingMonth"].toString()) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any): DepositRateDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new DepositRateDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["key"] = this.key;
+        data["value"] = this.value;
+        data["savingMonth"] = this.savingMonth ? this.savingMonth.toISOString() : <any>undefined;
+        return data;
+    }
+}
+
+export interface IDepositRateDto {
+    id?: number;
+    key?: string;
+    value?: number;
+    savingMonth?: Date;
+}
+
+export class DepositsUDto implements IDepositsUDto {
+    savingGoalId?: number;
+    depositUDto?: DepositRateDto;
+
+    constructor(data?: IDepositsUDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.savingGoalId = _data["savingGoalId"];
+            this.depositUDto = _data["depositUDto"] ? DepositRateDto.fromJS(_data["depositUDto"]) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any): DepositsUDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new DepositsUDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["savingGoalId"] = this.savingGoalId;
+        data["depositUDto"] = this.depositUDto ? this.depositUDto.toJSON() : <any>undefined;
+        return data;
+    }
+}
+
+export interface IDepositsUDto {
+    savingGoalId?: number;
+    depositUDto?: DepositRateDto;
+}
+
+export class SavingGoalCResponse implements ISavingGoalCResponse {
+    success?: boolean;
+
+    constructor(data?: ISavingGoalCResponse) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.success = _data["success"];
+        }
+    }
+
+    static fromJS(data: any): SavingGoalCResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new SavingGoalCResponse();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["success"] = this.success;
+        return data;
+    }
+}
+
+export interface ISavingGoalCResponse {
+    success?: boolean;
+}
+
+export class SavingGoalCDto implements ISavingGoalCDto {
+    name?: string;
+    goalValue?: number;
+    initialCapital?: number;
+    depositRate?: number;
+    depositRates?: DepositRateDto[];
+    startDate?: Date;
+    endDate?: Date;
+
+    constructor(data?: ISavingGoalCDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.name = _data["name"];
+            this.goalValue = _data["goalValue"];
+            this.initialCapital = _data["initialCapital"];
+            this.depositRate = _data["depositRate"];
+            if (Array.isArray(_data["depositRates"])) {
+                this.depositRates = [] as any;
+                for (let item of _data["depositRates"])
+                    this.depositRates!.push(DepositRateDto.fromJS(item));
+            }
+            this.startDate = _data["startDate"] ? new Date(_data["startDate"].toString()) : <any>undefined;
+            this.endDate = _data["endDate"] ? new Date(_data["endDate"].toString()) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any): SavingGoalCDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new SavingGoalCDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["name"] = this.name;
+        data["goalValue"] = this.goalValue;
+        data["initialCapital"] = this.initialCapital;
+        data["depositRate"] = this.depositRate;
+        if (Array.isArray(this.depositRates)) {
+            data["depositRates"] = [];
+            for (let item of this.depositRates)
+                data["depositRates"].push(item.toJSON());
+        }
+        data["startDate"] = this.startDate ? this.startDate.toISOString() : <any>undefined;
+        data["endDate"] = this.endDate ? this.endDate.toISOString() : <any>undefined;
+        return data;
+    }
+}
+
+export interface ISavingGoalCDto {
+    name?: string;
+    goalValue?: number;
+    initialCapital?: number;
+    depositRate?: number;
+    depositRates?: DepositRateDto[];
+    startDate?: Date;
+    endDate?: Date;
+}
+
+export class GetAllSavingGoalsResponse implements IGetAllSavingGoalsResponse {
+    allSavingGoals?: SavingGoalDto[];
+
+    constructor(data?: IGetAllSavingGoalsResponse) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            if (Array.isArray(_data["allSavingGoals"])) {
+                this.allSavingGoals = [] as any;
+                for (let item of _data["allSavingGoals"])
+                    this.allSavingGoals!.push(SavingGoalDto.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): GetAllSavingGoalsResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new GetAllSavingGoalsResponse();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        if (Array.isArray(this.allSavingGoals)) {
+            data["allSavingGoals"] = [];
+            for (let item of this.allSavingGoals)
+                data["allSavingGoals"].push(item.toJSON());
+        }
+        return data;
+    }
+}
+
+export interface IGetAllSavingGoalsResponse {
+    allSavingGoals?: SavingGoalDto[];
+}
+
+export class SavingGoalDto implements ISavingGoalDto {
+    id?: number;
+    name?: string;
+    goalValue?: number;
+    initialCapital?: number;
+    depositRate?: number;
+    startDate?: Date;
+    endDate?: Date;
+    depositRates?: DepositRateDto[] | undefined;
+    userId?: string;
+
+    constructor(data?: ISavingGoalDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.name = _data["name"];
+            this.goalValue = _data["goalValue"];
+            this.initialCapital = _data["initialCapital"];
+            this.depositRate = _data["depositRate"];
+            this.startDate = _data["startDate"] ? new Date(_data["startDate"].toString()) : <any>undefined;
+            this.endDate = _data["endDate"] ? new Date(_data["endDate"].toString()) : <any>undefined;
+            if (Array.isArray(_data["depositRates"])) {
+                this.depositRates = [] as any;
+                for (let item of _data["depositRates"])
+                    this.depositRates!.push(DepositRateDto.fromJS(item));
+            }
+            this.userId = _data["userId"];
+        }
+    }
+
+    static fromJS(data: any): SavingGoalDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new SavingGoalDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["name"] = this.name;
+        data["goalValue"] = this.goalValue;
+        data["initialCapital"] = this.initialCapital;
+        data["depositRate"] = this.depositRate;
+        data["startDate"] = this.startDate ? this.startDate.toISOString() : <any>undefined;
+        data["endDate"] = this.endDate ? this.endDate.toISOString() : <any>undefined;
+        if (Array.isArray(this.depositRates)) {
+            data["depositRates"] = [];
+            for (let item of this.depositRates)
+                data["depositRates"].push(item.toJSON());
+        }
+        data["userId"] = this.userId;
+        return data;
+    }
+}
+
+export interface ISavingGoalDto {
+    id?: number;
+    name?: string;
+    goalValue?: number;
+    initialCapital?: number;
+    depositRate?: number;
+    startDate?: Date;
+    endDate?: Date;
+    depositRates?: DepositRateDto[] | undefined;
+    userId?: string;
+}
+
+export class GetAllSavingGoalsRequest implements IGetAllSavingGoalsRequest {
+
+    constructor(data?: IGetAllSavingGoalsRequest) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+    }
+
+    static fromJS(data: any): GetAllSavingGoalsRequest {
+        data = typeof data === 'object' ? data : {};
+        let result = new GetAllSavingGoalsRequest();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        return data;
+    }
+}
+
+export interface IGetAllSavingGoalsRequest {
+}
+
+export class GetSavingGoalResponse implements IGetSavingGoalResponse {
+    savingGoalDto?: SavingGoalDto;
+
+    constructor(data?: IGetSavingGoalResponse) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.savingGoalDto = _data["savingGoalDto"] ? SavingGoalDto.fromJS(_data["savingGoalDto"]) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any): GetSavingGoalResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new GetSavingGoalResponse();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["savingGoalDto"] = this.savingGoalDto ? this.savingGoalDto.toJSON() : <any>undefined;
+        return data;
+    }
+}
+
+export interface IGetSavingGoalResponse {
+    savingGoalDto?: SavingGoalDto;
+}
+
+export class GetSavingGoalRequest implements IGetSavingGoalRequest {
+
+    constructor(data?: IGetSavingGoalRequest) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+    }
+
+    static fromJS(data: any): GetSavingGoalRequest {
+        data = typeof data === 'object' ? data : {};
+        let result = new GetSavingGoalRequest();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        return data;
+    }
+}
+
+export interface IGetSavingGoalRequest {
+}
+
+export class DepositRatelCResponse implements IDepositRatelCResponse {
+    depositRateDto?: DepositRateDto;
+
+    constructor(data?: IDepositRatelCResponse) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.depositRateDto = _data["depositRateDto"] ? DepositRateDto.fromJS(_data["depositRateDto"]) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any): DepositRatelCResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new DepositRatelCResponse();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["depositRateDto"] = this.depositRateDto ? this.depositRateDto.toJSON() : <any>undefined;
+        return data;
+    }
+}
+
+export interface IDepositRatelCResponse {
+    depositRateDto?: DepositRateDto;
+}
+
+export class DepositRateCDto implements IDepositRateCDto {
+    savingGoalId?: number;
+    key?: string;
+    value?: number;
+    savingMonth?: Date;
+
+    constructor(data?: IDepositRateCDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.savingGoalId = _data["savingGoalId"];
+            this.key = _data["key"];
+            this.value = _data["value"];
+            this.savingMonth = _data["savingMonth"] ? new Date(_data["savingMonth"].toString()) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any): DepositRateCDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new DepositRateCDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["savingGoalId"] = this.savingGoalId;
+        data["key"] = this.key;
+        data["value"] = this.value;
+        data["savingMonth"] = this.savingMonth ? this.savingMonth.toISOString() : <any>undefined;
+        return data;
+    }
+}
+
+export interface IDepositRateCDto {
+    savingGoalId?: number;
+    key?: string;
+    value?: number;
+    savingMonth?: Date;
+}
+
+export class DepositRatelUResponse implements IDepositRatelUResponse {
+    depositRateDto?: DepositRateDto;
+
+    constructor(data?: IDepositRatelUResponse) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.depositRateDto = _data["depositRateDto"] ? DepositRateDto.fromJS(_data["depositRateDto"]) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any): DepositRatelUResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new DepositRatelUResponse();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["depositRateDto"] = this.depositRateDto ? this.depositRateDto.toJSON() : <any>undefined;
+        return data;
+    }
+}
+
+export interface IDepositRatelUResponse {
+    depositRateDto?: DepositRateDto;
+}
+
+export class DepositRateUDto implements IDepositRateUDto {
+    savingGoalId?: number;
+    id?: number;
+    key?: string;
+    value?: number;
+    savingMonth?: Date;
+
+    constructor(data?: IDepositRateUDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.savingGoalId = _data["savingGoalId"];
+            this.id = _data["id"];
+            this.key = _data["key"];
+            this.value = _data["value"];
+            this.savingMonth = _data["savingMonth"] ? new Date(_data["savingMonth"].toString()) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any): DepositRateUDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new DepositRateUDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["savingGoalId"] = this.savingGoalId;
+        data["id"] = this.id;
+        data["key"] = this.key;
+        data["value"] = this.value;
+        data["savingMonth"] = this.savingMonth ? this.savingMonth.toISOString() : <any>undefined;
+        return data;
+    }
+}
+
+export interface IDepositRateUDto {
+    savingGoalId?: number;
+    id?: number;
+    key?: string;
+    value?: number;
+    savingMonth?: Date;
 }
 
 export class GroupCostCDto implements IGroupCostCDto {
@@ -2630,10 +3803,314 @@ export interface IFixedCostUDto {
     timeInterval?: TimeInterval;
 }
 
-export class CheckableFixedCostUptoDateRequest implements ICheckableFixedCostUptoDateRequest {
-    isUpgradeable?: boolean;
+export class CreateCreditResponse implements ICreateCreditResponse {
+    creditDto?: CreditDto;
+
+    constructor(data?: ICreateCreditResponse) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.creditDto = _data["creditDto"] ? CreditDto.fromJS(_data["creditDto"]) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any): CreateCreditResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new CreateCreditResponse();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["creditDto"] = this.creditDto ? this.creditDto.toJSON() : <any>undefined;
+        return data;
+    }
+}
+
+export interface ICreateCreditResponse {
+    creditDto?: CreditDto;
+}
+
+export class CreditDto implements ICreditDto {
+    id?: number;
+    name?: string;
+    value?: number;
+
+    constructor(data?: ICreditDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.name = _data["name"];
+            this.value = _data["value"];
+        }
+    }
+
+    static fromJS(data: any): CreditDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new CreditDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["name"] = this.name;
+        data["value"] = this.value;
+        return data;
+    }
+}
+
+export interface ICreditDto {
+    id?: number;
+    name?: string;
+    value?: number;
+}
+
+export class CreateCreditRequest implements ICreateCreditRequest {
+    creditCDto?: CreditCDto;
+
+    constructor(data?: ICreateCreditRequest) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.creditCDto = _data["creditCDto"] ? CreditCDto.fromJS(_data["creditCDto"]) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any): CreateCreditRequest {
+        data = typeof data === 'object' ? data : {};
+        let result = new CreateCreditRequest();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["creditCDto"] = this.creditCDto ? this.creditCDto.toJSON() : <any>undefined;
+        return data;
+    }
+}
+
+export interface ICreateCreditRequest {
+    creditCDto?: CreditCDto;
+}
+
+export class CreditCDto implements ICreditCDto {
+    name?: string;
+    value?: number;
     costInspectionId?: number;
-    alreadyCreatedCheckableFixedCosts?: CheckableFixedCostDto[];
+
+    constructor(data?: ICreditCDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.name = _data["name"];
+            this.value = _data["value"];
+            this.costInspectionId = _data["costInspectionId"];
+        }
+    }
+
+    static fromJS(data: any): CreditCDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new CreditCDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["name"] = this.name;
+        data["value"] = this.value;
+        data["costInspectionId"] = this.costInspectionId;
+        return data;
+    }
+}
+
+export interface ICreditCDto {
+    name?: string;
+    value?: number;
+    costInspectionId?: number;
+}
+
+export class DeleteCreditRequest implements IDeleteCreditRequest {
+
+    constructor(data?: IDeleteCreditRequest) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+    }
+
+    static fromJS(data: any): DeleteCreditRequest {
+        data = typeof data === 'object' ? data : {};
+        let result = new DeleteCreditRequest();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        return data;
+    }
+}
+
+export interface IDeleteCreditRequest {
+}
+
+export class UpdateBudgetResponse implements IUpdateBudgetResponse {
+    success?: boolean;
+
+    constructor(data?: IUpdateBudgetResponse) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.success = _data["success"];
+        }
+    }
+
+    static fromJS(data: any): UpdateBudgetResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new UpdateBudgetResponse();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["success"] = this.success;
+        return data;
+    }
+}
+
+export interface IUpdateBudgetResponse {
+    success?: boolean;
+}
+
+export class UpdateCreditRequest implements IUpdateCreditRequest {
+    creditUDto?: CreditUDto;
+
+    constructor(data?: IUpdateCreditRequest) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.creditUDto = _data["creditUDto"] ? CreditUDto.fromJS(_data["creditUDto"]) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any): UpdateCreditRequest {
+        data = typeof data === 'object' ? data : {};
+        let result = new UpdateCreditRequest();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["creditUDto"] = this.creditUDto ? this.creditUDto.toJSON() : <any>undefined;
+        return data;
+    }
+}
+
+export interface IUpdateCreditRequest {
+    creditUDto?: CreditUDto;
+}
+
+export class CreditUDto implements ICreditUDto {
+    id?: number;
+    name?: string;
+    value?: number;
+
+    constructor(data?: ICreditUDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.name = _data["name"];
+            this.value = _data["value"];
+        }
+    }
+
+    static fromJS(data: any): CreditUDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new CreditUDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["name"] = this.name;
+        data["value"] = this.value;
+        return data;
+    }
+}
+
+export interface ICreditUDto {
+    id?: number;
+    name?: string;
+    value?: number;
+}
+
+export class CheckableFixedCostUptoDateRequest implements ICheckableFixedCostUptoDateRequest {
+    costInspectionId?: number;
 
     constructor(data?: ICheckableFixedCostUptoDateRequest) {
         if (data) {
@@ -2646,13 +4123,7 @@ export class CheckableFixedCostUptoDateRequest implements ICheckableFixedCostUpt
 
     init(_data?: any) {
         if (_data) {
-            this.isUpgradeable = _data["isUpgradeable"];
             this.costInspectionId = _data["costInspectionId"];
-            if (Array.isArray(_data["alreadyCreatedCheckableFixedCosts"])) {
-                this.alreadyCreatedCheckableFixedCosts = [] as any;
-                for (let item of _data["alreadyCreatedCheckableFixedCosts"])
-                    this.alreadyCreatedCheckableFixedCosts!.push(CheckableFixedCostDto.fromJS(item));
-            }
         }
     }
 
@@ -2665,73 +4136,13 @@ export class CheckableFixedCostUptoDateRequest implements ICheckableFixedCostUpt
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["isUpgradeable"] = this.isUpgradeable;
         data["costInspectionId"] = this.costInspectionId;
-        if (Array.isArray(this.alreadyCreatedCheckableFixedCosts)) {
-            data["alreadyCreatedCheckableFixedCosts"] = [];
-            for (let item of this.alreadyCreatedCheckableFixedCosts)
-                data["alreadyCreatedCheckableFixedCosts"].push(item.toJSON());
-        }
         return data;
     }
 }
 
 export interface ICheckableFixedCostUptoDateRequest {
-    isUpgradeable?: boolean;
     costInspectionId?: number;
-    alreadyCreatedCheckableFixedCosts?: CheckableFixedCostDto[];
-}
-
-export class CheckableFixedCostDto implements ICheckableFixedCostDto {
-    key?: number;
-    name?: string;
-    value?: number;
-    isChecked?: boolean;
-    createdAt?: Date;
-
-    constructor(data?: ICheckableFixedCostDto) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.key = _data["key"];
-            this.name = _data["name"];
-            this.value = _data["value"];
-            this.isChecked = _data["isChecked"];
-            this.createdAt = _data["createdAt"] ? new Date(_data["createdAt"].toString()) : <any>undefined;
-        }
-    }
-
-    static fromJS(data: any): CheckableFixedCostDto {
-        data = typeof data === 'object' ? data : {};
-        let result = new CheckableFixedCostDto();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["key"] = this.key;
-        data["name"] = this.name;
-        data["value"] = this.value;
-        data["isChecked"] = this.isChecked;
-        data["createdAt"] = this.createdAt ? this.createdAt.toISOString() : <any>undefined;
-        return data;
-    }
-}
-
-export interface ICheckableFixedCostDto {
-    key?: number;
-    name?: string;
-    value?: number;
-    isChecked?: boolean;
-    createdAt?: Date;
 }
 
 export class CostInspectionCResponse implements ICostInspectionCResponse {
@@ -2854,8 +4265,8 @@ export class CostInspectionDto implements ICostInspectionDto {
     id?: number;
     userYearMonthKey?: string;
     fixedCostChecklist?: CheckableFixedCostDto[] | undefined;
+    monthlyBudgets?: MonthlyBudgetDto[] | undefined;
     credits?: CreditDto[];
-    budgetCharges?: ChargeDto[] | undefined;
     createdAt?: Date;
 
     constructor(data?: ICostInspectionDto) {
@@ -2876,15 +4287,15 @@ export class CostInspectionDto implements ICostInspectionDto {
                 for (let item of _data["fixedCostChecklist"])
                     this.fixedCostChecklist!.push(CheckableFixedCostDto.fromJS(item));
             }
+            if (Array.isArray(_data["monthlyBudgets"])) {
+                this.monthlyBudgets = [] as any;
+                for (let item of _data["monthlyBudgets"])
+                    this.monthlyBudgets!.push(MonthlyBudgetDto.fromJS(item));
+            }
             if (Array.isArray(_data["credits"])) {
                 this.credits = [] as any;
                 for (let item of _data["credits"])
                     this.credits!.push(CreditDto.fromJS(item));
-            }
-            if (Array.isArray(_data["budgetCharges"])) {
-                this.budgetCharges = [] as any;
-                for (let item of _data["budgetCharges"])
-                    this.budgetCharges!.push(ChargeDto.fromJS(item));
             }
             this.createdAt = _data["createdAt"] ? new Date(_data["createdAt"].toString()) : <any>undefined;
         }
@@ -2906,15 +4317,15 @@ export class CostInspectionDto implements ICostInspectionDto {
             for (let item of this.fixedCostChecklist)
                 data["fixedCostChecklist"].push(item.toJSON());
         }
+        if (Array.isArray(this.monthlyBudgets)) {
+            data["monthlyBudgets"] = [];
+            for (let item of this.monthlyBudgets)
+                data["monthlyBudgets"].push(item.toJSON());
+        }
         if (Array.isArray(this.credits)) {
             data["credits"] = [];
             for (let item of this.credits)
                 data["credits"].push(item.toJSON());
-        }
-        if (Array.isArray(this.budgetCharges)) {
-            data["budgetCharges"] = [];
-            for (let item of this.budgetCharges)
-                data["budgetCharges"].push(item.toJSON());
         }
         data["createdAt"] = this.createdAt ? this.createdAt.toISOString() : <any>undefined;
         return data;
@@ -2925,17 +4336,19 @@ export interface ICostInspectionDto {
     id?: number;
     userYearMonthKey?: string;
     fixedCostChecklist?: CheckableFixedCostDto[] | undefined;
+    monthlyBudgets?: MonthlyBudgetDto[] | undefined;
     credits?: CreditDto[];
-    budgetCharges?: ChargeDto[] | undefined;
     createdAt?: Date;
 }
 
-export class CreditDto implements ICreditDto {
+export class CheckableFixedCostDto implements ICheckableFixedCostDto {
     key?: number;
     name?: string;
     value?: number;
+    isChecked?: boolean;
+    createdAt?: Date;
 
-    constructor(data?: ICreditDto) {
+    constructor(data?: ICheckableFixedCostDto) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
@@ -2949,12 +4362,14 @@ export class CreditDto implements ICreditDto {
             this.key = _data["key"];
             this.name = _data["name"];
             this.value = _data["value"];
+            this.isChecked = _data["isChecked"];
+            this.createdAt = _data["createdAt"] ? new Date(_data["createdAt"].toString()) : <any>undefined;
         }
     }
 
-    static fromJS(data: any): CreditDto {
+    static fromJS(data: any): CheckableFixedCostDto {
         data = typeof data === 'object' ? data : {};
-        let result = new CreditDto();
+        let result = new CheckableFixedCostDto();
         result.init(data);
         return result;
     }
@@ -2964,21 +4379,85 @@ export class CreditDto implements ICreditDto {
         data["key"] = this.key;
         data["name"] = this.name;
         data["value"] = this.value;
+        data["isChecked"] = this.isChecked;
+        data["createdAt"] = this.createdAt ? this.createdAt.toISOString() : <any>undefined;
         return data;
     }
 }
 
-export interface ICreditDto {
+export interface ICheckableFixedCostDto {
     key?: number;
     name?: string;
     value?: number;
+    isChecked?: boolean;
+    createdAt?: Date;
+}
+
+export class MonthlyBudgetDto implements IMonthlyBudgetDto {
+    id?: number;
+    name?: string;
+    limit?: number;
+    charges?: ChargeDto[] | undefined;
+    costInspectionId?: number;
+
+    constructor(data?: IMonthlyBudgetDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.name = _data["name"];
+            this.limit = _data["limit"];
+            if (Array.isArray(_data["charges"])) {
+                this.charges = [] as any;
+                for (let item of _data["charges"])
+                    this.charges!.push(ChargeDto.fromJS(item));
+            }
+            this.costInspectionId = _data["costInspectionId"];
+        }
+    }
+
+    static fromJS(data: any): MonthlyBudgetDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new MonthlyBudgetDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["name"] = this.name;
+        data["limit"] = this.limit;
+        if (Array.isArray(this.charges)) {
+            data["charges"] = [];
+            for (let item of this.charges)
+                data["charges"].push(item.toJSON());
+        }
+        data["costInspectionId"] = this.costInspectionId;
+        return data;
+    }
+}
+
+export interface IMonthlyBudgetDto {
+    id?: number;
+    name?: string;
+    limit?: number;
+    charges?: ChargeDto[] | undefined;
+    costInspectionId?: number;
 }
 
 export class ChargeDto implements IChargeDto {
     id?: number;
-    chargeName?: string;
+    name?: string;
     value?: number;
-    budgetId?: number;
+    monthlyBudgetId?: number;
     costInspection?: CostInspectionDto;
 
     constructor(data?: IChargeDto) {
@@ -2993,9 +4472,9 @@ export class ChargeDto implements IChargeDto {
     init(_data?: any) {
         if (_data) {
             this.id = _data["id"];
-            this.chargeName = _data["chargeName"];
+            this.name = _data["name"];
             this.value = _data["value"];
-            this.budgetId = _data["budgetId"];
+            this.monthlyBudgetId = _data["monthlyBudgetId"];
             this.costInspection = _data["costInspection"] ? CostInspectionDto.fromJS(_data["costInspection"]) : <any>undefined;
         }
     }
@@ -3010,9 +4489,9 @@ export class ChargeDto implements IChargeDto {
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
         data["id"] = this.id;
-        data["chargeName"] = this.chargeName;
+        data["name"] = this.name;
         data["value"] = this.value;
-        data["budgetId"] = this.budgetId;
+        data["monthlyBudgetId"] = this.monthlyBudgetId;
         data["costInspection"] = this.costInspection ? this.costInspection.toJSON() : <any>undefined;
         return data;
     }
@@ -3020,9 +4499,9 @@ export class ChargeDto implements IChargeDto {
 
 export interface IChargeDto {
     id?: number;
-    chargeName?: string;
+    name?: string;
     value?: number;
-    budgetId?: number;
+    monthlyBudgetId?: number;
     costInspection?: CostInspectionDto;
 }
 
@@ -3054,78 +4533,6 @@ export class CostInspectionGRequest implements ICostInspectionGRequest {
 }
 
 export interface ICostInspectionGRequest {
-}
-
-export class CostInspectionIResponse implements ICostInspectionIResponse {
-    success?: boolean;
-
-    constructor(data?: ICostInspectionIResponse) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.success = _data["success"];
-        }
-    }
-
-    static fromJS(data: any): CostInspectionIResponse {
-        data = typeof data === 'object' ? data : {};
-        let result = new CostInspectionIResponse();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["success"] = this.success;
-        return data;
-    }
-}
-
-export interface ICostInspectionIResponse {
-    success?: boolean;
-}
-
-export class CostInspectionIRequest implements ICostInspectionIRequest {
-    userYearMonthKey?: string;
-
-    constructor(data?: ICostInspectionIRequest) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.userYearMonthKey = _data["userYearMonthKey"];
-        }
-    }
-
-    static fromJS(data: any): CostInspectionIRequest {
-        data = typeof data === 'object' ? data : {};
-        let result = new CostInspectionIRequest();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["userYearMonthKey"] = this.userYearMonthKey;
-        return data;
-    }
-}
-
-export interface ICostInspectionIRequest {
-    userYearMonthKey?: string;
 }
 
 export class UpdateCheckableFixedCostRequest implements IUpdateCheckableFixedCostRequest {
@@ -3208,8 +4615,79 @@ export interface ICheckableFixedCostUDto {
     isChecked?: boolean;
 }
 
+export class MonthlyBudgetUResponse implements IMonthlyBudgetUResponse {
+    success?: boolean;
+
+    constructor(data?: IMonthlyBudgetUResponse) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.success = _data["success"];
+        }
+    }
+
+    static fromJS(data: any): MonthlyBudgetUResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new MonthlyBudgetUResponse();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["success"] = this.success;
+        return data;
+    }
+}
+
+export interface IMonthlyBudgetUResponse {
+    success?: boolean;
+}
+
+export class MonthlyBudgetUDto implements IMonthlyBudgetUDto {
+    costInspectionId?: number;
+
+    constructor(data?: IMonthlyBudgetUDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.costInspectionId = _data["costInspectionId"];
+        }
+    }
+
+    static fromJS(data: any): MonthlyBudgetUDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new MonthlyBudgetUDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["costInspectionId"] = this.costInspectionId;
+        return data;
+    }
+}
+
+export interface IMonthlyBudgetUDto {
+    costInspectionId?: number;
+}
+
 export class LoginResponse implements ILoginResponse {
-    user?: UserDto;
     success?: boolean;
     jwtToken?: string;
     refreshToken?: string;
@@ -3226,7 +4704,6 @@ export class LoginResponse implements ILoginResponse {
 
     init(_data?: any) {
         if (_data) {
-            this.user = _data["user"] ? UserDto.fromJS(_data["user"]) : <any>undefined;
             this.success = _data["success"];
             this.jwtToken = _data["jwtToken"];
             this.refreshToken = _data["refreshToken"];
@@ -3243,7 +4720,6 @@ export class LoginResponse implements ILoginResponse {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["user"] = this.user ? this.user.toJSON() : <any>undefined;
         data["success"] = this.success;
         data["jwtToken"] = this.jwtToken;
         data["refreshToken"] = this.refreshToken;
@@ -3253,7 +4729,6 @@ export class LoginResponse implements ILoginResponse {
 }
 
 export interface ILoginResponse {
-    user?: UserDto;
     success?: boolean;
     jwtToken?: string;
     refreshToken?: string;
@@ -3485,7 +4960,7 @@ export interface ICreateRevenueResponse {
 }
 
 export class CreateRevenueRequest implements ICreateRevenueRequest {
-    cRevenueDto?: RevenueDto;
+    revenueCDto?: RevenueCDto;
 
     constructor(data?: ICreateRevenueRequest) {
         if (data) {
@@ -3498,7 +4973,7 @@ export class CreateRevenueRequest implements ICreateRevenueRequest {
 
     init(_data?: any) {
         if (_data) {
-            this.cRevenueDto = _data["cRevenueDto"] ? RevenueDto.fromJS(_data["cRevenueDto"]) : <any>undefined;
+            this.revenueCDto = _data["revenueCDto"] ? RevenueCDto.fromJS(_data["revenueCDto"]) : <any>undefined;
         }
     }
 
@@ -3511,22 +4986,20 @@ export class CreateRevenueRequest implements ICreateRevenueRequest {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["cRevenueDto"] = this.cRevenueDto ? this.cRevenueDto.toJSON() : <any>undefined;
+        data["revenueCDto"] = this.revenueCDto ? this.revenueCDto.toJSON() : <any>undefined;
         return data;
     }
 }
 
 export interface ICreateRevenueRequest {
-    cRevenueDto?: RevenueDto;
+    revenueCDto?: RevenueCDto;
 }
 
-export class RevenueDto implements IRevenueDto {
-    id?: number;
-    companyName?: string;
+export class RevenueCDto implements IRevenueCDto {
+    name?: string;
     value?: number;
-    userId?: string;
 
-    constructor(data?: IRevenueDto) {
+    constructor(data?: IRevenueCDto) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
@@ -3537,35 +5010,29 @@ export class RevenueDto implements IRevenueDto {
 
     init(_data?: any) {
         if (_data) {
-            this.id = _data["id"];
-            this.companyName = _data["companyName"];
+            this.name = _data["name"];
             this.value = _data["value"];
-            this.userId = _data["userId"];
         }
     }
 
-    static fromJS(data: any): RevenueDto {
+    static fromJS(data: any): RevenueCDto {
         data = typeof data === 'object' ? data : {};
-        let result = new RevenueDto();
+        let result = new RevenueCDto();
         result.init(data);
         return result;
     }
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["companyName"] = this.companyName;
+        data["name"] = this.name;
         data["value"] = this.value;
-        data["userId"] = this.userId;
         return data;
     }
 }
 
-export interface IRevenueDto {
-    id?: number;
-    companyName?: string;
+export interface IRevenueCDto {
+    name?: string;
     value?: number;
-    userId?: string;
 }
 
 export class GetRevenuesResponse implements IGetRevenuesResponse {
@@ -3610,6 +5077,54 @@ export class GetRevenuesResponse implements IGetRevenuesResponse {
 
 export interface IGetRevenuesResponse {
     revenues?: RevenueDto[];
+}
+
+export class RevenueDto implements IRevenueDto {
+    id?: number;
+    source?: string;
+    value?: number;
+    userId?: string;
+
+    constructor(data?: IRevenueDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.source = _data["source"];
+            this.value = _data["value"];
+            this.userId = _data["userId"];
+        }
+    }
+
+    static fromJS(data: any): RevenueDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new RevenueDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["source"] = this.source;
+        data["value"] = this.value;
+        data["userId"] = this.userId;
+        return data;
+    }
+}
+
+export interface IRevenueDto {
+    id?: number;
+    source?: string;
+    value?: number;
+    userId?: string;
 }
 
 export class UpdateRevenueResponse implements IUpdateRevenueResponse {
@@ -3757,10 +5272,9 @@ export interface ICreateChargeRequest {
 }
 
 export class ChargeCDto implements IChargeCDto {
-    chargeName?: string;
+    name?: string;
     value?: number;
-    budgetId?: number;
-    costInspectionId?: number;
+    monthlyBudgetId?: number;
 
     constructor(data?: IChargeCDto) {
         if (data) {
@@ -3773,10 +5287,9 @@ export class ChargeCDto implements IChargeCDto {
 
     init(_data?: any) {
         if (_data) {
-            this.chargeName = _data["chargeName"];
+            this.name = _data["name"];
             this.value = _data["value"];
-            this.budgetId = _data["budgetId"];
-            this.costInspectionId = _data["costInspectionId"];
+            this.monthlyBudgetId = _data["monthlyBudgetId"];
         }
     }
 
@@ -3789,19 +5302,17 @@ export class ChargeCDto implements IChargeCDto {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["chargeName"] = this.chargeName;
+        data["name"] = this.name;
         data["value"] = this.value;
-        data["budgetId"] = this.budgetId;
-        data["costInspectionId"] = this.costInspectionId;
+        data["monthlyBudgetId"] = this.monthlyBudgetId;
         return data;
     }
 }
 
 export interface IChargeCDto {
-    chargeName?: string;
+    name?: string;
     value?: number;
-    budgetId?: number;
-    costInspectionId?: number;
+    monthlyBudgetId?: number;
 }
 
 export class DeleteChargesRequest implements IDeleteChargesRequest {
@@ -4012,10 +5523,9 @@ export interface IUpdateChargeRequest {
 
 export class ChargeUDto implements IChargeUDto {
     id?: number;
-    chargeName?: string;
+    name?: string;
     value?: number;
-    budgetId?: number;
-    costInspectionId?: number;
+    monthlyBudgetId?: number;
 
     constructor(data?: IChargeUDto) {
         if (data) {
@@ -4029,10 +5539,9 @@ export class ChargeUDto implements IChargeUDto {
     init(_data?: any) {
         if (_data) {
             this.id = _data["id"];
-            this.chargeName = _data["chargeName"];
+            this.name = _data["name"];
             this.value = _data["value"];
-            this.budgetId = _data["budgetId"];
-            this.costInspectionId = _data["costInspectionId"];
+            this.monthlyBudgetId = _data["monthlyBudgetId"];
         }
     }
 
@@ -4046,20 +5555,18 @@ export class ChargeUDto implements IChargeUDto {
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
         data["id"] = this.id;
-        data["chargeName"] = this.chargeName;
+        data["name"] = this.name;
         data["value"] = this.value;
-        data["budgetId"] = this.budgetId;
-        data["costInspectionId"] = this.costInspectionId;
+        data["monthlyBudgetId"] = this.monthlyBudgetId;
         return data;
     }
 }
 
 export interface IChargeUDto {
     id?: number;
-    chargeName?: string;
+    name?: string;
     value?: number;
-    budgetId?: number;
-    costInspectionId?: number;
+    monthlyBudgetId?: number;
 }
 
 export class CBudgetResponse implements ICBudgetResponse {
@@ -4376,10 +5883,10 @@ export class GetBudgetsRequest implements IGetBudgetsRequest {
 export interface IGetBudgetsRequest {
 }
 
-export class UpdateBudgetResponse implements IUpdateBudgetResponse {
+export class UpdateBudgetResponse2 implements IUpdateBudgetResponse2 {
     success?: boolean;
 
-    constructor(data?: IUpdateBudgetResponse) {
+    constructor(data?: IUpdateBudgetResponse2) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
@@ -4394,9 +5901,9 @@ export class UpdateBudgetResponse implements IUpdateBudgetResponse {
         }
     }
 
-    static fromJS(data: any): UpdateBudgetResponse {
+    static fromJS(data: any): UpdateBudgetResponse2 {
         data = typeof data === 'object' ? data : {};
-        let result = new UpdateBudgetResponse();
+        let result = new UpdateBudgetResponse2();
         result.init(data);
         return result;
     }
@@ -4408,7 +5915,7 @@ export class UpdateBudgetResponse implements IUpdateBudgetResponse {
     }
 }
 
-export interface IUpdateBudgetResponse {
+export interface IUpdateBudgetResponse2 {
     success?: boolean;
 }
 

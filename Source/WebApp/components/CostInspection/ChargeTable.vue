@@ -1,8 +1,8 @@
 <template>
-  <div v-if="selectedBudget" class="h-full">
+  <div v-if="selectedMontlyBudget" class="h-full">
     <div class="flex-center">
       <p class="underlineAnimation w-full text-xl text-center mb-4">
-        {{ selectedBudget.name }}
+        {{ selectedMontlyBudget.name }}
       </p>
     </div>
     <div class="h-5/6 overflow-auto flex"
@@ -19,7 +19,7 @@
         >
           <div class="w-3/5">
             <BaseEditInput
-              v-model="charge.chargeName"
+              v-model="charge.name"
               @leave="updateBudgetCharge(charge)"
             />
           </div>
@@ -44,7 +44,7 @@
 
     <div class="flex-center" :class="calculateSumBgColor()">
       {{ useFloor(sum, 2) }}
-      € / {{ selectedBudget.limit }} €
+      € / {{ selectedMontlyBudget.limit }} €
     </div>
   </div>
 </template>
@@ -52,9 +52,9 @@
 <script setup lang="ts">
 import { storeToRefs } from "pinia";
 import {
-  BudgetDto,
   ChargeDto,
   ChargeUDto,
+  MonthlyBudgetDto,
   UpdateChargeRequest,
 } from "~/stores/apiClient";
 import { useInspectionStore } from "~/stores/costInspectionStore";
@@ -63,18 +63,18 @@ import { useApiStore } from "~/stores/apiStore";
 
 const costInspectionStore = useInspectionStore();
 
-const { selectedBudget, selectedCostInspection } =
+const { selectedMontlyBudget, selectedCostInspection } =
   storeToRefs(costInspectionStore);
 
 const charges = computed(() =>
-  getCharges(selectedCostInspection?.value?.budgetCharges ?? [])
+  getCharges(selectedCostInspection?.value?.monthlyBudgets ?? [])
 );
 
-const getCharges = (budgetCharges?: ChargeDto[]): ChargeDto[] => {
-  const filteredArray = budgetCharges?.filter(
-    (x) => x.budgetId === selectedBudget.value.id
-  );
-  return filteredArray;
+const getCharges = (monthlyBudgetCharges?: MonthlyBudgetDto[]): ChargeDto[] => {
+  const selectedBudgetWithCharges = monthlyBudgetCharges?.filter(
+    (x:MonthlyBudgetDto) => x?.id === selectedMontlyBudget.value.id
+  )[0];
+  return selectedBudgetWithCharges?.charges??[];
 };
 
 const sum = computed(() =>
@@ -89,10 +89,10 @@ const deleteCharge = async (id: number) => {
 
 const updateBudgetCharge = async (charge: ChargeDto) => {
   const chargeUDto: ChargeUDto = {
-    budgetId: charge.budgetId,
-    costInspectionId: charge.costInspection?.id,
+    monthlyBudgetId: charge.monthlyBudgetId,
     id: charge.id,
-    chargeName: charge.chargeName,
+    value: charge.value,
+    name: charge.name,
   };
   useApiStore().ChargeClient.updateChargeEndpoint({
     chargeUDto,
@@ -100,11 +100,11 @@ const updateBudgetCharge = async (charge: ChargeDto) => {
 };
 
 const calculateSumBgColor = () => {
-  const procent = sum.value / selectedBudget.value.limit;
+  const procent = sum.value / selectedMontlyBudget.value.limit??0;
   switch (true) {
     case procent > 0.8 && procent < 1:
       return "bg-yellow-200/75";
-    case sum.value >= selectedBudget.value.limit:
+    case sum.value >= selectedMontlyBudget.value.limit??0:
       return "bg-red-500/75";
     default:
       return "bg-green-300/75";
