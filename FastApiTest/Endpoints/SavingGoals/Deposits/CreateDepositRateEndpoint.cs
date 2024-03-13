@@ -31,6 +31,7 @@ namespace Moco.Api.Endpoints.SavingGoals.Deposits
         public required string Key { get; set; }
         public required double Value { get; set; }
         public required DateTime SavingMonth { get; set; }
+        public bool isPaid { get; set; }
     }
 
         public record DepositRatelCResponse

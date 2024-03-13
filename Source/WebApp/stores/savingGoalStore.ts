@@ -4,11 +4,13 @@ import { useApiStore } from "./apiStore";
 
 export const useSavingGoalStore = defineStore("savingGoal", {
   state: () => {
+    const selectedSavingGoal: SavingGoalDto = undefined;
     const savingGoals: SavingGoalDto[] = [];
 
     return {
         savingGoals,
-        
+        selectedSavingGoal,
+
         fetch
     };
   },
@@ -19,7 +21,9 @@ export const useSavingGoalStore = defineStore("savingGoal", {
                 this.savingGoals = response.allSavingGoals;
             }
         },
-        
+        setSelectedSavingGoal(savingGoal: SavingGoalDto){
+          this.selectedSavingGoal = savingGoal;
+        }
     },
     getters:{
         

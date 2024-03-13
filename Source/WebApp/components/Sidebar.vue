@@ -6,9 +6,9 @@
       >
         <NuxtLink to="/">
           <NuxtImg
-            src="/logo/logo.jpg"
+            src="/logo/logo.png"
             alt="Moco Logo"
-            class="h-24 mix-blend-multiply"
+            class="h-24 "
           />
         </NuxtLink>
       </div>

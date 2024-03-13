@@ -14,7 +14,8 @@
               :class="creditDetailsVis ? 'text-primary' : ''"
               @click="() => (creditDetailsVis = true)"
             />
-            <div
+            <Transition>
+              <div
               v-if="creditDetailsVis"
               ref="target"
               class="absolute w-[300px] max-h-72 overflow-auto -right-1/2 top-10 bg-background z-[999] border-border border-2 rounded-md p-2"
@@ -61,6 +62,7 @@
                 <CostInspectionAddInlineCredit class="pt-2" />
               </div>
             </div>
+            </Transition>
           </div>
           <p class="flex pl-2">
             Aktuelles Geld: {{ useCeil(currentMoney, 2) }} €
@@ -143,4 +145,24 @@ const handleDelete = async (credit: CreditDto) => {
 
 </script>
 
-<style scoped></style>
+<style scoped>
+
+.v-enter-active {
+  animation: bounce-in 0.5s;
+}
+.v-leave-active {
+  animation: bounce-in 0.5s reverse;
+}
+@keyframes bounce-in {
+  0% {
+    opacity: 0;
+    transform: scale(0);
+    transform: translateY(200px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+    transform: translateY(0);
+  }
+}
+</style>

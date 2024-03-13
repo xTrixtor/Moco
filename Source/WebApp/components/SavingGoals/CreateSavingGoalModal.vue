@@ -15,6 +15,7 @@
         <InputNumber
           class="flex-1"
           v-model="savingGoalCDto.goalValue"
+          @update:model-value="calculateGoal"
           :min="0"
           :maxFractionDigits="2"
         />
@@ -24,6 +25,7 @@
         <InputNumber
           class="flex-1"
           v-model="savingGoalCDto.initialCapital"
+          @update:model-value="calculateGoal"
           :min="0"
           :maxFractionDigits="2"
         />
@@ -32,10 +34,12 @@
         <p class="w-1/4">Spar-Methode</p>
         <Dropdown
           class="flex-1"
-          v-model="selectedSavingOption"
+          v-model="savingGoalCDto.methodKey"
+          @update:model-value="calculateGoal"
           :options="savingOptions"
           placeholder="Bitte auswählen"
           optionLabel="label"
+          option-value="key"
         />
       </div>
       <div :class="modalRowStyling">
@@ -45,10 +49,10 @@
           v-model="savingGoalCDto.depositRate"
           :min="0"
           :maxFractionDigits="2"
-          @update:model-value="calculateDates"
-          :disabled="selectedSavingOption.key != 0"
+          @update:model-value="calculateGoal"
+          :disabled="savingGoalCDto.methodKey != 0"
           :placeholder="
-            selectedSavingOption.key != 0
+            savingGoalCDto.methodKey != 0
               ? 'Wird berechnet...'
               : 'Bitte Monatliche Rate angeben...'
           "
@@ -61,9 +65,11 @@
           dateFormat="M-yy"
           class="flex-1"
           v-model="savingGoalCDto.startDate"
-          :disabled="selectedSavingOption.key != 1"
+          @update:model-value="calculateGoal"
+          :min-date="minDate"
+          :disabled="savingGoalCDto.methodKey != 1"
           :placeholder="
-            selectedSavingOption.key != 1
+            savingGoalCDto.methodKey != 1
               ? 'Wird berechnet...'
               : 'Bitte Start-Datum auswählen...'
           "
@@ -76,9 +82,10 @@
           dateFormat="M-yy"
           class="flex-1"
           v-model="savingGoalCDto.endDate"
-          :disabled="selectedSavingOption.key != 1"
+          @update:model-value="calculateGoal"
+          :disabled="savingGoalCDto.methodKey != 1"
           :placeholder="
-            selectedSavingOption.key != 1
+            savingGoalCDto.methodKey != 1
               ? 'Wird berechnet...'
               : 'Bitte End-Datum auswählen...'
           "
@@ -112,17 +119,23 @@ import InputNumber from "primevue/inputnumber";
 import { SavingGoalCDto } from "~/stores/apiClient";
 import { useApiStore } from "~/stores/apiStore";
 import { useSavingGoalStore } from "~/stores/savingGoalStore";
-import { calculateDepositsWithMonthlyRate } from "~/metaData/savingGoalService";
+import {
+  savingOptions,
+  calculateDepositsWithDate,
+  calculateDepositsWithMonthlyRate,
+} from "~/metaData/savingGoalService";
+import { storeToRefs } from "pinia";
+import { addMonths } from "date-fns";
 
 const modalRowStyling = "flex-center justify-between gap-6 my-3";
 
-const props = defineProps<{
-  modelValue: boolean;
-}>();
+const props = defineProps<{ modelValue: boolean }>();
 const emit = defineEmits(["update:modelValue"]);
 
+const { selectedSavingGoal, savingGoals } = storeToRefs(useSavingGoalStore());
 const data = useVModel(props, "modelValue", emit);
 let savingGoalCDto: Ref<SavingGoalCDto> = ref<SavingGoalCDto>({});
+const minDate = ref(addMonths(new Date(), 1));
 const canSave = computed(() =>
   Boolean(
     savingGoalCDto.value.name &&
@@ -131,33 +144,57 @@ const canSave = computed(() =>
   )
 );
 
-const canSaveBool = Boolean(savingGoalCDto.value.name);
-
-const selectedSavingOption: Ref<{ key: number; label: string }> = ref({});
-
-const savingOptions: { key: number; label: string }[] = [
-  { key: 0, label: "Monatliche Raten" },
-  { key: 1, label: "Start und End Datum" },
-];
-
 const handleCreate = async () => {
-  const result = await useApiStore().SavingGoalsClient.createSavingGoalEndpoint(
-    savingGoalCDto.value
-  );
-  await useSavingGoalStore().fetch();
-  savingGoalCDto.value = {};
-  selectedSavingOption.value = {};
-  data.value = false;
+  const newSavingGoal =
+    await useApiStore().SavingGoalsClient.createSavingGoalEndpoint(
+      savingGoalCDto.value
+    );
+    selectedSavingGoal.value = newSavingGoal;
+    savingGoals.value.push(newSavingGoal);
+    useSavingGoalStore().setSelectedSavingGoal(newSavingGoal);
+    data.value = false;
+    savingGoalCDto.value = {};
 };
 
-watch(savingGoalCDto.value, (newVal: SavingGoalCDto) => {
-  if (savingGoalCDto.value.depositRate && savingGoalCDto.value.goalValue) {
-    calculateDates(newVal);
+watch(
+  () => savingGoalCDto.value,
+  (newVal, oldVal) => {
+    if (newVal.methodKey != oldVal.methodKey) {
+      savingGoalCDto.value.depositRate = undefined;
+      savingGoalCDto.value.startDate = undefined;
+      savingGoalCDto.value.endDate = undefined;
+    }
   }
-});
+);
 
-const calculateDates = (newVal?: SavingGoalCDto) => {
-  if (savingGoalCDto.value !== newVal) {
+const calculateGoal = () => {
+  if (savingGoalCDto.value.methodKey == 0) {
+    calculateGoalWithRates();
+  }
+  if (savingGoalCDto.value.methodKey == 1) {
+    calculateGoalWithDate();
+  }
+};
+const calculateGoalWithDate = 
+() => {
+  if (
+    savingGoalCDto.value.startDate &&
+    savingGoalCDto.value.endDate &&
+    savingGoalCDto.value.goalValue
+  ) {
+    const result = calculateDepositsWithDate(
+      savingGoalCDto.value.startDate,
+      savingGoalCDto.value.endDate,
+      savingGoalCDto.value.goalValue,
+      savingGoalCDto.value.initialCapital ?? 0
+    );
+    savingGoalCDto.value.depositRates = result.depositRates;
+    savingGoalCDto.value.depositRate = result.monthRate;
+  }
+};
+
+const calculateGoalWithRates = () => {
+  if (savingGoalCDto.value.depositRate && savingGoalCDto.value.goalValue) {
     const result = calculateDepositsWithMonthlyRate(
       savingGoalCDto.value.depositRate,
       savingGoalCDto.value.goalValue,

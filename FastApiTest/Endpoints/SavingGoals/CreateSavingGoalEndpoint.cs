@@ -1,16 +1,11 @@
 ﻿using FastEndpoints;
 using Moco.Api.Models.Moco.Dto;
 using Moco.Api.Models.Moco.Resource;
-using MocoApi.Endpoints.Budget;
-using MocoApi.Endpoints.Revenue;
 using MocoApi.Extensions;
-using MocoApi.Models.Moco.Dto;
-using Newtonsoft.Json;
-using System;
 
 namespace Moco.Api.Endpoints.SavingGoals
 {
-    public class CreateSavingGoalEndpoint : Endpoint<SavingGoalCDto, SavingGoalCResponse>
+    public class CreateSavingGoalEndpoint : Endpoint<SavingGoalCDto, SavingGoalDto>
     {
         public override void Configure()
         {
@@ -33,15 +28,15 @@ namespace Moco.Api.Endpoints.SavingGoals
                         SavingMonth = depositDto.SavingMonth,
                         Value = depositDto.Value,
                         SavingGoalId = savingGoal.Id,
+                        isPaid = depositDto.isPaid,
                     };
                     dbContext.DepositRates.Add(deposit);
                 }
                 dbContext.SaveChanges();
 
-                await SendAsync(new SavingGoalCResponse { Success = true });
+                await SendAsync(savingGoal.asDto());
             }
-
-        }
+        }   
     }
 
     public record SavingGoalCDto
@@ -52,12 +47,9 @@ namespace Moco.Api.Endpoints.SavingGoals
         public required double GoalValue { get; set; }
         public required double InitialCapital { get; set; }
         public required double DepositRate { get; set; } = 0;
+        public required int MethodKey { get; set; }
         public required DepositRateDto[] DepositRates { get; set; }
         public required DateTime StartDate { get; set; }
         public required DateTime EndDate { get; set; }
-    }
-    public record SavingGoalCResponse
-    {
-        public bool Success { get; set; }
     }
 }

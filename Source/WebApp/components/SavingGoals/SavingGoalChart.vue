@@ -5,10 +5,8 @@
 </template>
 
 <script setup lang="ts">
-import { storeToRefs } from '@pinia/nuxt/dist/runtime/composables';
 import Chart from 'primevue/chart';
 import { SavingGoalDto } from '~/stores/apiClient';
-import { useSavingGoalStore } from '~/stores/savingGoalStore';
 
 const props = defineProps<{selectedSavingGoal: SavingGoalDto}>();
 
@@ -22,7 +20,7 @@ const setChartData = () => {
         labels: props.selectedSavingGoal.depositRates?.map((data) => { return data.key}),
         datasets: [
             {
-                label: 'First Dataset',
+                label: props.selectedSavingGoal.name,
                 data: props.selectedSavingGoal.depositRates?.map((data) => { return data.value}),
                 fill: false,
                 borderColor: documentStyle.getPropertyValue('--cyan-500'),

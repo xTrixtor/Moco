@@ -13,7 +13,7 @@
           <div
             v-for="config in configs"
             @click="() => selectedConfig = config"
-            class="hover:text-highlight-text hover:cursor-pointer duration-300 h-full pt-2"
+            class="text-highlight-text hover:text-primary underlineAnimation hover:cursor-pointer duration-300 h-full pt-2"
           >
             <p>{{ config }}</p>
           </div>

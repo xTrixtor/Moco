@@ -25,10 +25,7 @@
 
 <script setup lang="ts">
 import { storeToRefs } from "pinia";
-import { CreateCreditRequest, CreditDto, UpdateChargeRequest, UpdateCreditRequest } from "~/stores/apiClient";
-import { useApiStore } from "~/stores/apiStore";
 import { useInspectionStore } from "~/stores/costInspectionStore";
-import { useConfirm } from "primevue/useconfirm";
 import { useFixedCostStore } from "~/stores/fixedCostStore";
 
 const { selectedCostInspection } = storeToRefs(useInspectionStore());

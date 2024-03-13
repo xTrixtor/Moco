@@ -132,6 +132,7 @@ namespace MocoApi.Extensions
                 GoalValue = cDto.GoalValue,
                 InitialCapital = cDto.InitialCapital,
                 UserId = cDto.UserId,
+                MethodKey = cDto.MethodKey
             };
         }
 
@@ -149,6 +150,7 @@ namespace MocoApi.Extensions
                 Key = cDto.Key,
                 SavingMonth = cDto.SavingMonth,
                 Value = cDto.Value,
+                isPaid = cDto.isPaid
             };
         }
 

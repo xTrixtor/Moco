@@ -5,7 +5,7 @@
     id="navbar"
   >
     <NuxtLink to="/">
-      <NuxtImg class="h-12" src="/logo/logo.jpg" alt="Moco Logo" />
+      <NuxtImg class="h-12" src="/logo/logo.png" alt="FinanzHorus Logo" />
     </NuxtLink>
     <div
       class="duration-300 rounded-full p-2 flex-center"
@@ -25,7 +25,6 @@
         <h1 class="text-4xl font-bold text-highlight-text tracking-widest">Finanz</h1>
         <h1 class="text-4xl font-bold text-primary tracking-widest">Horus</h1>
       </NuxtLink>
-      
     </div>
   </div>
   <div v-if="mobilMenuClick" class="bg-slate-200">

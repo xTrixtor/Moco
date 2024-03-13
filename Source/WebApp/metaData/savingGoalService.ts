@@ -1,22 +1,35 @@
-import { addMonths, getDate, getMonth, getYear } from "date-fns";
+import {
+  addMonths,
+  differenceInCalendarMonths,
+  getMonth,
+  getYear,
+} from "date-fns";
 import { DepositRateDto } from "~/stores/apiClient";
+
+export const savingOptions: { key: number; label: string }[] = [
+  { key: 0, label: "Monatliche Raten" },
+  { key: 1, label: "Start und End Datum" },
+];
 
 export const calculateDepositsWithMonthlyRate = (
   rate: number,
   goalValue: number,
-  initialCapital: number
+  initialCapital: number,
+  startDate?: Date
 ): DepositRateDto[] => {
   let goalCopy = goalValue - initialCapital;
   const depositRateNumber = goalCopy / rate;
   let capital = initialCapital;
 
-  const today = new Date();
+  const start = startDate ?? addMonths(new Date(), 1);
 
-  const depositRates: DepositRateDto[] = [];
+  const depositRates: DepositRateDto[] = [
+    { key: GetKeyFromDate(start), value: capital, savingMonth: start, isPaid:true },
+  ];
 
   for (let i = 1; i <= depositRateNumber; i++) {
-    const monthOfSaving = addMonths(today, i);
-    const key = `${getMonth(monthOfSaving)}-${getYear(monthOfSaving)}`;
+    const monthOfSaving = addMonths(start, i);
+    const key = GetKeyFromDate(monthOfSaving);
     capital += rate;
     const depositRate: DepositRateDto = {
       key: key,
@@ -28,8 +41,8 @@ export const calculateDepositsWithMonthlyRate = (
   }
 
   if (goalCopy % rate != 0) {
-    const lastSavingMonth = addMonths(today, useCeil(depositRateNumber));
-    const key = `${getMonth(lastSavingMonth)}-${getYear(lastSavingMonth)}`;
+    const lastSavingMonth = addMonths(start, useCeil(depositRateNumber));
+    const key = GetKeyFromDate(lastSavingMonth);
     const depositRate: DepositRateDto = {
       key: key,
       value: goalValue,
@@ -40,7 +53,33 @@ export const calculateDepositsWithMonthlyRate = (
   return depositRates;
 };
 
-export const calculateDepositsWithDate = () => {};
+export const calculateDepositsWithDate = (
+  startDate: Date,
+  endDate: Date,
+  goalValue: number,
+  initialCapital: number
+): { depositRates: DepositRateDto[]; monthRate: number } => {
+  let goalCopy = goalValue - initialCapital;
+  const monthRange = differenceInCalendarMonths(endDate, startDate);
+  const monthRate = useCeil(goalCopy / monthRange, 2);
+  let capital = initialCapital;
+
+  const depositRates: DepositRateDto[] = [];
+  for (let i = 1; i <= monthRange; i++) {
+    const monthOfSaving = addMonths(startDate, i);
+    const key = `${getMonth(monthOfSaving)}-${getYear(monthOfSaving)}`;
+    capital += monthRate;
+    const depositRate: DepositRateDto = {
+      key: key,
+      value: useCeil(capital, 2),
+      savingMonth: monthOfSaving,
+    };
+    depositRates.push(depositRate);
+    goalCopy = goalCopy - monthRate;
+  }
+
+  return { depositRates: depositRates, monthRate: monthRate };
+};
 
 export const ConvertKeyIntoDate = (key: string): Date => {
   const parts = key.split("-");
@@ -50,7 +89,7 @@ export const ConvertKeyIntoDate = (key: string): Date => {
 };
 
 export const GetKeyFromDate = (date: Date): string => {
-  const month = getMonth(date);
+  const month = date.getMonth()+1;
   const year = getYear(date);
 
   return `${month}-${year}`;

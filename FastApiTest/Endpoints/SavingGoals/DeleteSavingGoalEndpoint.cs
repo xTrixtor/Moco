@@ -1,12 +1,13 @@
 ﻿using FastEndpoints;
+using Moco.Api.Endpoints.Credit;
 
-namespace Moco.Api.Endpoints.Credit
+namespace Moco.Api.Endpoints.SavingGoals
 {
-    public class DeleteCreditEndpoint : Endpoint<DeleteCreditRequest>
+    public class DeleteSavingGoalEndpoint : Endpoint<DeleteCreditRequest>
     {
         public override void Configure()
         {
-            Delete("/credit/{CreditId}");
+            Delete("/savingGoals/{SavingGoalId}");
             Policies("User");
         }
 
@@ -16,18 +17,18 @@ namespace Moco.Api.Endpoints.Credit
             {
                 try
                 {
-                    var credit = dbContext.Credits.FirstOrDefault(x => x.Id.Equals(req.CreditId));
-                    if (credit == null)
-                        ThrowError("Could not find Credit with given Id");
+                    var savingGoal = dbContext.SavingGoals.FirstOrDefault(x => x.Id.Equals(req.SavingGoalId));
+                    if (savingGoal == null)
+                        ThrowError("Could not find SavingGoal with given Id");
 
-                    dbContext.Credits.Remove(credit);
+                    dbContext.SavingGoals.Remove(savingGoal);
                     await dbContext.SaveChangesAsync();
 
                     await SendOkAsync();
                 }
                 catch (Exception)
                 {
-                    ThrowError("Credit couldnt not be loaded");
+                    ThrowError("SavingGoal couldnt not be loaded");
                 }
             }
         }
@@ -36,6 +37,6 @@ namespace Moco.Api.Endpoints.Credit
     {
         [FromClaim("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier")]
         public string? UserId { get; set; }
-        public required int CreditId { get; set; }
+        public required int SavingGoalId { get; set; }
     }
 }

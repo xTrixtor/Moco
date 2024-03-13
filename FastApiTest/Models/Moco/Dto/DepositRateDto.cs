@@ -10,14 +10,16 @@ namespace Moco.Api.Models.Moco.Dto
         }
         public DepositRateDto(DepositRate depositRate)
         {
-            Id = depositRate.Id;
-            Key = depositRate.Key;
-            Value = depositRate.Value;
-            SavingMonth = depositRate.SavingMonth;
+            this.Id = depositRate.Id;
+            this.Key = depositRate.Key;
+            this.Value = depositRate.Value;
+            this.SavingMonth = depositRate.SavingMonth;
+            this.isPaid = depositRate.isPaid;
         }
         public int Id { get; set; }
         public string Key { get; set; }
         public double Value { get; set; } = 0;
+        public bool isPaid { get; set; }
         public DateTime SavingMonth { get; set; }
     }
 }
