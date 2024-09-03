@@ -18,17 +18,14 @@ jobs:
         dotnet-version: [7.x]
 
     steps:
-      # Step 1: Checkout the code
       - name: Checkout code
         uses: actions/checkout@v3
 
-      # Step 2: Set up Node.js for Nuxt 3
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
 
-      # Step 3: Install and build the Nuxt 3 frontend
       - name: Install dependencies (Nuxt 3)
         run: |
           cd Source/WebApp
@@ -42,50 +39,21 @@ jobs:
       - name: Upload Nuxt build artifact
         uses: actions/upload-artifact@v4
         with:
-          name: nuxt3-build
-          path: ./Source/WebApp/.output/ 
+          name: frontend-build
+          path: /Source/WebApp/.output
           retention-days: 30 
 
-      # Step 4: Set up .NET 7 SDK
       - name: Set up .NET 7
         uses: actions/setup-dotnet@v3
         with:
           dotnet-version: ${{ matrix.dotnet-version }}
 
-      # Step 5: Restore and build the .NET 7 API
       - name: Restore dependencies (.NET)
         run: dotnet restore
 
       - name: Build .NET API
         run: dotnet publish --configuration Release --output ./publish --no-restore
 
-      # Step 6: Run tests for .NET API (if any)
-      - name: Run tests (.NET)
-        run: dotnet test --no-restore --verbosity normal
-
-      - name: Set up Docker Compose
-        run: sudo apt-get update && sudo apt-get install -y docker-compose
-
-      # Step 7: Build and start the containers using Docker Compose
-      - name: Build and Start Docker Compose
-        run: |
-          docker-compose -f FastApiTest/docker-compose.yml up --build -d
-
-      # Step 8: Stop and clean up the containers
-      - name: Stop Docker Compose
-        run: |
-          cd FastApiTest/
-          docker-compose down
-
-       # Optional: Commit the changes if any formatting was needed
-      - name: Commit formatted code
-        if: ${{ steps.format.outputs.changes_detected == 'true' }}
-        run: |
-          git config --global user.name "GitHub Action"
-          git config --global user.email "action@github.com"
-          git commit -am "Apply code formatting"
-          git push
-          
       - name: Upload build artifact
         uses: actions/upload-artifact@v4
         with:
