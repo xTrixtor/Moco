@@ -14,7 +14,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [18.x]  # Use the Node.js version suitable for Nuxt 3
+        node-version: [20.17.0]  # Use the Node.js version suitable for Nuxt 3
         dotnet-version: [7.x]
 
     steps:
