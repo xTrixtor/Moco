@@ -36,7 +36,7 @@ jobs:
 
       - name: Build Nuxt 3 app
         run: |
-          cd Source
+          cd Source/WebApp
           npm run build
 
       # Step 4: Set up .NET 7 SDK
