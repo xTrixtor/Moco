@@ -43,7 +43,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: nuxt3-build
-          path: /Source/WebApp/.output/ 
+          path: Source/WebApp/.output/ 
           retention-days: 30 
 
       # Step 4: Set up .NET 7 SDK
@@ -57,7 +57,7 @@ jobs:
         run: dotnet restore
 
       - name: Build .NET API
-        run: dotnet build --configuration Release --no-restore
+        run: dotnet publish --configuration Release --output ./publish --no-restore
 
       # Step 6: Run tests for .NET API (if any)
       - name: Run tests (.NET)
@@ -84,11 +84,11 @@ jobs:
           git config --global user.name "GitHub Action"
           git config --global user.email "action@github.com"
           git commit -am "Apply code formatting"
-          git push 
-        
+          git push
+          
       - name: Upload build artifact
         uses: actions/upload-artifact@v3
         with:
           name: dotnet7-publish
-          path: /FastApiTest/publish/
+          path: FastApiTest/publish/
           retention-days: 30  # Adjust as needed
