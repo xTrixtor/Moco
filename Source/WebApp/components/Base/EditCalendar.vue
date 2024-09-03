@@ -1,15 +1,19 @@
 <template>
   <div>
-    <div v-if="editModus" class="wrapper relative gap-1 flex-center" ref="target">
+    <div
+      v-if="editModus"
+      class="wrapper relative gap-1 flex-center"
+      ref="target"
+    >
       <Calendar
         v-model="dateValue"
         :pt="{ input: { class: 'p-[2px] pl-2' } }"
       />
-      <div class="w-14 h-8 flex-center bg-slate-50/20 p-1 rounded-lg hover:bg-primary cursor-pointer duration-500" @click="handleSave">
-        <Icon
-          name="material-symbols:save-outline"
-          size="1rem"
-        />
+      <div
+        class="w-14 h-8 flex-center bg-slate-50/20 p-1 rounded-lg hover:bg-primary cursor-pointer duration-500"
+        @click="handleSave"
+      >
+        <Icon name="material-symbols:save-outline" size="1rem" />
       </div>
     </div>
     <p

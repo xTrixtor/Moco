@@ -45,9 +45,7 @@
 </template>
 
 <script setup lang="ts">
-import {
-  CBudgetRequest,
-} from "~/stores/apiClient";
+import { CBudgetRequest } from "~/stores/apiClient";
 import { useApiStore } from "~/stores/apiStore";
 import { useBudgetStore } from "~/stores/budgetStore";
 import { useOverviewCostStore } from "~/stores/overviewCostStore";
@@ -83,8 +81,8 @@ const handleCreateCharge = async () => {
 };
 
 onKeyStroke("Enter", async () => {
-    await handleCreateCharge();
-})
+  await handleCreateCharge();
+});
 
 onClickOutside(target, async () => {
   createModus.value = false;

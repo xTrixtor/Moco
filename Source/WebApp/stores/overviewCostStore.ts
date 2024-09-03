@@ -54,16 +54,16 @@ export const useOverviewCostStore = defineStore("costOverview", {
     calculateOverviewCosts() {
       const { selectedCostInspection } = storeToRefs(useInspectionStore());
 
-      if(selectedCostInspection.value == undefined){
+      if (selectedCostInspection.value == undefined) {
         this.overviewCosts = undefined;
         return;
-      };
+      }
 
       const monthlyRevenue = this.calculateMonthyRevenue(
-        selectedCostInspection.value
+        selectedCostInspection.value,
       );
       const fixcostSum = this.calculateFixedCostSum(
-        selectedCostInspection.value
+        selectedCostInspection.value,
       );
       const budgetLimit = this.calculateBudgetSum();
       const chargesSum = this.calculateChargeSum(selectedCostInspection.value);
@@ -73,11 +73,16 @@ export const useOverviewCostStore = defineStore("costOverview", {
         value: monthlyRevenue.value - (fixcostSum.value + budgetLimit.value),
       };
       const toPayMoney: OverviewCost = this.calculateToPayMoney(
-        selectedCostInspection.value
+        selectedCostInspection.value,
       );
-      const checkFixedCost = useSumBy(selectedCostInspection.value.fixedCostChecklist.filter(x => x.isChecked), function(r){
-        return r.value
-      } )
+      const checkFixedCost = useSumBy(
+        selectedCostInspection.value.fixedCostChecklist.filter(
+          (x) => x.isChecked,
+        ),
+        function (r) {
+          return r.value;
+        },
+      );
       const availableMoney: OverviewCost = {
         name: "Aktuelles Geld mit aktuellen Abzügen",
         value: monthlyRevenue.value - checkFixedCost - chargesSum.value,
@@ -101,14 +106,12 @@ export const useOverviewCostStore = defineStore("costOverview", {
         monthlyRevenue,
       ];
     },
-    calculateToPayMoney(
-      costInspection: CostInspectionDto
-    ): OverviewCost {
+    calculateToPayMoney(costInspection: CostInspectionDto): OverviewCost {
       const fixcostsToPay = useSumBy(
         costInspection?.fixedCostChecklist.filter((x) => !x.isChecked),
         function (f) {
           return f.value ?? 0;
-        }
+        },
       );
       return { name: "Maximal zu zahlende Summe", value: fixcostsToPay };
     },
@@ -159,7 +162,7 @@ export const useOverviewCostStore = defineStore("costOverview", {
           groupCost.fixedCosts,
           function (fixedcost: FixedCostDto) {
             return calculateMontlyChargeCost(fixedcost);
-          }
+          },
         );
         fixedCostSumTemp += groupCostSum;
       });
@@ -178,14 +181,14 @@ export const useOverviewCostStore = defineStore("costOverview", {
         revenues,
         function (revenue: RevenueDto) {
           return revenue.value;
-        }
+        },
       );
     },
     setAvailibleMoney() {
       this.availibleMoney.value = useCeil(
         this.totalRevenue.value -
           (this.budgetCost.value + this.fixedCost.value),
-        2
+        2,
       );
     },
     setCostOverview() {

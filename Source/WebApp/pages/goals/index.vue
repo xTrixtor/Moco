@@ -14,11 +14,11 @@
           placeholder="Bitte auswählen"
           optionLabel="name"
           data-key="id"
-          @change="(item:any) => handleChange(item.value)"
+          @change="(item: any) => handleChange(item.value)"
         />
       </div>
       <div class="p-2 flex-1 border-x-2 border-border">
-        <OverviewRow/>
+        <OverviewRow />
       </div>
       <div v-if="selectedSavingGoal.id">
         <Icon
@@ -89,7 +89,7 @@ const handleDelete = () => {
     acceptLabel: "Löschen",
     accept: async () => {
       await useApiStore().SavingGoalsClient.deleteSavingGoalEndpoint(
-        selectedSavingGoal.value.id
+        selectedSavingGoal.value.id,
       );
       savingGoalStore.fetch();
       selectedSavingGoal.value = { id: undefined };
@@ -101,7 +101,6 @@ const handleDelete = () => {
 onBeforeMount(async () => {
   await savingGoalStore.fetch();
 });
-
 </script>
 
 <style></style>

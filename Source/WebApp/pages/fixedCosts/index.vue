@@ -56,13 +56,24 @@
               </div>
             </div>
           </div>
-          <div v-if="groupCosts" class="flex-1 w-full p-4 grid grid-cols-4 gap-2 h-full">
-            <div v-for="groupCost in groupCosts" class="text-center bg-background flex-col border-2 rounded border-border p-4 h-full max-h-[75px] w-full hover:scale-110 duration-300 hover:cursor-pointer hover:outline-primary hover:outline-2 text-highlight-text flex">
+          <div
+            v-if="groupCosts"
+            class="flex-1 w-full p-4 grid grid-cols-4 gap-2 h-full"
+          >
+            <div
+              v-for="groupCost in groupCosts"
+              class="text-center bg-background flex-col border-2 rounded border-border p-4 h-full max-h-[75px] w-full hover:scale-110 duration-300 hover:cursor-pointer hover:outline-primary hover:outline-2 text-highlight-text flex"
+            >
               <div class="font-black underline decoration-2 underline-offset-2">
                 {{ groupCost.name }}
               </div>
               <div class="text-secondary-light">
-                {{ useSumBy(groupCost.fixedCosts, function(c){ return c.value}) }} €
+                {{
+                  useSumBy(groupCost.fixedCosts, function (c) {
+                    return c.value;
+                  })
+                }}
+                €
               </div>
             </div>
           </div>
@@ -101,7 +112,7 @@ const { overviewCosts } = storeToRefs(overviewStore);
 const { selectedCostInspection } = storeToRefs(useInspectionStore());
 
 var butgetBars = computed(() =>
-  calculateBar(selectedCostInspection?.value?.monthlyBudgets ?? [])
+  calculateBar(selectedCostInspection?.value?.monthlyBudgets ?? []),
 );
 
 const calculateSumBgColor = (chargeSum: number, limit: number) => {

@@ -14,7 +14,7 @@ import { mergeProps } from 'nuxt/dist/app/compat/capi';
         v-if="props.clearable"
         class="w-8 h-full text-xl flex-center text-zinc-400 absolute right-0"
         v-tooltip="'Löschen'"
-          placeholder="Right"
+        placeholder="Right"
       >
         <Icon
           name="mdi:clear-circle-outline"

@@ -1,5 +1,8 @@
 <template>
-  <div class="p-4 border-2 border-border absolute -translate-x-[380px] z-20 bg-background" v-if="data">
+  <div
+    class="p-4 border-2 border-border absolute -translate-x-[380px] z-20 bg-background"
+    v-if="data"
+  >
     <div class="flex flex-col p-2" ref="target">
       <div
         class="underline decoration-2 decoration-primary text-highlight-text underline-offset-4"
@@ -14,7 +17,13 @@
           :max="selectedSavingGoal.goalValue"
           :pt="{ root: { class: 'flex-1' } }"
         />
-        <Button outlined size="small" class="hover:bg-primary duration-700" disabled @click="handleSave">
+        <Button
+          outlined
+          size="small"
+          class="hover:bg-primary duration-700"
+          disabled
+          @click="handleSave"
+        >
           <Icon
             name="material-symbols:save-outline"
             class="text-highlight-text p-1"
@@ -56,7 +65,6 @@ const handleSave = () => {
   const last = useLast<DepositRateDto>(paidRates);
   updateRatesWithRates(last);
   data.value = false;
-
 };
 
 const updateRatesWithRates = (lastRate: DepositRateDto) => {
@@ -65,7 +73,7 @@ const updateRatesWithRates = (lastRate: DepositRateDto) => {
     depositRate,
     goalValue,
     lastRate.value + newDepositRate.value,
-    lastRate.savingMonth
+    lastRate.savingMonth,
   );
 };
 </script>

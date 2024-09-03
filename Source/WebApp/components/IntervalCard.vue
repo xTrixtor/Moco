@@ -12,10 +12,7 @@
       <div class="flex w-full justify-between">
         <div class="flex">
           <p class="font-semibold">Summe:</p>
-          <p class="px-2">
-            a
-            €
-          </p>
+          <p class="px-2">a €</p>
         </div>
         <button
           @click="() => (modalVis = true)"
@@ -34,10 +31,7 @@
 </template>
 
 <script setup lang="ts">
-import {
-ChargeDto,
-  TimeInterval,
-} from "~/stores/apiClient";
+import { ChargeDto, TimeInterval } from "~/stores/apiClient";
 
 interface ChargeCardProps {
   interval: string;

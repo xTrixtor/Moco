@@ -64,9 +64,7 @@
             class="w-full flex flex-1 justify-start gap-6 items-center"
           >
             <div
-              v-if="
-                slotProps.data.savingMonth <
-                  currentRate.savingMonth"
+              v-if="slotProps.data.savingMonth < currentRate.savingMonth"
               class="w-full flex flex-1 justify-start gap-6 items-center"
             >
               <Icon
@@ -169,7 +167,7 @@ const { selectedSavingGoal } = storeToRefs(useSavingGoalStore());
 const selectedNoPayDepositRate = ref<DepositRateDto>();
 const loading = ref(false);
 const lazyLoadDepositRates = ref<DepositRateDto[]>(
-  selectedSavingGoal.value.depositRates ?? []
+  selectedSavingGoal.value.depositRates ?? [],
 );
 const totalRates = computed(() => selectedSavingGoal.value.totalRates ?? 0);
 const lazyParams = ref(undefined);
@@ -178,7 +176,7 @@ const op = ref();
 const showNotPaid = ref(false);
 
 let currentRate = computed(
-  () => lazyLoadDepositRates.value.filter((x) => x.isPaid == true)[0] ?? {}
+  () => lazyLoadDepositRates.value.filter((x) => x.isPaid == true)[0] ?? {},
 );
 
 const columns = [{ field: "key", header: "Month-Year" }];
@@ -206,7 +204,7 @@ const rowClass = (data: DepositRateDto) => {
     { "!bg-green-500": data.isPaid },
     {
       "":
-        data.savingMonth> currentRate.value.savingMonth ||
+        data.savingMonth > currentRate.value.savingMonth ||
         JSON.stringify(currentRate.value) == "{}",
     },
   ];
@@ -234,7 +232,7 @@ const updateRatesWithRates = async (currentRate: DepositRateDto) => {
     depositRate,
     goalValue,
     rateBefore + newDepositRate.value,
-    currentRate.savingMonth
+    currentRate.savingMonth,
   );
 
   const response =
@@ -252,7 +250,7 @@ const updateRatesWithDates = async (currentRate: DepositRateDto) => {
     currentRate.savingMonth,
     endDate,
     goalValue,
-    currentSaving + newDepositRate.value
+    currentSaving + newDepositRate.value,
   );
   const response =
     await useApiStore().SavingGoalsClient.updateDepositRatesEndpoint({
@@ -271,12 +269,12 @@ const loadData = async (event) => {
     await useApiStore().SavingGoalsClient.lazyLoadDepositRateEndpoint(
       selectedSavingGoal.value.id,
       event.first,
-      showNotPaid.value
+      showNotPaid.value,
     );
   lazyLoadDepositRates.value = response.depositRates ?? [];
   totalRates.value = response.totalRates;
   currentRate.value = lazyLoadDepositRates.value.filter(
-    (x) => x.isPaid == true
+    (x) => x.isPaid == true,
   )[0];
   loading.value = false;
 };

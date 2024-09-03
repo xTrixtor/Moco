@@ -4,7 +4,7 @@
       Variable Kosten pro Monat
     </p>
     <div>
-        <BudgetOverviewTable />
+      <BudgetOverviewTable />
     </div>
   </div>
 </template>

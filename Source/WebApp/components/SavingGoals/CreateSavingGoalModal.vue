@@ -19,7 +19,7 @@
           :min="0"
           :maxFractionDigits="2"
           mode="currency"
-          currency="EUR" 
+          currency="EUR"
           locale="de-DE"
         />
       </div>
@@ -58,9 +58,9 @@
           :maxFractionDigits="2"
           @update:model-value="calculateGoal"
           :disabled="savingGoalCDto.methodKey != 0"
-          :max="(savingGoalCDto.goalValue-1)"
+          :max="savingGoalCDto.goalValue - 1"
           mode="currency"
-          currency="EUR" 
+          currency="EUR"
           locale="de-DE"
           :placeholder="
             savingGoalCDto.methodKey != 0
@@ -94,7 +94,7 @@
           class="flex-1"
           v-model="savingGoalCDto.endDate"
           :max-date="addYears(savingGoalCDto.startDate, 20)"
-          :min-date="addMonths(savingGoalCDto.startDate,1)"
+          :min-date="addMonths(savingGoalCDto.startDate, 1)"
           @update:model-value="calculateGoal"
           :disabled="savingGoalCDto.methodKey != 1"
           :placeholder="
@@ -139,7 +139,7 @@ import {
 } from "~/metaData/savingGoalService";
 import { storeToRefs } from "pinia";
 import { addMonths, addYears } from "date-fns";
-import { useToast } from 'primevue/usetoast';
+import { useToast } from "primevue/usetoast";
 
 const toast = useToast();
 
@@ -150,28 +150,30 @@ const emit = defineEmits(["update:modelValue"]);
 
 const { selectedSavingGoal, savingGoals } = storeToRefs(useSavingGoalStore());
 const data = useVModel(props, "modelValue", emit);
-let savingGoalCDto: Ref<SavingGoalCDto> = ref<SavingGoalCDto>({initialCapital: 0});
+let savingGoalCDto: Ref<SavingGoalCDto> = ref<SavingGoalCDto>({
+  initialCapital: 0,
+});
 const minDate = ref(addMonths(new Date(), 1));
 const canSave = computed(() =>
   Boolean(
     savingGoalCDto.value.name &&
       savingGoalCDto.value.goalValue &&
       savingGoalCDto.value.depositRate &&
-      isValid.value
-  )
+      isValid.value,
+  ),
 );
-const isValid = ref(false)
+const isValid = ref(false);
 
 const handleCreate = async () => {
   const newSavingGoal =
     await useApiStore().SavingGoalsClient.createSavingGoalEndpoint(
-      savingGoalCDto.value
+      savingGoalCDto.value,
     );
-    selectedSavingGoal.value = newSavingGoal;
-    savingGoals.value = [...savingGoals.value, newSavingGoal];
-    useSavingGoalStore().setSelectedSavingGoal(newSavingGoal);
-    data.value = false;
-    savingGoalCDto.value = {};
+  selectedSavingGoal.value = newSavingGoal;
+  savingGoals.value = [...savingGoals.value, newSavingGoal];
+  useSavingGoalStore().setSelectedSavingGoal(newSavingGoal);
+  data.value = false;
+  savingGoalCDto.value = {};
 };
 
 watch(
@@ -182,7 +184,7 @@ watch(
       savingGoalCDto.value.startDate = undefined;
       savingGoalCDto.value.endDate = undefined;
     }
-  }
+  },
 );
 
 const calculateGoal = () => {
@@ -193,8 +195,7 @@ const calculateGoal = () => {
     calculateGoalWithDate();
   }
 };
-const calculateGoalWithDate = 
-() => {
+const calculateGoalWithDate = () => {
   if (
     savingGoalCDto.value.startDate &&
     savingGoalCDto.value.endDate &&
@@ -204,7 +205,7 @@ const calculateGoalWithDate =
       savingGoalCDto.value.startDate,
       savingGoalCDto.value.endDate,
       savingGoalCDto.value.goalValue,
-      savingGoalCDto.value.initialCapital ?? 0
+      savingGoalCDto.value.initialCapital ?? 0,
     );
     savingGoalCDto.value.depositRates = result.depositRates;
     savingGoalCDto.value.depositRate = result.monthRate;
@@ -217,10 +218,16 @@ const calculateGoalWithRates = () => {
     const result = calculateDepositsWithMonthlyRate(
       savingGoalCDto.value.depositRate,
       savingGoalCDto.value.goalValue,
-      savingGoalCDto.value.initialCapital ?? 0
+      savingGoalCDto.value.initialCapital ?? 0,
     );
-    if(result == undefined){
-      toast.add({ severity: 'warn', summary: 'Plan dauert zu lange', detail: 'Bitte erstelle keine Sparziele, welche länger als 20 Jahre gehen', life: 3000 });
+    if (result == undefined) {
+      toast.add({
+        severity: "warn",
+        summary: "Plan dauert zu lange",
+        detail:
+          "Bitte erstelle keine Sparziele, welche länger als 20 Jahre gehen",
+        life: 3000,
+      });
       return;
     }
     savingGoalCDto.value.startDate = result[0].savingMonth;

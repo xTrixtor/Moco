@@ -24,11 +24,7 @@
           />
         </div>
         <div class="flex w-full">
-          <CustomInput
-            type="text"
-            placeholder="Email"
-            v-model="user.email"
-          />
+          <CustomInput type="text" placeholder="Email" v-model="user.email" />
           <CustomInput
             type="text"
             placeholder="Username"
@@ -94,7 +90,7 @@ const registerUser = async () => {
     },
   };
   const res = await useApiStore().UserClient.createUserEndpoint(
-    req as CreateUserRequest
+    req as CreateUserRequest,
   );
 
   sessionStorage.setItem("authToken", res.keycloakResponse?.access_token);

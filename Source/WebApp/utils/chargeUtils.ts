@@ -22,7 +22,7 @@ export const calculateMontlyChargeCost = (fixedcost: FixedCostDto): number => {
 };
 
 export const createMonthlyGroupCost = (
-  groupcosts: GroupCostDto[]
+  groupcosts: GroupCostDto[],
 ): GroupCostDto[] => {
   return groupcosts.map((groupCost) => {
     const fixedCosts = groupCost.fixedCosts ?? [];
@@ -31,14 +31,14 @@ export const createMonthlyGroupCost = (
       function (o: FixedCostDto) {
         calculateMontlyChargeCost(o.timeInterval, o.value);
       },
-      ["desc"]
+      ["desc"],
     );
     return groupCost;
   });
 };
 
 export const createCalculatedFixedCost = (
-  fixedCost: FixedCostDto
+  fixedCost: FixedCostDto,
 ): FixedCostDto => {
   return {
     value: calculateMontlyChargeCost(fixedCost),

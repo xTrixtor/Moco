@@ -12,8 +12,8 @@
       <p>Start-Datum</p>
       <p>{{ formatDate(selectedSavingGoal.startDate, "MMMM YYYY") }}</p>
     </div>
-    <div  :class="cellStyling" v-if="selectedSavingGoal.endDate">
-      <p >End-Datum</p>
+    <div :class="cellStyling" v-if="selectedSavingGoal.endDate">
+      <p>End-Datum</p>
       <p>{{ formatDate(selectedSavingGoal.endDate, "MMMM YYYY") }}</p>
     </div>
     <div :class="cellStyling" v-if="selectedSavingGoal.goalValue">

@@ -6,16 +6,11 @@ export const useChargeStore = defineStore("charge", {
     const charges = [] as ChargeDto[];
 
     return {
-    charges,
-    fetch,
+      charges,
+      fetch,
     };
   },
   actions: {
-  
-    async fetch() {
-    
-    },
-    
-    },
+    async fetch() {},
   },
-);
+});

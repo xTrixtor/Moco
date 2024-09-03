@@ -3,7 +3,6 @@ import { useApiStore } from "./apiStore";
 import { useTimeoutStore } from "./timeOutStore";
 import { LoginRequest, RefreshAuthTokenRequest, UserDto } from "./apiClient";
 
-
 export const useUserStore = defineStore("user", {
   state: () => {
     const user = {} as UserDto;
@@ -13,7 +12,7 @@ export const useUserStore = defineStore("user", {
 
     return {
       user,
-      keycloakId, 
+      keycloakId,
       authToken,
       refreshToken,
     };
@@ -28,16 +27,12 @@ export const useUserStore = defineStore("user", {
       sessionStorage.setItem("authToken", "");
       sessionStorage.setItem("refreshToken", "");
     },
-    async login(
-      credentials: LoginRequest
-    ): Promise<boolean> {
+    async login(credentials: LoginRequest): Promise<boolean> {
       const apiStore = useApiStore();
       try {
         useTimeoutStore().startTimer();
         const result =
-          await apiStore.LoginClient.loginUserEndpoint(
-            credentials
-          );
+          await apiStore.LoginClient.loginUserEndpoint(credentials);
         if (result.jwtToken) {
           this.authToken = result.jwtToken;
           sessionStorage.setItem("authToken", result.jwtToken);
@@ -46,10 +41,10 @@ export const useUserStore = defineStore("user", {
           this.refreshToken = result.refreshToken;
           sessionStorage.setItem("refreshToken", result.refreshToken);
         }
-        if(result.user && result.user.keycloakUserId){
+        if (result.user && result.user.keycloakUserId) {
           this.user = result.user;
           this.keycloakId = result.user.keycloakUserId;
-          sessionStorage.setItem("keycloakId", result.user.keycloakUserId)
+          sessionStorage.setItem("keycloakId", result.user.keycloakUserId);
         }
 
         return true;
@@ -62,10 +57,9 @@ export const useUserStore = defineStore("user", {
       var request = {
         refreshToken,
       };
-      var res =
-        await useApiStore().RefreshClient.refreshAuthTokenEndpoint(
-          request as RefreshAuthTokenRequest
-        );
+      var res = await useApiStore().RefreshClient.refreshAuthTokenEndpoint(
+        request as RefreshAuthTokenRequest,
+      );
       if (res === undefined) {
         throw new Error("Refreshedfaild");
       }
@@ -73,7 +67,6 @@ export const useUserStore = defineStore("user", {
       sessionStorage.setItem("authToken", res.jwtToken);
       this.refreshToken = res.refreshToken ?? "";
       sessionStorage.setItem("refreshToken", res.refreshToken);
-      
     },
     async validate() {
       this.keycloakId = sessionStorage.getItem("keycloakId");
@@ -98,30 +91,33 @@ export const useUserStore = defineStore("user", {
     getAuthToken(): string {
       return this.authToken;
     },
-    getUser(): DecodedToken{
+    getUser(): DecodedToken {
       return parseJwt(this.authToken);
     },
-    getKeycloakId():string{
+    getKeycloakId(): string {
       return this.keycloakId;
-    }
+    },
   },
 });
 interface DecodedToken {
-  family_name: String,
-  given_name: String,
-  email: String,
-  sub: String
+  family_name: String;
+  given_name: String;
+  email: String;
+  sub: String;
 }
 
-function parseJwt (token:string) : DecodedToken {
-  var base64Url = token.split('.')[1];
-  var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-  var jsonPayload = decodeURIComponent(window.atob(base64).split('').map(function(c) {
-      return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-  }).join(''));
+function parseJwt(token: string): DecodedToken {
+  var base64Url = token.split(".")[1];
+  var base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
+  var jsonPayload = decodeURIComponent(
+    window
+      .atob(base64)
+      .split("")
+      .map(function (c) {
+        return "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2);
+      })
+      .join(""),
+  );
 
   return JSON.parse(jsonPayload);
 }
-
-
-

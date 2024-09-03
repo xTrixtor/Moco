@@ -56,9 +56,7 @@
       </div>
     </div>
   </div>
-  <AddFixedCostModal
-    v-model="addFixedCostModalVis"
-  />
+  <AddFixedCostModal v-model="addFixedCostModalVis" />
 </template>
 
 <script setup lang="ts">

@@ -1,6 +1,6 @@
-import ConfirmationService from 'primevue/confirmationservice';
-import ToastService from 'primevue/toastservice';
+import ConfirmationService from "primevue/confirmationservice";
+import ToastService from "primevue/toastservice";
 
-export default defineNuxtPlugin((nuxtApp) => { 
-    nuxtApp.vueApp.use(ConfirmationService, ToastService)
-})
+export default defineNuxtPlugin((nuxtApp) => {
+  nuxtApp.vueApp.use(ConfirmationService, ToastService);
+});

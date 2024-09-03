@@ -1,7 +1,7 @@
 <template>
   <div
     v-if="isMobil"
-    class="flex-center justify-between !h-[70px] !bg-background px-4 "
+    class="flex-center justify-between !h-[70px] !bg-background px-4"
     id="navbar"
   >
     <NuxtLink to="/">
@@ -19,10 +19,16 @@
       />
     </div>
   </div>
-  <div v-else id="navbar" class="flex-center h-[10vh] bg-foreground border-border border-b-2 rounded-b-sm">
+  <div
+    v-else
+    id="navbar"
+    class="flex-center h-[10vh] bg-foreground border-border border-b-2 rounded-b-sm"
+  >
     <div class="flex w-full justify-between">
       <NuxtLink to="/" class="flex-1 flex-center">
-        <h1 class="text-4xl font-bold text-highlight-text tracking-widest">Finanz</h1>
+        <h1 class="text-4xl font-bold text-highlight-text tracking-widest">
+          Finanz
+        </h1>
         <h1 class="text-4xl font-bold text-primary tracking-widest">Horus</h1>
       </NuxtLink>
     </div>

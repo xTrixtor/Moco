@@ -29,17 +29,23 @@ export const useFixedCostStore = defineStore("fixedCost", {
     },
     setGroupCostOptions(groupCosts: GroupCostDto[]) {
       this.groupCostOptions = groupCosts.map<GroupCostOption>((x, key) => {
-        return { id: x.id, name: x.name, sum: useSumBy(x.fixedCosts, function(o:FixedCostDto){ return o.value} )};
+        return {
+          id: x.id,
+          name: x.name,
+          sum: useSumBy(x.fixedCosts, function (o: FixedCostDto) {
+            return o.value;
+          }),
+        };
       });
     },
-    setSelectedGroupCost(groupCost:GroupCostDto){
+    setSelectedGroupCost(groupCost: GroupCostDto) {
       this.selectedGroupCost = groupCost;
-    }
+    },
   },
 });
 
 export interface GroupCostOption {
   id: number;
   name: string;
-  sum:number
+  sum: number;
 }

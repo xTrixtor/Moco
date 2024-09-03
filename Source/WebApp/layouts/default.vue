@@ -8,12 +8,12 @@
     <div v-else class="bg-background h-screen">
       <div class="grid-cols-5 flex">
         <div class="col-span-2">
-          <Sidebar/>
+          <Sidebar />
         </div>
         <div class="col-span-3 flex-1">
-          <Navbar/>
+          <Navbar />
           <div class="flex w-full h-[90svh] p-6">
-            <slot/>
+            <slot />
           </div>
         </div>
       </div>

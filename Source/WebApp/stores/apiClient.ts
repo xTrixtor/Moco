@@ -16,7 +16,7 @@ export interface IUserClient {
    * @return Returns true
    */
   createUserEndpoint(
-    createUserRequest: CreateUserRequest
+    createUserRequest: CreateUserRequest,
   ): Promise<CreateUserResponse>;
 }
 
@@ -30,7 +30,7 @@ export class UserClient extends BaseAPIClient implements IUserClient {
 
   constructor(
     baseUrl?: string,
-    http?: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> }
+    http?: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> },
   ) {
     super();
     this.http = http ? http : (window as any);
@@ -42,7 +42,7 @@ export class UserClient extends BaseAPIClient implements IUserClient {
    * @return Returns true
    */
   createUserEndpoint(
-    createUserRequest: CreateUserRequest
+    createUserRequest: CreateUserRequest,
   ): Promise<CreateUserResponse> {
     let url_ = this.baseUrl + "/api/user";
     url_ = url_.replace(/[?&]$/, "");
@@ -64,13 +64,13 @@ export class UserClient extends BaseAPIClient implements IUserClient {
       })
       .then((_response: Response) => {
         return this.transformResult(url_, _response, (_response: Response) =>
-          this.processCreateUserEndpoint(_response)
+          this.processCreateUserEndpoint(_response),
         );
       });
   }
 
   protected processCreateUserEndpoint(
-    response: Response
+    response: Response,
   ): Promise<CreateUserResponse> {
     const status = response.status;
     let _headers: any = {};
@@ -93,7 +93,7 @@ export class UserClient extends BaseAPIClient implements IUserClient {
           "An unexpected server error occurred.",
           status,
           _responseText,
-          _headers
+          _headers,
         );
       });
     }
@@ -106,14 +106,14 @@ export interface ISavinggoalsClient {
    * @return Success
    */
   addDepositEndpoint(
-    depositsUDto: DepositsUDto
+    depositsUDto: DepositsUDto,
   ): Promise<UpdateDepositsResponse>;
 
   /**
    * @return Success
    */
   createSavingGoalEndpoint(
-    savingGoalCDto: SavingGoalCDto
+    savingGoalCDto: SavingGoalCDto,
   ): Promise<SavingGoalDto>;
 
   /**
@@ -135,21 +135,21 @@ export interface ISavinggoalsClient {
    * @return Success
    */
   updateDepositRatesEndpoint(
-    updateDepositRatesRequest: UpdateDepositRatesRequest
+    updateDepositRatesRequest: UpdateDepositRatesRequest,
   ): Promise<UpdateDepositRatesResponse>;
 
   /**
    * @return Success
    */
   createDepositRateEndpoint(
-    depositRateCDto: DepositRateCDto
+    depositRateCDto: DepositRateCDto,
   ): Promise<DepositRatelCResponse>;
 
   /**
    * @return Success
    */
   updateDepositRateEndpoint(
-    depositRateUDto: DepositRateUDto
+    depositRateUDto: DepositRateUDto,
   ): Promise<DepositRatelUResponse>;
 
   /**
@@ -158,14 +158,14 @@ export interface ISavinggoalsClient {
   lazyLoadDepositRateEndpoint(
     savingGoalId: number,
     firstOfNexPage: number,
-    hidePaidDeposits: boolean
+    hidePaidDeposits: boolean,
   ): Promise<LazyLoadDepositRateResponse>;
 
   /**
    * @return Success
    */
   payDepositRateEndpoint(
-    payDepositRateDto: PayDepositRateDto
+    payDepositRateDto: PayDepositRateDto,
   ): Promise<DepositRateDto>;
 }
 
@@ -182,7 +182,7 @@ export class SavinggoalsClient
 
   constructor(
     baseUrl?: string,
-    http?: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> }
+    http?: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> },
   ) {
     super();
     this.http = http ? http : (window as any);
@@ -193,7 +193,7 @@ export class SavinggoalsClient
    * @return Success
    */
   addDepositEndpoint(
-    depositsUDto: DepositsUDto
+    depositsUDto: DepositsUDto,
   ): Promise<UpdateDepositsResponse> {
     let url_ = this.baseUrl + "/api/savingGoals/deposits";
     url_ = url_.replace(/[?&]$/, "");
@@ -215,13 +215,13 @@ export class SavinggoalsClient
       })
       .then((_response: Response) => {
         return this.transformResult(url_, _response, (_response: Response) =>
-          this.processAddDepositEndpoint(_response)
+          this.processAddDepositEndpoint(_response),
         );
       });
   }
 
   protected processAddDepositEndpoint(
-    response: Response
+    response: Response,
   ): Promise<UpdateDepositsResponse> {
     const status = response.status;
     let _headers: any = {};
@@ -252,7 +252,7 @@ export class SavinggoalsClient
           "An unexpected server error occurred.",
           status,
           _responseText,
-          _headers
+          _headers,
         );
       });
     }
@@ -263,7 +263,7 @@ export class SavinggoalsClient
    * @return Success
    */
   createSavingGoalEndpoint(
-    savingGoalCDto: SavingGoalCDto
+    savingGoalCDto: SavingGoalCDto,
   ): Promise<SavingGoalDto> {
     let url_ = this.baseUrl + "/api/savingGoals";
     url_ = url_.replace(/[?&]$/, "");
@@ -285,13 +285,13 @@ export class SavinggoalsClient
       })
       .then((_response: Response) => {
         return this.transformResult(url_, _response, (_response: Response) =>
-          this.processCreateSavingGoalEndpoint(_response)
+          this.processCreateSavingGoalEndpoint(_response),
         );
       });
   }
 
   protected processCreateSavingGoalEndpoint(
-    response: Response
+    response: Response,
   ): Promise<SavingGoalDto> {
     const status = response.status;
     let _headers: any = {};
@@ -322,7 +322,7 @@ export class SavinggoalsClient
           "An unexpected server error occurred.",
           status,
           _responseText,
-          _headers
+          _headers,
         );
       });
     }
@@ -349,13 +349,13 @@ export class SavinggoalsClient
       })
       .then((_response: Response) => {
         return this.transformResult(url_, _response, (_response: Response) =>
-          this.processGetAllSavingGoalsEndpoint(_response)
+          this.processGetAllSavingGoalsEndpoint(_response),
         );
       });
   }
 
   protected processGetAllSavingGoalsEndpoint(
-    response: Response
+    response: Response,
   ): Promise<GetAllSavingGoalsResponse> {
     const status = response.status;
     let _headers: any = {};
@@ -386,7 +386,7 @@ export class SavinggoalsClient
           "An unexpected server error occurred.",
           status,
           _responseText,
-          _headers
+          _headers,
         );
       });
     }
@@ -402,7 +402,7 @@ export class SavinggoalsClient
       throw new Error("The parameter 'savingGoalId' must be defined.");
     url_ = url_.replace(
       "{SavingGoalId}",
-      encodeURIComponent("" + savingGoalId)
+      encodeURIComponent("" + savingGoalId),
     );
     url_ = url_.replace(/[?&]$/, "");
 
@@ -419,7 +419,7 @@ export class SavinggoalsClient
       })
       .then((_response: Response) => {
         return this.transformResult(url_, _response, (_response: Response) =>
-          this.processDeleteSavingGoalEndpoint(_response)
+          this.processDeleteSavingGoalEndpoint(_response),
         );
       });
   }
@@ -455,7 +455,7 @@ export class SavinggoalsClient
           "An unexpected server error occurred.",
           status,
           _responseText,
-          _headers
+          _headers,
         );
       });
     }
@@ -471,7 +471,7 @@ export class SavinggoalsClient
       throw new Error("The parameter 'savingGoalId' must be defined.");
     url_ = url_.replace(
       "{SavingGoalId}",
-      encodeURIComponent("" + savingGoalId)
+      encodeURIComponent("" + savingGoalId),
     );
     url_ = url_.replace(/[?&]$/, "");
 
@@ -488,13 +488,13 @@ export class SavinggoalsClient
       })
       .then((_response: Response) => {
         return this.transformResult(url_, _response, (_response: Response) =>
-          this.processGetSavingGoalEnpoint(_response)
+          this.processGetSavingGoalEnpoint(_response),
         );
       });
   }
 
   protected processGetSavingGoalEnpoint(
-    response: Response
+    response: Response,
   ): Promise<GetSavingGoalResponse> {
     const status = response.status;
     let _headers: any = {};
@@ -525,7 +525,7 @@ export class SavinggoalsClient
           "An unexpected server error occurred.",
           status,
           _responseText,
-          _headers
+          _headers,
         );
       });
     }
@@ -536,7 +536,7 @@ export class SavinggoalsClient
    * @return Success
    */
   updateDepositRatesEndpoint(
-    updateDepositRatesRequest: UpdateDepositRatesRequest
+    updateDepositRatesRequest: UpdateDepositRatesRequest,
   ): Promise<UpdateDepositRatesResponse> {
     let url_ = this.baseUrl + "/api/savingGoals/updateRates";
     url_ = url_.replace(/[?&]$/, "");
@@ -558,13 +558,13 @@ export class SavinggoalsClient
       })
       .then((_response: Response) => {
         return this.transformResult(url_, _response, (_response: Response) =>
-          this.processUpdateDepositRatesEndpoint(_response)
+          this.processUpdateDepositRatesEndpoint(_response),
         );
       });
   }
 
   protected processUpdateDepositRatesEndpoint(
-    response: Response
+    response: Response,
   ): Promise<UpdateDepositRatesResponse> {
     const status = response.status;
     let _headers: any = {};
@@ -595,7 +595,7 @@ export class SavinggoalsClient
           "An unexpected server error occurred.",
           status,
           _responseText,
-          _headers
+          _headers,
         );
       });
     }
@@ -606,7 +606,7 @@ export class SavinggoalsClient
    * @return Success
    */
   createDepositRateEndpoint(
-    depositRateCDto: DepositRateCDto
+    depositRateCDto: DepositRateCDto,
   ): Promise<DepositRatelCResponse> {
     let url_ = this.baseUrl + "/api/savingGoals/depositRate";
     url_ = url_.replace(/[?&]$/, "");
@@ -628,13 +628,13 @@ export class SavinggoalsClient
       })
       .then((_response: Response) => {
         return this.transformResult(url_, _response, (_response: Response) =>
-          this.processCreateDepositRateEndpoint(_response)
+          this.processCreateDepositRateEndpoint(_response),
         );
       });
   }
 
   protected processCreateDepositRateEndpoint(
-    response: Response
+    response: Response,
   ): Promise<DepositRatelCResponse> {
     const status = response.status;
     let _headers: any = {};
@@ -665,7 +665,7 @@ export class SavinggoalsClient
           "An unexpected server error occurred.",
           status,
           _responseText,
-          _headers
+          _headers,
         );
       });
     }
@@ -676,7 +676,7 @@ export class SavinggoalsClient
    * @return Success
    */
   updateDepositRateEndpoint(
-    depositRateUDto: DepositRateUDto
+    depositRateUDto: DepositRateUDto,
   ): Promise<DepositRatelUResponse> {
     let url_ = this.baseUrl + "/api/savingGoals/depositRate";
     url_ = url_.replace(/[?&]$/, "");
@@ -698,13 +698,13 @@ export class SavinggoalsClient
       })
       .then((_response: Response) => {
         return this.transformResult(url_, _response, (_response: Response) =>
-          this.processUpdateDepositRateEndpoint(_response)
+          this.processUpdateDepositRateEndpoint(_response),
         );
       });
   }
 
   protected processUpdateDepositRateEndpoint(
-    response: Response
+    response: Response,
   ): Promise<DepositRatelUResponse> {
     const status = response.status;
     let _headers: any = {};
@@ -735,7 +735,7 @@ export class SavinggoalsClient
           "An unexpected server error occurred.",
           status,
           _responseText,
-          _headers
+          _headers,
         );
       });
     }
@@ -748,23 +748,23 @@ export class SavinggoalsClient
   lazyLoadDepositRateEndpoint(
     savingGoalId: number,
     firstOfNexPage: number,
-    hidePaidDeposits: boolean
+    hidePaidDeposits: boolean,
   ): Promise<LazyLoadDepositRateResponse> {
     let url_ = this.baseUrl + "/api/savingGoals/lazyload?";
     if (savingGoalId === undefined || savingGoalId === null)
       throw new Error(
-        "The parameter 'savingGoalId' must be defined and cannot be null."
+        "The parameter 'savingGoalId' must be defined and cannot be null.",
       );
     else url_ += "SavingGoalId=" + encodeURIComponent("" + savingGoalId) + "&";
     if (firstOfNexPage === undefined || firstOfNexPage === null)
       throw new Error(
-        "The parameter 'firstOfNexPage' must be defined and cannot be null."
+        "The parameter 'firstOfNexPage' must be defined and cannot be null.",
       );
     else
       url_ += "FirstOfNexPage=" + encodeURIComponent("" + firstOfNexPage) + "&";
     if (hidePaidDeposits === undefined || hidePaidDeposits === null)
       throw new Error(
-        "The parameter 'hidePaidDeposits' must be defined and cannot be null."
+        "The parameter 'hidePaidDeposits' must be defined and cannot be null.",
       );
     else
       url_ +=
@@ -784,13 +784,13 @@ export class SavinggoalsClient
       })
       .then((_response: Response) => {
         return this.transformResult(url_, _response, (_response: Response) =>
-          this.processLazyLoadDepositRateEndpoint(_response)
+          this.processLazyLoadDepositRateEndpoint(_response),
         );
       });
   }
 
   protected processLazyLoadDepositRateEndpoint(
-    response: Response
+    response: Response,
   ): Promise<LazyLoadDepositRateResponse> {
     const status = response.status;
     let _headers: any = {};
@@ -821,7 +821,7 @@ export class SavinggoalsClient
           "An unexpected server error occurred.",
           status,
           _responseText,
-          _headers
+          _headers,
         );
       });
     }
@@ -832,7 +832,7 @@ export class SavinggoalsClient
    * @return Success
    */
   payDepositRateEndpoint(
-    payDepositRateDto: PayDepositRateDto
+    payDepositRateDto: PayDepositRateDto,
   ): Promise<DepositRateDto> {
     let url_ = this.baseUrl + "/api/savingGoals/depositRate/pay";
     url_ = url_.replace(/[?&]$/, "");
@@ -854,13 +854,13 @@ export class SavinggoalsClient
       })
       .then((_response: Response) => {
         return this.transformResult(url_, _response, (_response: Response) =>
-          this.processPayDepositRateEndpoint(_response)
+          this.processPayDepositRateEndpoint(_response),
         );
       });
   }
 
   protected processPayDepositRateEndpoint(
-    response: Response
+    response: Response,
   ): Promise<DepositRateDto> {
     const status = response.status;
     let _headers: any = {};
@@ -891,7 +891,7 @@ export class SavinggoalsClient
           "An unexpected server error occurred.",
           status,
           _responseText,
-          _headers
+          _headers,
         );
       });
     }
@@ -931,7 +931,7 @@ export class GroupcostClient extends BaseAPIClient implements IGroupcostClient {
 
   constructor(
     baseUrl?: string,
-    http?: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> }
+    http?: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> },
   ) {
     super();
     this.http = http ? http : (window as any);
@@ -962,7 +962,7 @@ export class GroupcostClient extends BaseAPIClient implements IGroupcostClient {
       })
       .then((_response: Response) => {
         return this.transformResult(url_, _response, (_response: Response) =>
-          this.processCreateGroupCostEndpoint(_response)
+          this.processCreateGroupCostEndpoint(_response),
         );
       });
   }
@@ -998,7 +998,7 @@ export class GroupcostClient extends BaseAPIClient implements IGroupcostClient {
           "An unexpected server error occurred.",
           status,
           _responseText,
-          _headers
+          _headers,
         );
       });
     }
@@ -1025,13 +1025,13 @@ export class GroupcostClient extends BaseAPIClient implements IGroupcostClient {
       })
       .then((_response: Response) => {
         return this.transformResult(url_, _response, (_response: Response) =>
-          this.processGetGroupCostEndpoint(_response)
+          this.processGetGroupCostEndpoint(_response),
         );
       });
   }
 
   protected processGetGroupCostEndpoint(
-    response: Response
+    response: Response,
   ): Promise<GetGroupCostResponse> {
     const status = response.status;
     let _headers: any = {};
@@ -1062,7 +1062,7 @@ export class GroupcostClient extends BaseAPIClient implements IGroupcostClient {
           "An unexpected server error occurred.",
           status,
           _responseText,
-          _headers
+          _headers,
         );
       });
     }
@@ -1093,7 +1093,7 @@ export class GroupcostClient extends BaseAPIClient implements IGroupcostClient {
       })
       .then((_response: Response) => {
         return this.transformResult(url_, _response, (_response: Response) =>
-          this.processUpdateGroupCostEndpoint(_response)
+          this.processUpdateGroupCostEndpoint(_response),
         );
       });
   }
@@ -1129,7 +1129,7 @@ export class GroupcostClient extends BaseAPIClient implements IGroupcostClient {
           "An unexpected server error occurred.",
           status,
           _responseText,
-          _headers
+          _headers,
         );
       });
     }
@@ -1159,7 +1159,7 @@ export class GroupcostClient extends BaseAPIClient implements IGroupcostClient {
       })
       .then((_response: Response) => {
         return this.transformResult(url_, _response, (_response: Response) =>
-          this.processDeleteGroupCostEndpoint(_response)
+          this.processDeleteGroupCostEndpoint(_response),
         );
       });
   }
@@ -1195,7 +1195,7 @@ export class GroupcostClient extends BaseAPIClient implements IGroupcostClient {
           "An unexpected server error occurred.",
           status,
           _responseText,
-          _headers
+          _headers,
         );
       });
     }
@@ -1235,7 +1235,7 @@ export class FixedcostClient extends BaseAPIClient implements IFixedcostClient {
 
   constructor(
     baseUrl?: string,
-    http?: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> }
+    http?: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> },
   ) {
     super();
     this.http = http ? http : (window as any);
@@ -1266,7 +1266,7 @@ export class FixedcostClient extends BaseAPIClient implements IFixedcostClient {
       })
       .then((_response: Response) => {
         return this.transformResult(url_, _response, (_response: Response) =>
-          this.processCreateFixedCostEndpoint(_response)
+          this.processCreateFixedCostEndpoint(_response),
         );
       });
   }
@@ -1302,7 +1302,7 @@ export class FixedcostClient extends BaseAPIClient implements IFixedcostClient {
           "An unexpected server error occurred.",
           status,
           _responseText,
-          _headers
+          _headers,
         );
       });
     }
@@ -1329,13 +1329,13 @@ export class FixedcostClient extends BaseAPIClient implements IFixedcostClient {
       })
       .then((_response: Response) => {
         return this.transformResult(url_, _response, (_response: Response) =>
-          this.processGetAllFixedCostsEndpoint(_response)
+          this.processGetAllFixedCostsEndpoint(_response),
         );
       });
   }
 
   protected processGetAllFixedCostsEndpoint(
-    response: Response
+    response: Response,
   ): Promise<GetAllFixedCostsEndpointResponse> {
     const status = response.status;
     let _headers: any = {};
@@ -1366,7 +1366,7 @@ export class FixedcostClient extends BaseAPIClient implements IFixedcostClient {
           "An unexpected server error occurred.",
           status,
           _responseText,
-          _headers
+          _headers,
         );
       });
     }
@@ -1397,7 +1397,7 @@ export class FixedcostClient extends BaseAPIClient implements IFixedcostClient {
       })
       .then((_response: Response) => {
         return this.transformResult(url_, _response, (_response: Response) =>
-          this.processUpdateFixedCostEndpoint(_response)
+          this.processUpdateFixedCostEndpoint(_response),
         );
       });
   }
@@ -1433,7 +1433,7 @@ export class FixedcostClient extends BaseAPIClient implements IFixedcostClient {
           "An unexpected server error occurred.",
           status,
           _responseText,
-          _headers
+          _headers,
         );
       });
     }
@@ -1463,7 +1463,7 @@ export class FixedcostClient extends BaseAPIClient implements IFixedcostClient {
       })
       .then((_response: Response) => {
         return this.transformResult(url_, _response, (_response: Response) =>
-          this.processDeleteFixedCostEndpoint(_response)
+          this.processDeleteFixedCostEndpoint(_response),
         );
       });
   }
@@ -1499,7 +1499,7 @@ export class FixedcostClient extends BaseAPIClient implements IFixedcostClient {
           "An unexpected server error occurred.",
           status,
           _responseText,
-          _headers
+          _headers,
         );
       });
     }
@@ -1512,14 +1512,14 @@ export interface ICreditClient {
    * @return Success
    */
   createCreditEndpoint(
-    createCreditRequest: CreateCreditRequest
+    createCreditRequest: CreateCreditRequest,
   ): Promise<CreateCreditResponse>;
 
   /**
    * @return Success
    */
   updateCreditEndpoint(
-    updateCreditRequest: UpdateCreditRequest
+    updateCreditRequest: UpdateCreditRequest,
   ): Promise<UpdateBudgetResponse>;
 
   /**
@@ -1538,7 +1538,7 @@ export class CreditClient extends BaseAPIClient implements ICreditClient {
 
   constructor(
     baseUrl?: string,
-    http?: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> }
+    http?: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> },
   ) {
     super();
     this.http = http ? http : (window as any);
@@ -1549,7 +1549,7 @@ export class CreditClient extends BaseAPIClient implements ICreditClient {
    * @return Success
    */
   createCreditEndpoint(
-    createCreditRequest: CreateCreditRequest
+    createCreditRequest: CreateCreditRequest,
   ): Promise<CreateCreditResponse> {
     let url_ = this.baseUrl + "/api/credit";
     url_ = url_.replace(/[?&]$/, "");
@@ -1571,13 +1571,13 @@ export class CreditClient extends BaseAPIClient implements ICreditClient {
       })
       .then((_response: Response) => {
         return this.transformResult(url_, _response, (_response: Response) =>
-          this.processCreateCreditEndpoint(_response)
+          this.processCreateCreditEndpoint(_response),
         );
       });
   }
 
   protected processCreateCreditEndpoint(
-    response: Response
+    response: Response,
   ): Promise<CreateCreditResponse> {
     const status = response.status;
     let _headers: any = {};
@@ -1608,7 +1608,7 @@ export class CreditClient extends BaseAPIClient implements ICreditClient {
           "An unexpected server error occurred.",
           status,
           _responseText,
-          _headers
+          _headers,
         );
       });
     }
@@ -1619,7 +1619,7 @@ export class CreditClient extends BaseAPIClient implements ICreditClient {
    * @return Success
    */
   updateCreditEndpoint(
-    updateCreditRequest: UpdateCreditRequest
+    updateCreditRequest: UpdateCreditRequest,
   ): Promise<UpdateBudgetResponse> {
     let url_ = this.baseUrl + "/api/credit";
     url_ = url_.replace(/[?&]$/, "");
@@ -1641,13 +1641,13 @@ export class CreditClient extends BaseAPIClient implements ICreditClient {
       })
       .then((_response: Response) => {
         return this.transformResult(url_, _response, (_response: Response) =>
-          this.processUpdateCreditEndpoint(_response)
+          this.processUpdateCreditEndpoint(_response),
         );
       });
   }
 
   protected processUpdateCreditEndpoint(
-    response: Response
+    response: Response,
   ): Promise<UpdateBudgetResponse> {
     const status = response.status;
     let _headers: any = {};
@@ -1678,7 +1678,7 @@ export class CreditClient extends BaseAPIClient implements ICreditClient {
           "An unexpected server error occurred.",
           status,
           _responseText,
-          _headers
+          _headers,
         );
       });
     }
@@ -1708,7 +1708,7 @@ export class CreditClient extends BaseAPIClient implements ICreditClient {
       })
       .then((_response: Response) => {
         return this.transformResult(url_, _response, (_response: Response) =>
-          this.processDeleteCreditEndpoint(_response)
+          this.processDeleteCreditEndpoint(_response),
         );
       });
   }
@@ -1744,7 +1744,7 @@ export class CreditClient extends BaseAPIClient implements ICreditClient {
           "An unexpected server error occurred.",
           status,
           _responseText,
-          _headers
+          _headers,
         );
       });
     }
@@ -1757,14 +1757,14 @@ export interface IInspectionClient {
    * @return Success
    */
   checkableFixedCostUptoDate(
-    checkableFixedCostUptoDateRequest: CheckableFixedCostUptoDateRequest
+    checkableFixedCostUptoDateRequest: CheckableFixedCostUptoDateRequest,
   ): Promise<boolean>;
 
   /**
    * @return Success
    */
   createCostInspectionEndpoint(
-    costInspectionCRequest: CostInspectionCRequest
+    costInspectionCRequest: CostInspectionCRequest,
   ): Promise<CostInspectionCResponse>;
 
   /**
@@ -1772,7 +1772,7 @@ export interface IInspectionClient {
    */
   getCostInspectionEndpoint(
     year: number,
-    monthNumber: number
+    monthNumber: number,
   ): Promise<CostInspectionGResponse>;
 
   /**
@@ -1784,14 +1784,14 @@ export interface IInspectionClient {
    * @return Success
    */
   checkFixedCost(
-    updateCheckableFixedCostRequest: UpdateCheckableFixedCostRequest
+    updateCheckableFixedCostRequest: UpdateCheckableFixedCostRequest,
   ): Promise<boolean>;
 
   /**
    * @return Success
    */
   updateMonthlyBudgetEnpoint(
-    monthlyBudgetUDto: MonthlyBudgetUDto
+    monthlyBudgetUDto: MonthlyBudgetUDto,
   ): Promise<MonthlyBudgetUResponse>;
 }
 
@@ -1808,7 +1808,7 @@ export class InspectionClient
 
   constructor(
     baseUrl?: string,
-    http?: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> }
+    http?: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> },
   ) {
     super();
     this.http = http ? http : (window as any);
@@ -1819,7 +1819,7 @@ export class InspectionClient
    * @return Success
    */
   checkableFixedCostUptoDate(
-    checkableFixedCostUptoDateRequest: CheckableFixedCostUptoDateRequest
+    checkableFixedCostUptoDateRequest: CheckableFixedCostUptoDateRequest,
   ): Promise<boolean> {
     let url_ = this.baseUrl + "/api/inspection/checkableFixedCost/upToDate";
     url_ = url_.replace(/[?&]$/, "");
@@ -1841,13 +1841,13 @@ export class InspectionClient
       })
       .then((_response: Response) => {
         return this.transformResult(url_, _response, (_response: Response) =>
-          this.processCheckableFixedCostUptoDate(_response)
+          this.processCheckableFixedCostUptoDate(_response),
         );
       });
   }
 
   protected processCheckableFixedCostUptoDate(
-    response: Response
+    response: Response,
   ): Promise<boolean> {
     const status = response.status;
     let _headers: any = {};
@@ -1879,7 +1879,7 @@ export class InspectionClient
           "An unexpected server error occurred.",
           status,
           _responseText,
-          _headers
+          _headers,
         );
       });
     }
@@ -1890,7 +1890,7 @@ export class InspectionClient
    * @return Success
    */
   createCostInspectionEndpoint(
-    costInspectionCRequest: CostInspectionCRequest
+    costInspectionCRequest: CostInspectionCRequest,
   ): Promise<CostInspectionCResponse> {
     let url_ = this.baseUrl + "/api/inspection";
     url_ = url_.replace(/[?&]$/, "");
@@ -1912,13 +1912,13 @@ export class InspectionClient
       })
       .then((_response: Response) => {
         return this.transformResult(url_, _response, (_response: Response) =>
-          this.processCreateCostInspectionEndpoint(_response)
+          this.processCreateCostInspectionEndpoint(_response),
         );
       });
   }
 
   protected processCreateCostInspectionEndpoint(
-    response: Response
+    response: Response,
   ): Promise<CostInspectionCResponse> {
     const status = response.status;
     let _headers: any = {};
@@ -1949,7 +1949,7 @@ export class InspectionClient
           "An unexpected server error occurred.",
           status,
           _responseText,
-          _headers
+          _headers,
         );
       });
     }
@@ -1961,17 +1961,17 @@ export class InspectionClient
    */
   getCostInspectionEndpoint(
     year: number,
-    monthNumber: number
+    monthNumber: number,
   ): Promise<CostInspectionGResponse> {
     let url_ = this.baseUrl + "/api/inspection?";
     if (year === undefined || year === null)
       throw new Error(
-        "The parameter 'year' must be defined and cannot be null."
+        "The parameter 'year' must be defined and cannot be null.",
       );
     else url_ += "Year=" + encodeURIComponent("" + year) + "&";
     if (monthNumber === undefined || monthNumber === null)
       throw new Error(
-        "The parameter 'monthNumber' must be defined and cannot be null."
+        "The parameter 'monthNumber' must be defined and cannot be null.",
       );
     else url_ += "MonthNumber=" + encodeURIComponent("" + monthNumber) + "&";
     url_ = url_.replace(/[?&]$/, "");
@@ -1989,13 +1989,13 @@ export class InspectionClient
       })
       .then((_response: Response) => {
         return this.transformResult(url_, _response, (_response: Response) =>
-          this.processGetCostInspectionEndpoint(_response)
+          this.processGetCostInspectionEndpoint(_response),
         );
       });
   }
 
   protected processGetCostInspectionEndpoint(
-    response: Response
+    response: Response,
   ): Promise<CostInspectionGResponse> {
     const status = response.status;
     let _headers: any = {};
@@ -2026,7 +2026,7 @@ export class InspectionClient
           "An unexpected server error occurred.",
           status,
           _responseText,
-          _headers
+          _headers,
         );
       });
     }
@@ -2042,7 +2042,7 @@ export class InspectionClient
       throw new Error("The parameter 'costInspectionID' must be defined.");
     url_ = url_.replace(
       "{CostInspectionID}",
-      encodeURIComponent("" + costInspectionID)
+      encodeURIComponent("" + costInspectionID),
     );
     url_ = url_.replace(/[?&]$/, "");
 
@@ -2059,13 +2059,13 @@ export class InspectionClient
       })
       .then((_response: Response) => {
         return this.transformResult(url_, _response, (_response: Response) =>
-          this.processDeleteCostInspectionEndpoint(_response)
+          this.processDeleteCostInspectionEndpoint(_response),
         );
       });
   }
 
   protected processDeleteCostInspectionEndpoint(
-    response: Response
+    response: Response,
   ): Promise<any> {
     const status = response.status;
     let _headers: any = {};
@@ -2097,7 +2097,7 @@ export class InspectionClient
           "An unexpected server error occurred.",
           status,
           _responseText,
-          _headers
+          _headers,
         );
       });
     }
@@ -2108,7 +2108,7 @@ export class InspectionClient
    * @return Success
    */
   checkFixedCost(
-    updateCheckableFixedCostRequest: UpdateCheckableFixedCostRequest
+    updateCheckableFixedCostRequest: UpdateCheckableFixedCostRequest,
   ): Promise<boolean> {
     let url_ = this.baseUrl + "/api/inspection/checkableFixedCost";
     url_ = url_.replace(/[?&]$/, "");
@@ -2130,7 +2130,7 @@ export class InspectionClient
       })
       .then((_response: Response) => {
         return this.transformResult(url_, _response, (_response: Response) =>
-          this.processCheckFixedCost(_response)
+          this.processCheckFixedCost(_response),
         );
       });
   }
@@ -2166,7 +2166,7 @@ export class InspectionClient
           "An unexpected server error occurred.",
           status,
           _responseText,
-          _headers
+          _headers,
         );
       });
     }
@@ -2177,7 +2177,7 @@ export class InspectionClient
    * @return Success
    */
   updateMonthlyBudgetEnpoint(
-    monthlyBudgetUDto: MonthlyBudgetUDto
+    monthlyBudgetUDto: MonthlyBudgetUDto,
   ): Promise<MonthlyBudgetUResponse> {
     let url_ = this.baseUrl + "/api/inspection/monthlyBudget";
     url_ = url_.replace(/[?&]$/, "");
@@ -2199,13 +2199,13 @@ export class InspectionClient
       })
       .then((_response: Response) => {
         return this.transformResult(url_, _response, (_response: Response) =>
-          this.processUpdateMonthlyBudgetEnpoint(_response)
+          this.processUpdateMonthlyBudgetEnpoint(_response),
         );
       });
   }
 
   protected processUpdateMonthlyBudgetEnpoint(
-    response: Response
+    response: Response,
   ): Promise<MonthlyBudgetUResponse> {
     const status = response.status;
     let _headers: any = {};
@@ -2236,7 +2236,7 @@ export class InspectionClient
           "An unexpected server error occurred.",
           status,
           _responseText,
-          _headers
+          _headers,
         );
       });
     }
@@ -2262,7 +2262,7 @@ export class LoginClient extends BaseAPIClient implements ILoginClient {
 
   constructor(
     baseUrl?: string,
-    http?: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> }
+    http?: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> },
   ) {
     super();
     this.http = http ? http : (window as any);
@@ -2294,13 +2294,13 @@ export class LoginClient extends BaseAPIClient implements ILoginClient {
       })
       .then((_response: Response) => {
         return this.transformResult(url_, _response, (_response: Response) =>
-          this.processLoginUserEndpoint(_response)
+          this.processLoginUserEndpoint(_response),
         );
       });
   }
 
   protected processLoginUserEndpoint(
-    response: Response
+    response: Response,
   ): Promise<LoginResponse> {
     const status = response.status;
     let _headers: any = {};
@@ -2330,7 +2330,7 @@ export class LoginClient extends BaseAPIClient implements ILoginClient {
           status,
           _responseText,
           _headers,
-          result400
+          result400,
         );
       });
     } else if (status !== 200 && status !== 204) {
@@ -2339,7 +2339,7 @@ export class LoginClient extends BaseAPIClient implements ILoginClient {
           "An unexpected server error occurred.",
           status,
           _responseText,
-          _headers
+          _headers,
         );
       });
     }
@@ -2353,7 +2353,7 @@ export interface IRefreshClient {
    * @return Returns JWT token
    */
   refreshAuthTokenEndpoint(
-    refreshAuthTokenRequest: RefreshAuthTokenRequest
+    refreshAuthTokenRequest: RefreshAuthTokenRequest,
   ): Promise<RefreshAuthTokenResponse>;
 }
 
@@ -2367,7 +2367,7 @@ export class RefreshClient extends BaseAPIClient implements IRefreshClient {
 
   constructor(
     baseUrl?: string,
-    http?: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> }
+    http?: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> },
   ) {
     super();
     this.http = http ? http : (window as any);
@@ -2379,7 +2379,7 @@ export class RefreshClient extends BaseAPIClient implements IRefreshClient {
    * @return Returns JWT token
    */
   refreshAuthTokenEndpoint(
-    refreshAuthTokenRequest: RefreshAuthTokenRequest
+    refreshAuthTokenRequest: RefreshAuthTokenRequest,
   ): Promise<RefreshAuthTokenResponse> {
     let url_ = this.baseUrl + "/api/refresh";
     url_ = url_.replace(/[?&]$/, "");
@@ -2401,13 +2401,13 @@ export class RefreshClient extends BaseAPIClient implements IRefreshClient {
       })
       .then((_response: Response) => {
         return this.transformResult(url_, _response, (_response: Response) =>
-          this.processRefreshAuthTokenEndpoint(_response)
+          this.processRefreshAuthTokenEndpoint(_response),
         );
       });
   }
 
   protected processRefreshAuthTokenEndpoint(
-    response: Response
+    response: Response,
   ): Promise<RefreshAuthTokenResponse> {
     const status = response.status;
     let _headers: any = {};
@@ -2430,7 +2430,7 @@ export class RefreshClient extends BaseAPIClient implements IRefreshClient {
           "An unexpected server error occurred.",
           status,
           _responseText,
-          _headers
+          _headers,
         );
       });
     }
@@ -2443,7 +2443,7 @@ export interface IRevenueClient {
    * @return Success
    */
   createRevenueEndpoint(
-    createRevenueRequest: CreateRevenueRequest
+    createRevenueRequest: CreateRevenueRequest,
   ): Promise<CreateRevenueResponse>;
 
   /**
@@ -2455,7 +2455,7 @@ export interface IRevenueClient {
    * @return Success
    */
   updateRevenueEndpoint(
-    updateRevenueRequest: UpdateRevenueRequest
+    updateRevenueRequest: UpdateRevenueRequest,
   ): Promise<UpdateRevenueResponse>;
 }
 
@@ -2469,7 +2469,7 @@ export class RevenueClient extends BaseAPIClient implements IRevenueClient {
 
   constructor(
     baseUrl?: string,
-    http?: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> }
+    http?: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> },
   ) {
     super();
     this.http = http ? http : (window as any);
@@ -2480,7 +2480,7 @@ export class RevenueClient extends BaseAPIClient implements IRevenueClient {
    * @return Success
    */
   createRevenueEndpoint(
-    createRevenueRequest: CreateRevenueRequest
+    createRevenueRequest: CreateRevenueRequest,
   ): Promise<CreateRevenueResponse> {
     let url_ = this.baseUrl + "/api/revenue";
     url_ = url_.replace(/[?&]$/, "");
@@ -2502,13 +2502,13 @@ export class RevenueClient extends BaseAPIClient implements IRevenueClient {
       })
       .then((_response: Response) => {
         return this.transformResult(url_, _response, (_response: Response) =>
-          this.processCreateRevenueEndpoint(_response)
+          this.processCreateRevenueEndpoint(_response),
         );
       });
   }
 
   protected processCreateRevenueEndpoint(
-    response: Response
+    response: Response,
   ): Promise<CreateRevenueResponse> {
     const status = response.status;
     let _headers: any = {};
@@ -2535,7 +2535,7 @@ export class RevenueClient extends BaseAPIClient implements IRevenueClient {
           "An unexpected server error occurred.",
           status,
           _responseText,
-          _headers
+          _headers,
         );
       });
     }
@@ -2562,13 +2562,13 @@ export class RevenueClient extends BaseAPIClient implements IRevenueClient {
       })
       .then((_response: Response) => {
         return this.transformResult(url_, _response, (_response: Response) =>
-          this.processGetRevenuesEndpoint(_response)
+          this.processGetRevenuesEndpoint(_response),
         );
       });
   }
 
   protected processGetRevenuesEndpoint(
-    response: Response
+    response: Response,
   ): Promise<GetRevenuesResponse> {
     const status = response.status;
     let _headers: any = {};
@@ -2591,7 +2591,7 @@ export class RevenueClient extends BaseAPIClient implements IRevenueClient {
           "An unexpected server error occurred.",
           status,
           _responseText,
-          _headers
+          _headers,
         );
       });
     }
@@ -2602,7 +2602,7 @@ export class RevenueClient extends BaseAPIClient implements IRevenueClient {
    * @return Success
    */
   updateRevenueEndpoint(
-    updateRevenueRequest: UpdateRevenueRequest
+    updateRevenueRequest: UpdateRevenueRequest,
   ): Promise<UpdateRevenueResponse> {
     let url_ = this.baseUrl + "/api/revenue";
     url_ = url_.replace(/[?&]$/, "");
@@ -2624,13 +2624,13 @@ export class RevenueClient extends BaseAPIClient implements IRevenueClient {
       })
       .then((_response: Response) => {
         return this.transformResult(url_, _response, (_response: Response) =>
-          this.processUpdateRevenueEndpoint(_response)
+          this.processUpdateRevenueEndpoint(_response),
         );
       });
   }
 
   protected processUpdateRevenueEndpoint(
-    response: Response
+    response: Response,
   ): Promise<UpdateRevenueResponse> {
     const status = response.status;
     let _headers: any = {};
@@ -2657,7 +2657,7 @@ export class RevenueClient extends BaseAPIClient implements IRevenueClient {
           "An unexpected server error occurred.",
           status,
           _responseText,
-          _headers
+          _headers,
         );
       });
     }
@@ -2671,7 +2671,7 @@ export interface IChargeClient {
    * @return Returns true
    */
   createChargeEndpoint(
-    createChargeRequest: CreateChargeRequest
+    createChargeRequest: CreateChargeRequest,
   ): Promise<CreateChargeRespone>;
 
   /**
@@ -2684,7 +2684,7 @@ export interface IChargeClient {
    * @return Returns true
    */
   updateChargeEndpoint(
-    updateChargeRequest: UpdateChargeRequest
+    updateChargeRequest: UpdateChargeRequest,
   ): Promise<UpdateChargeResponse>;
 
   /**
@@ -2708,7 +2708,7 @@ export class ChargeClient extends BaseAPIClient implements IChargeClient {
 
   constructor(
     baseUrl?: string,
-    http?: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> }
+    http?: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> },
   ) {
     super();
     this.http = http ? http : (window as any);
@@ -2720,7 +2720,7 @@ export class ChargeClient extends BaseAPIClient implements IChargeClient {
    * @return Returns true
    */
   createChargeEndpoint(
-    createChargeRequest: CreateChargeRequest
+    createChargeRequest: CreateChargeRequest,
   ): Promise<CreateChargeRespone> {
     let url_ = this.baseUrl + "/api/charge";
     url_ = url_.replace(/[?&]$/, "");
@@ -2742,13 +2742,13 @@ export class ChargeClient extends BaseAPIClient implements IChargeClient {
       })
       .then((_response: Response) => {
         return this.transformResult(url_, _response, (_response: Response) =>
-          this.processCreateChargeEndpoint(_response)
+          this.processCreateChargeEndpoint(_response),
         );
       });
   }
 
   protected processCreateChargeEndpoint(
-    response: Response
+    response: Response,
   ): Promise<CreateChargeRespone> {
     const status = response.status;
     let _headers: any = {};
@@ -2779,7 +2779,7 @@ export class ChargeClient extends BaseAPIClient implements IChargeClient {
           "An unexpected server error occurred.",
           status,
           _responseText,
-          _headers
+          _headers,
         );
       });
     }
@@ -2806,13 +2806,13 @@ export class ChargeClient extends BaseAPIClient implements IChargeClient {
       })
       .then((_response: Response) => {
         return this.transformResult(url_, _response, (_response: Response) =>
-          this.processGetChargesEndpoint(_response)
+          this.processGetChargesEndpoint(_response),
         );
       });
   }
 
   protected processGetChargesEndpoint(
-    response: Response
+    response: Response,
   ): Promise<GetChargesResponse> {
     const status = response.status;
     let _headers: any = {};
@@ -2843,7 +2843,7 @@ export class ChargeClient extends BaseAPIClient implements IChargeClient {
           "An unexpected server error occurred.",
           status,
           _responseText,
-          _headers
+          _headers,
         );
       });
     }
@@ -2855,7 +2855,7 @@ export class ChargeClient extends BaseAPIClient implements IChargeClient {
    * @return Returns true
    */
   updateChargeEndpoint(
-    updateChargeRequest: UpdateChargeRequest
+    updateChargeRequest: UpdateChargeRequest,
   ): Promise<UpdateChargeResponse> {
     let url_ = this.baseUrl + "/api/charge";
     url_ = url_.replace(/[?&]$/, "");
@@ -2877,13 +2877,13 @@ export class ChargeClient extends BaseAPIClient implements IChargeClient {
       })
       .then((_response: Response) => {
         return this.transformResult(url_, _response, (_response: Response) =>
-          this.processUpdateChargeEndpoint(_response)
+          this.processUpdateChargeEndpoint(_response),
         );
       });
   }
 
   protected processUpdateChargeEndpoint(
-    response: Response
+    response: Response,
   ): Promise<UpdateChargeResponse> {
     const status = response.status;
     let _headers: any = {};
@@ -2914,7 +2914,7 @@ export class ChargeClient extends BaseAPIClient implements IChargeClient {
           "An unexpected server error occurred.",
           status,
           _responseText,
-          _headers
+          _headers,
         );
       });
     }
@@ -2944,7 +2944,7 @@ export class ChargeClient extends BaseAPIClient implements IChargeClient {
       })
       .then((_response: Response) => {
         return this.transformResult(url_, _response, (_response: Response) =>
-          this.processDeleteChargeEndpoint(_response)
+          this.processDeleteChargeEndpoint(_response),
         );
       });
   }
@@ -2980,7 +2980,7 @@ export class ChargeClient extends BaseAPIClient implements IChargeClient {
           "An unexpected server error occurred.",
           status,
           _responseText,
-          _headers
+          _headers,
         );
       });
     }
@@ -2994,7 +2994,7 @@ export class ChargeClient extends BaseAPIClient implements IChargeClient {
     let url_ = this.baseUrl + "/api/charge/byTimeInterval?";
     if (timeIntervalKey === undefined || timeIntervalKey === null)
       throw new Error(
-        "The parameter 'timeIntervalKey' must be defined and cannot be null."
+        "The parameter 'timeIntervalKey' must be defined and cannot be null.",
       );
     else
       url_ +=
@@ -3014,13 +3014,13 @@ export class ChargeClient extends BaseAPIClient implements IChargeClient {
       })
       .then((_response: Response) => {
         return this.transformResult(url_, _response, (_response: Response) =>
-          this.processGetChargesByInterval(_response)
+          this.processGetChargesByInterval(_response),
         );
       });
   }
 
   protected processGetChargesByInterval(
-    response: Response
+    response: Response,
   ): Promise<ChargeDto[]> {
     const status = response.status;
     let _headers: any = {};
@@ -3057,7 +3057,7 @@ export class ChargeClient extends BaseAPIClient implements IChargeClient {
           "An unexpected server error occurred.",
           status,
           _responseText,
-          _headers
+          _headers,
         );
       });
     }
@@ -3070,7 +3070,7 @@ export interface IBudgetClient {
    * @return Success
    */
   createBudgetEndpoint(
-    cBudgetRequest: CBudgetRequest
+    cBudgetRequest: CBudgetRequest,
   ): Promise<CBudgetResponse>;
 
   /**
@@ -3083,7 +3083,7 @@ export interface IBudgetClient {
    * @return Returns true
    */
   updateButgetEndpoint(
-    updateBudgetRequest: UpdateBudgetRequest
+    updateBudgetRequest: UpdateBudgetRequest,
   ): Promise<UpdateBudgetResponse2>;
 
   /**
@@ -3096,7 +3096,7 @@ export interface IBudgetClient {
    * @return Returns Budget
    */
   getBudgetByIdEndpoint(
-    budgetId: string | null
+    budgetId: string | null,
   ): Promise<GetBudgetWithChargesResponse>;
 }
 
@@ -3110,7 +3110,7 @@ export class BudgetClient extends BaseAPIClient implements IBudgetClient {
 
   constructor(
     baseUrl?: string,
-    http?: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> }
+    http?: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> },
   ) {
     super();
     this.http = http ? http : (window as any);
@@ -3121,7 +3121,7 @@ export class BudgetClient extends BaseAPIClient implements IBudgetClient {
    * @return Success
    */
   createBudgetEndpoint(
-    cBudgetRequest: CBudgetRequest
+    cBudgetRequest: CBudgetRequest,
   ): Promise<CBudgetResponse> {
     let url_ = this.baseUrl + "/api/budget";
     url_ = url_.replace(/[?&]$/, "");
@@ -3143,13 +3143,13 @@ export class BudgetClient extends BaseAPIClient implements IBudgetClient {
       })
       .then((_response: Response) => {
         return this.transformResult(url_, _response, (_response: Response) =>
-          this.processCreateBudgetEndpoint(_response)
+          this.processCreateBudgetEndpoint(_response),
         );
       });
   }
 
   protected processCreateBudgetEndpoint(
-    response: Response
+    response: Response,
   ): Promise<CBudgetResponse> {
     const status = response.status;
     let _headers: any = {};
@@ -3180,7 +3180,7 @@ export class BudgetClient extends BaseAPIClient implements IBudgetClient {
           "An unexpected server error occurred.",
           status,
           _responseText,
-          _headers
+          _headers,
         );
       });
     }
@@ -3207,13 +3207,13 @@ export class BudgetClient extends BaseAPIClient implements IBudgetClient {
       })
       .then((_response: Response) => {
         return this.transformResult(url_, _response, (_response: Response) =>
-          this.processGetBudgetsEndpoint(_response)
+          this.processGetBudgetsEndpoint(_response),
         );
       });
   }
 
   protected processGetBudgetsEndpoint(
-    response: Response
+    response: Response,
   ): Promise<GetBudgetsResponse> {
     const status = response.status;
     let _headers: any = {};
@@ -3244,7 +3244,7 @@ export class BudgetClient extends BaseAPIClient implements IBudgetClient {
           "An unexpected server error occurred.",
           status,
           _responseText,
-          _headers
+          _headers,
         );
       });
     }
@@ -3256,7 +3256,7 @@ export class BudgetClient extends BaseAPIClient implements IBudgetClient {
    * @return Returns true
    */
   updateButgetEndpoint(
-    updateBudgetRequest: UpdateBudgetRequest
+    updateBudgetRequest: UpdateBudgetRequest,
   ): Promise<UpdateBudgetResponse2> {
     let url_ = this.baseUrl + "/api/budget";
     url_ = url_.replace(/[?&]$/, "");
@@ -3278,13 +3278,13 @@ export class BudgetClient extends BaseAPIClient implements IBudgetClient {
       })
       .then((_response: Response) => {
         return this.transformResult(url_, _response, (_response: Response) =>
-          this.processUpdateButgetEndpoint(_response)
+          this.processUpdateButgetEndpoint(_response),
         );
       });
   }
 
   protected processUpdateButgetEndpoint(
-    response: Response
+    response: Response,
   ): Promise<UpdateBudgetResponse2> {
     const status = response.status;
     let _headers: any = {};
@@ -3315,7 +3315,7 @@ export class BudgetClient extends BaseAPIClient implements IBudgetClient {
           "An unexpected server error occurred.",
           status,
           _responseText,
-          _headers
+          _headers,
         );
       });
     }
@@ -3345,7 +3345,7 @@ export class BudgetClient extends BaseAPIClient implements IBudgetClient {
       })
       .then((_response: Response) => {
         return this.transformResult(url_, _response, (_response: Response) =>
-          this.processDeleteBudgetEndpoint(_response)
+          this.processDeleteBudgetEndpoint(_response),
         );
       });
   }
@@ -3381,7 +3381,7 @@ export class BudgetClient extends BaseAPIClient implements IBudgetClient {
           "An unexpected server error occurred.",
           status,
           _responseText,
-          _headers
+          _headers,
         );
       });
     }
@@ -3393,7 +3393,7 @@ export class BudgetClient extends BaseAPIClient implements IBudgetClient {
    * @return Returns Budget
    */
   getBudgetByIdEndpoint(
-    budgetId: string | null
+    budgetId: string | null,
   ): Promise<GetBudgetWithChargesResponse> {
     let url_ = this.baseUrl + "/api/budget/{BudgetId}";
     if (budgetId === undefined || budgetId === null)
@@ -3414,13 +3414,13 @@ export class BudgetClient extends BaseAPIClient implements IBudgetClient {
       })
       .then((_response: Response) => {
         return this.transformResult(url_, _response, (_response: Response) =>
-          this.processGetBudgetByIdEndpoint(_response)
+          this.processGetBudgetByIdEndpoint(_response),
         );
       });
   }
 
   protected processGetBudgetByIdEndpoint(
-    response: Response
+    response: Response,
   ): Promise<GetBudgetWithChargesResponse> {
     const status = response.status;
     let _headers: any = {};
@@ -3451,7 +3451,7 @@ export class BudgetClient extends BaseAPIClient implements IBudgetClient {
           "An unexpected server error occurred.",
           status,
           _responseText,
-          _headers
+          _headers,
         );
       });
     }
@@ -7542,7 +7542,7 @@ export class ClientApiException extends Error {
     status: number,
     response: string,
     headers: { [key: string]: any },
-    result: any
+    result: any,
   ) {
     super();
 
@@ -7565,7 +7565,7 @@ function throwException(
   status: number,
   response: string,
   headers: { [key: string]: any },
-  result?: any
+  result?: any,
 ): any {
   if (result !== null && result !== undefined) throw result;
   else throw new ClientApiException(message, status, response, headers, null);

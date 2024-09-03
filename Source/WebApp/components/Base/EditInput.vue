@@ -22,7 +22,7 @@
 </template>
 
 <script setup lang="ts">
-import InputText from 'primevue/inputtext';
+import InputText from "primevue/inputtext";
 
 const props = defineProps<{
   modelValue: string;

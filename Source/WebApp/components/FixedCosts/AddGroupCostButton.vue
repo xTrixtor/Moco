@@ -14,7 +14,11 @@
         }"
         :emptySearchMessage="'Drücke Enter zum Erstellen dieser Kosten-Gruppe'"
       />
-      <div v-if="newGroupCostName" class="absolute h-full flex-center right-0 mr-2" v-tooltip="'Drücke Enter zum Erstellen dieser Kosten-Gruppe'">
+      <div
+        v-if="newGroupCostName"
+        class="absolute h-full flex-center right-0 mr-2"
+        v-tooltip="'Drücke Enter zum Erstellen dieser Kosten-Gruppe'"
+      >
         <Icon
           name="gridicons:add-outline"
           class="text-2xl duration-500 text-highlight-text"
@@ -59,7 +63,7 @@ const search = (event: any) => {
   const copy = [...suggestions.value];
   suggestions.value = event.query
     ? copy.filter((x) =>
-        x.toLocaleLowerCase().includes(event.query.toLocaleLowerCase())
+        x.toLocaleLowerCase().includes(event.query.toLocaleLowerCase()),
       )
     : getGroupcostSuggestions();
 };

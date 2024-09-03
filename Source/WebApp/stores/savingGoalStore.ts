@@ -4,29 +4,27 @@ import { useApiStore } from "./apiStore";
 
 export const useSavingGoalStore = defineStore("savingGoal", {
   state: () => {
-    const selectedSavingGoal: SavingGoalDto| undefined = {id:undefined};
+    const selectedSavingGoal: SavingGoalDto | undefined = { id: undefined };
     const savingGoals: SavingGoalOption[] = [];
 
     return {
-        savingGoals,
-        selectedSavingGoal,
+      savingGoals,
+      selectedSavingGoal,
 
-        fetch
+      fetch,
     };
   },
   actions: {
-        async fetch() {
-            const response = await useApiStore().SavingGoalsClient.getAllSavingGoalsEndpoint();
-            if(response.savingGoalOptions){
-                this.savingGoals = response.savingGoalOptions;
-            }
-        },
-        setSelectedSavingGoal(savingGoal: SavingGoalDto){
-          this.selectedSavingGoal = savingGoal;
-        }
+    async fetch() {
+      const response =
+        await useApiStore().SavingGoalsClient.getAllSavingGoalsEndpoint();
+      if (response.savingGoalOptions) {
+        this.savingGoals = response.savingGoalOptions;
+      }
     },
-    getters:{
-        
-    }
+    setSelectedSavingGoal(savingGoal: SavingGoalDto) {
+      this.selectedSavingGoal = savingGoal;
+    },
   },
-);
+  getters: {},
+});

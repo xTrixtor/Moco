@@ -16,12 +16,12 @@ export const calculateDepositsWithMonthlyRate = (
   rate: number,
   goalValue: number,
   initialCapital: number,
-  startDate?: Date
-): DepositRateDto[] | undefined  => {
+  startDate?: Date,
+): DepositRateDto[] | undefined => {
   let goalCopy = goalValue - initialCapital;
   const depositRateNumber = goalCopy / rate;
 
-  if(depositRateNumber > 200){
+  if (depositRateNumber > 200) {
     return undefined;
   }
   let capital = initialCapital;
@@ -29,7 +29,12 @@ export const calculateDepositsWithMonthlyRate = (
   const start = startDate ?? addMonths(new Date(), 1);
 
   const depositRates: DepositRateDto[] = [
-    { key: GetKeyFromDate(start), value: capital, savingMonth: start, isPaid:true },
+    {
+      key: GetKeyFromDate(start),
+      value: capital,
+      savingMonth: start,
+      isPaid: true,
+    },
   ];
 
   for (let i = 1; i <= depositRateNumber; i++) {
@@ -62,7 +67,7 @@ export const calculateDepositsWithDate = (
   startDate: Date,
   endDate: Date,
   goalValue: number,
-  initialCapital: number
+  initialCapital: number,
 ): { depositRates: DepositRateDto[]; monthRate: number } => {
   let goalCopy = goalValue - initialCapital;
   const monthRange = differenceInCalendarMonths(endDate, startDate);
@@ -70,7 +75,12 @@ export const calculateDepositsWithDate = (
   let capital = initialCapital;
 
   const depositRates: DepositRateDto[] = [
-    { key: GetKeyFromDate(addMonths(startDate, -1)), value: capital, savingMonth: startDate, isPaid:true },
+    {
+      key: GetKeyFromDate(addMonths(startDate, -1)),
+      value: capital,
+      savingMonth: startDate,
+      isPaid: true,
+    },
   ];
   for (let i = 1; i <= monthRange; i++) {
     const monthOfSaving = addMonths(startDate, i);
@@ -96,7 +106,7 @@ export const ConvertKeyIntoDate = (key: string): Date => {
 };
 
 export const GetKeyFromDate = (date: Date): string => {
-  const month = date.getMonth()+1;
+  const month = date.getMonth() + 1;
   const year = getYear(date);
 
   return `${month}-${year}`;

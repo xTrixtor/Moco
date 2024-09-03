@@ -1,12 +1,12 @@
-import type { Config } from 'tailwindcss'
+import type { Config } from "tailwindcss";
 
-export default<Partial<Config>> {
+export default <Partial<Config>>{
   content: [],
   theme: {
     extend: {
       colors: {
-          primary: "var(--primary-color)",
-          "primary-text" : "var(--primary-color-text)",
+        primary: "var(--primary-color)",
+        "primary-text": "var(--primary-color-text)",
         "primary-content": "var(--primary-900)",
         "primary-dark": "var(--primary-500)",
         "primary-light": "var(--primary-300)",

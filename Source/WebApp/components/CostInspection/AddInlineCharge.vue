@@ -4,13 +4,13 @@
       class="my-1 py-1 bg-foreground rounded-lg flex w-full content-center justify-between"
       ref="target"
     >
-      <InputText 
+      <InputText
         v-model="chargeCDto.name"
         size="small"
         class="input text-sm outline-none bg-transparent pl-2 font-semibold text-primary w-[45%] relative"
         placeholder="Name"
       />
-      <InputText 
+      <InputText
         v-model="chargeCDto.value"
         size="small"
         class="input text-sm outline-none bg-transparent pl-2 font-semibold text-primary w-[45%] relative"
@@ -20,20 +20,20 @@
 
       <div class="flex-1 ml-2 flex-center">
         <div
-        :class="
-          allowedToSafe
-            ? 'bg-primary text-highlight-text border-border hover:shadow-secondary hover:bg-primary-light hover:cursor-pointer duration-300 shadow-lg'
-            : 'bg-copy-light border-slate-300 cursor-not-allowed'
-        "
-        class="rounded-full border-2 flex-center w-8 h-8"
-        @click="handleCreateCharge()"
-      >
-        <Icon
-          name="material-symbols:save-outline"
-          class="text-highlight-text p-1"
-          size="1.8rem"
-        />
-      </div>
+          :class="
+            allowedToSafe
+              ? 'bg-primary text-highlight-text border-border hover:shadow-secondary hover:bg-primary-light hover:cursor-pointer duration-300 shadow-lg'
+              : 'bg-copy-light border-slate-300 cursor-not-allowed'
+          "
+          class="rounded-full border-2 flex-center w-8 h-8"
+          @click="handleCreateCharge()"
+        >
+          <Icon
+            name="material-symbols:save-outline"
+            class="text-highlight-text p-1"
+            size="1.8rem"
+          />
+        </div>
       </div>
     </div>
     <p class="text-red-600">{{ error }}</p>
@@ -50,13 +50,16 @@
 
 <script setup lang="ts">
 import { storeToRefs } from "pinia";
-import { ChargeCDto, CreateChargeRequest, UpdateBudgetChargeRequest } from "~/stores/apiClient";
+import {
+  ChargeCDto,
+  CreateChargeRequest,
+  UpdateBudgetChargeRequest,
+} from "~/stores/apiClient";
 import { useApiStore } from "~/stores/apiStore";
 import { useInspectionStore } from "~/stores/costInspectionStore";
 
 const costInspectionStore = useInspectionStore();
-const { selectedMontlyBudget } =
-  storeToRefs(costInspectionStore);
+const { selectedMontlyBudget } = storeToRefs(costInspectionStore);
 
 const createModus = ref(false);
 const emit = defineEmits(["leave"]);
@@ -89,9 +92,9 @@ onClickOutside(target, async () => {
   emit("leave");
 });
 
-onKeyStroke("Enter", () =>{
+onKeyStroke("Enter", () => {
   handleCreateCharge();
-})
+});
 
 watchDeep(chargeCDto, (newValue) => {
   if (newValue.value && newValue.name) {

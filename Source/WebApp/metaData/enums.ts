@@ -1,11 +1,11 @@
 export enum EditModalType {
-    FixedCost,
-    Budget,
-    Charge
+  FixedCost,
+  Budget,
+  Charge,
 }
 
-export enum ModalType{
-    Show,
-    Edit,
-    Create
+export enum ModalType {
+  Show,
+  Edit,
+  Create,
 }

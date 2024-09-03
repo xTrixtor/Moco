@@ -1,23 +1,23 @@
 <template>
-    <InputText ref="target" v-model="bindValue" :type="props.type"/>
+  <InputText ref="target" v-model="bindValue" :type="props.type" />
 </template>
 
 <script setup lang="ts">
-export interface GenericInputProps{
-    workObject: any;
-    bindProperty:string;
-    type:string;
-    placeholder?: string;
+export interface GenericInputProps {
+  workObject: any;
+  bindProperty: string;
+  type: string;
+  placeholder?: string;
 }
 
-const props = defineProps<GenericInputProps>()
-const emit = defineEmits(["inputChange"])
+const props = defineProps<GenericInputProps>();
+const emit = defineEmits(["inputChange"]);
 
-const bindValue = ref(props.workObject[props.bindProperty])
+const bindValue = ref(props.workObject[props.bindProperty]);
 
-watch(bindValue, newVal =>{
-    emit("inputChange", props.bindProperty, newVal)
-})
+watch(bindValue, (newVal) => {
+  emit("inputChange", props.bindProperty, newVal);
+});
 </script>
 
 <style scoped>
@@ -28,7 +28,7 @@ input::-webkit-inner-spin-button {
 }
 
 /* Firefox */
-input[type=number] {
+input[type="number"] {
   -moz-appearance: textfield;
 }
 </style>

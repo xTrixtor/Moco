@@ -88,7 +88,7 @@ const calculateUpgradeable = (): Boolean => {
   });
   const isEqualBool = isEqual(
     totalFixedcostCompareArray,
-    checklistCompareArray
+    checklistCompareArray,
   );
   return !isEqualBool;
 };
@@ -126,7 +126,6 @@ const checkedFixedCost = async (changedFixedCost: CheckableFixedCostDto) => {
     checkableFixedCostUDto: uDto,
   } as UpdateCheckableFixedCostRequest);
 };
-
 </script>
 
 <style scoped>

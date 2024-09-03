@@ -21,7 +21,7 @@ import {
   SavinggoalsClient,
   ISavinggoalsClient,
   ICreditClient,
-  CreditClient
+  CreditClient,
 } from "./apiClient";
 
 export const useApiStore = defineStore("api", {
@@ -35,8 +35,8 @@ export const useApiStore = defineStore("api", {
     RevenueClient(): IRevenueClient {
       return new RevenueClient();
     },
-    BudgetClient(): IBudgetClient{
-      return new BudgetClient;
+    BudgetClient(): IBudgetClient {
+      return new BudgetClient();
     },
     ChargeClient(): IChargeClient {
       return new ChargeClient();
@@ -44,19 +44,19 @@ export const useApiStore = defineStore("api", {
     RefreshClient(): IRefreshClient {
       return new RefreshClient();
     },
-    FixedcostClient(): IFixedcostClient{
+    FixedcostClient(): IFixedcostClient {
       return new FixedcostClient();
     },
-    GroupcostClient(): IGroupcostClient{
+    GroupcostClient(): IGroupcostClient {
       return new GroupcostClient();
     },
-    InspectionClient(): IInspectionClient{
+    InspectionClient(): IInspectionClient {
       return new InspectionClient();
     },
-    SavingGoalsClient(): ISavinggoalsClient{
+    SavingGoalsClient(): ISavinggoalsClient {
       return new SavinggoalsClient();
     },
-    CreditClient(): ICreditClient{
+    CreditClient(): ICreditClient {
       return new CreditClient();
     },
   },

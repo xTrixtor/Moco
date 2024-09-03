@@ -82,11 +82,15 @@ const handleLogin = async () => {
   }
 };
 
-onKeyStroke(["Shift", "U", "N"], (event) => {
-  if (event.shiftKey && event.key === 'U') {
+onKeyStroke(
+  ["Shift", "U", "N"],
+  (event) => {
+    if (event.shiftKey && event.key === "U") {
       showRegisterBtn.value = !showRegisterBtn.value;
-  }
-}, { dedupe: true });
+    }
+  },
+  { dedupe: true },
+);
 </script>
 
 <style scoped></style>

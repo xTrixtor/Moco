@@ -82,10 +82,7 @@
 </template>
 
 <script setup lang="ts">
-import {
-  CreateFixedCDto,
-  TimeInterval,
-} from "~/stores/apiClient";
+import { CreateFixedCDto, TimeInterval } from "~/stores/apiClient";
 import { useApiStore } from "~/stores/apiStore";
 import { storeToRefs } from "pinia";
 import { useFixedCostStore } from "~/stores/fixedCostStore";
@@ -115,11 +112,11 @@ const isAdding = ref(false);
 const allowedToSafe = ref(false);
 
 watch(activeIndex, (newVal, oldVal) => {
-    fixedCostCDto.groupCostId = groupCostOptions.value[newVal]?.id ?? 0;
+  fixedCostCDto.groupCostId = groupCostOptions.value[newVal]?.id ?? 0;
 });
 
 let calculatedMontlyChargeCost = computed<number>(() =>
-  calculateMontlyChargeCost(fixedCostCDto)
+  calculateMontlyChargeCost(fixedCostCDto),
 );
 
 const clear = () => {

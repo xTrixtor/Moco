@@ -2,11 +2,11 @@
   <div
     class="xl:h-1/2 w-full flex flex-col xl:flex-row justify-between items-center border-2 border-border bg-card rounded-lg text-primary-text shadow-lg mb-2"
   >
-    <div
-      class="gridgrid-cols-2 gap-5 rounded-xl mx-2 p-1"
-    >
+    <div class="gridgrid-cols-2 gap-5 rounded-xl mx-2 p-1">
       <OverviewCell
-        v-for="(overviewCost, key) in combinedCosts.concat(combinedCosts).concat(combinedCosts)"
+        v-for="(overviewCost, key) in combinedCosts
+          .concat(combinedCosts)
+          .concat(combinedCosts)"
         :key="key"
         :name="overviewCost.name"
         :value="overviewCost.value"
@@ -29,20 +29,24 @@ import { storeToRefs } from "pinia";
 import { GroupCostOption, useFixedCostStore } from "~/stores/fixedCostStore";
 
 const { overviewCosts, selectedOverviewCost } = storeToRefs(
-  useOverviewCostStore()
+  useOverviewCostStore(),
 );
 const { selectedGroupCost, groupCostOptions } = storeToRefs(
-  useFixedCostStore()
+  useFixedCostStore(),
 );
 
-const combinedCosts = computed(() => createCombiedOverviewCosts(groupCostOptions.value))
+const combinedCosts = computed(() =>
+  createCombiedOverviewCosts(groupCostOptions.value),
+);
 
-const createCombiedOverviewCosts = (groupCost: GroupCostOption[]): OverviewCost[] => {
-  const convertedOverviewCosts = groupCost.map<OverviewCost>(x =>{
-    return {id: x.id, name: x.name, value: x.sum}
-  })
+const createCombiedOverviewCosts = (
+  groupCost: GroupCostOption[],
+): OverviewCost[] => {
+  const convertedOverviewCosts = groupCost.map<OverviewCost>((x) => {
+    return { id: x.id, name: x.name, value: x.sum };
+  });
   return convertedOverviewCosts.concat(overviewCosts.value);
-}
+};
 </script>
 
 <style scoped>

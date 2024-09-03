@@ -1,7 +1,7 @@
 <template>
   <div class="flex flex-col h-full w-full p-4">
     <p class="text-xl text-primary underline underline-offset-4">
-      Fixkosten pro Monat 
+      Fixkosten pro Monat
     </p>
     <Accordion v-if="groupCosts.length != 0" v-model:activeIndex="activeIndex">
       <AccordionTab
@@ -27,9 +27,9 @@ import AddGroupCostCard from "~/components/FixedCosts/AddGroupCostCard.vue";
 
 const fixedCostStore = useFixedCostStore();
 const { groupCosts } = storeToRefs(fixedCostStore);
-const activeIndex = ref(0)
+const activeIndex = ref(0);
 
-provide("activeIndex", activeIndex)
+provide("activeIndex", activeIndex);
 
 onMounted(async () => {
   await fixedCostStore.fetch();
