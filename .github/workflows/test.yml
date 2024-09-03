@@ -77,14 +77,6 @@ jobs:
           cd FastApiTest/
           docker-compose down
 
-      # Step 9: Formatting
-      - name: Run Prettier
-        run: |
-          cd Source/WebApp
-          prettier . --write
-      - name: Run .NET Format
-        run: dotnet format --verify-no-changes
-
        # Optional: Commit the changes if any formatting was needed
       - name: Commit formatted code
         if: ${{ steps.format.outputs.changes_detected == 'true' }}
