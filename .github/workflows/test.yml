@@ -55,3 +55,21 @@ jobs:
       # Step 6: Run tests for .NET API (if any)
       - name: Run tests (.NET)
         run: dotnet test --no-restore --verbosity normal
+
+      - name: Set up Docker Compose
+        run: sudo apt-get update && sudo apt-get install -y docker-compose
+
+      # Step 7: Build and start the containers using Docker Compose
+      - name: Build and Start Docker Compose
+        run: |
+          docker-compose -f FastApiTest/docker-compose.yml up --build -d
+
+      # Step 8: Run tests (if any)
+      - name: Run Tests
+        run: |
+          docker-compose exec <service_name> npm run test
+
+      # Step 9: Stop and clean up the containers
+      - name: Stop Docker Compose
+        run: |
+          docker-compose down
