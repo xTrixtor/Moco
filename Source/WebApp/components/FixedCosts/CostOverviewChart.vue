@@ -1,6 +1,6 @@
 <template>
-  <div class="flex-center">
-    <Chart type="pie" :data="chartData" :options="chartOptions" class="w-full p-10" />
+  <div class="flex-center flex-1 relative w-full h-full">
+    <Chart type="pie" :data="chartData" :options="chartOptions" class="w-full flex-center p-10 absolute h-full" />
     <div v-if="false" class="h-full w-full grid justify-center items-center bg-gray/25">
       <div role="status">
         <svg

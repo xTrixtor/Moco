@@ -22,13 +22,7 @@ namespace Moco.Api.Endpoints.CostInspection.MonthlyBudget
         {
             using (var dbContext = mocoContextFactory.CreateMocoContext())
             {
-                var budgets = dbContext.Budgets.ToList().Where(x => x.UserId == req.UserId).Select(x => x.asDto()).ToArray();
-                var budgetCharges = new List<Models.Moco.Resource.MonthlyBudget>();
-                foreach (var budget in budgets)
-                {
-                    var monthlyBudget = new Models.Moco.Resource.MonthlyBudget { Name = budget.Name, Limit = budget.Limit, CostInspectionId = req.CostInspectionId };
-                    await dbContext.MonthlyBudgets.AddAsync(monthlyBudget);
-                }
+                await req.Update(dbContext);
                 await dbContext.SaveChangesAsync();
             }
             await SendAsync(new MonthlyBudgetUResponse { Success = true });
@@ -39,7 +33,9 @@ namespace Moco.Api.Endpoints.CostInspection.MonthlyBudget
     {
         [FromClaim("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier")]
         public string? UserId { get; set; }
-        public int CostInspectionId { get; set; }
+        public int MonthlyBudgetId { get; set; }
+        public string Name { get; set; }
+        public double Limit{ get; set; }
     }
 
     public record MonthlyBudgetUResponse

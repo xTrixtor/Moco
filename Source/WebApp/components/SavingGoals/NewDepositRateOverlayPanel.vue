@@ -11,14 +11,15 @@
           size="small"
           v-model="newDepositRate"
           placeholder="Einzahlungswert"
+          :max="selectedSavingGoal.goalValue"
           :pt="{ root: { class: 'flex-1' } }"
         />
-        <Button outlined size="small" class="hover:bg-primary duration-700">
+        <Button outlined size="small" class="hover:bg-primary duration-700" disabled @click="handleSave">
           <Icon
             name="material-symbols:save-outline"
             class="text-highlight-text p-1"
             size="1.8rem"
-            @click="handleSave"
+            @click.prevent
           />
         </Button>
       </div>
@@ -54,6 +55,8 @@ const handleSave = () => {
   });
   const last = useLast<DepositRateDto>(paidRates);
   updateRatesWithRates(last);
+  data.value = false;
+
 };
 
 const updateRatesWithRates = (lastRate: DepositRateDto) => {
@@ -64,11 +67,7 @@ const updateRatesWithRates = (lastRate: DepositRateDto) => {
     lastRate.value + newDepositRate.value,
     lastRate.savingMonth
   );
-  console.log(result);
 };
 </script>
 
 <style scoped></style>
-import { storeToRefs } from "pinia"; import { calculateDepositsWithMonthlyRate }
-from "~/metaData/savingGoalService"; import { DepositRateDto } from
-"~/stores/apiClient";

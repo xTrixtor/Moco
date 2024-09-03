@@ -1,6 +1,6 @@
 <template>
   <div
-    class="w-3/5 bg-foreground border-2 border-border rounded-lg grid grid-cols-5 divide-x-2 divide-border p-6"
+    class="w-5/6 bg-foreground border-2 border-border rounded-lg grid grid-cols-5 divide-x-2 divide-border p-6"
   >
     <div class="col-span-2 px-2">
       <div
@@ -23,6 +23,7 @@
     <div class="col-span-3">
       <ConfigurationFixedCost v-if="selectedConfig== 'Fix-Kosten'"/>
       <ConfigurationBudget v-if="selectedConfig == 'Budgets'"/>
+      <ConfigurationProfil v-if="selectedConfig == 'Profil'"/>
     </div>
   </div>
 </template>
@@ -32,7 +33,7 @@ import { useFixedCostStore } from '~/stores/fixedCostStore';
 
 const selectedConfig = ref<string | undefined>(undefined)
 
-const configs = ["Fix-Kosten", "Budgets", "Gehalt", "Profil"];
+const configs = ["Fix-Kosten", "Budgets", "Profil"];
 onMounted(async() => {
   await useFixedCostStore().fetch();
 })

@@ -19,7 +19,6 @@
 </template>
 
 <script setup lang="ts">
-import { ChargeDto, GroupCostDto } from "~/stores/apiClient";
 import FixedCostTable from "./FixedCostTable.vue";
 import { useApiStore } from "~/stores/apiStore";
 import { useFixedCostStore } from "~/stores/fixedCostStore";

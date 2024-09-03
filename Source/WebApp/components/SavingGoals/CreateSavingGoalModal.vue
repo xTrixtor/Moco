@@ -18,16 +18,23 @@
           @update:model-value="calculateGoal"
           :min="0"
           :maxFractionDigits="2"
+          mode="currency"
+          currency="EUR" 
+          locale="de-DE"
         />
       </div>
       <div :class="modalRowStyling">
         <p class="w-1/4">Start-Kapital</p>
         <InputNumber
           class="flex-1"
+          :max="savingGoalCDto.goalValue"
           v-model="savingGoalCDto.initialCapital"
           @update:model-value="calculateGoal"
           :min="0"
           :maxFractionDigits="2"
+          mode="currency"
+          currency="EUR"
+          locale="de-DE"
         />
       </div>
       <div :class="modalRowStyling">
@@ -51,6 +58,10 @@
           :maxFractionDigits="2"
           @update:model-value="calculateGoal"
           :disabled="savingGoalCDto.methodKey != 0"
+          :max="(savingGoalCDto.goalValue-1)"
+          mode="currency"
+          currency="EUR" 
+          locale="de-DE"
           :placeholder="
             savingGoalCDto.methodKey != 0
               ? 'Wird berechnet...'
@@ -82,6 +93,8 @@
           dateFormat="M-yy"
           class="flex-1"
           v-model="savingGoalCDto.endDate"
+          :max-date="addYears(savingGoalCDto.startDate, 20)"
+          :min-date="addMonths(savingGoalCDto.startDate,1)"
           @update:model-value="calculateGoal"
           :disabled="savingGoalCDto.methodKey != 1"
           :placeholder="
@@ -125,7 +138,10 @@ import {
   calculateDepositsWithMonthlyRate,
 } from "~/metaData/savingGoalService";
 import { storeToRefs } from "pinia";
-import { addMonths } from "date-fns";
+import { addMonths, addYears } from "date-fns";
+import { useToast } from 'primevue/usetoast';
+
+const toast = useToast();
 
 const modalRowStyling = "flex-center justify-between gap-6 my-3";
 
@@ -134,15 +150,17 @@ const emit = defineEmits(["update:modelValue"]);
 
 const { selectedSavingGoal, savingGoals } = storeToRefs(useSavingGoalStore());
 const data = useVModel(props, "modelValue", emit);
-let savingGoalCDto: Ref<SavingGoalCDto> = ref<SavingGoalCDto>({});
+let savingGoalCDto: Ref<SavingGoalCDto> = ref<SavingGoalCDto>({initialCapital: 0});
 const minDate = ref(addMonths(new Date(), 1));
 const canSave = computed(() =>
   Boolean(
     savingGoalCDto.value.name &&
       savingGoalCDto.value.goalValue &&
-      savingGoalCDto.value.depositRate
+      savingGoalCDto.value.depositRate &&
+      isValid.value
   )
 );
+const isValid = ref(false)
 
 const handleCreate = async () => {
   const newSavingGoal =
@@ -150,7 +168,7 @@ const handleCreate = async () => {
       savingGoalCDto.value
     );
     selectedSavingGoal.value = newSavingGoal;
-    savingGoals.value.push(newSavingGoal);
+    savingGoals.value = [...savingGoals.value, newSavingGoal];
     useSavingGoalStore().setSelectedSavingGoal(newSavingGoal);
     data.value = false;
     savingGoalCDto.value = {};
@@ -190,6 +208,7 @@ const calculateGoalWithDate =
     );
     savingGoalCDto.value.depositRates = result.depositRates;
     savingGoalCDto.value.depositRate = result.monthRate;
+    isValid.value = true;
   }
 };
 
@@ -200,10 +219,15 @@ const calculateGoalWithRates = () => {
       savingGoalCDto.value.goalValue,
       savingGoalCDto.value.initialCapital ?? 0
     );
+    if(result == undefined){
+      toast.add({ severity: 'warn', summary: 'Plan dauert zu lange', detail: 'Bitte erstelle keine Sparziele, welche länger als 20 Jahre gehen', life: 3000 });
+      return;
+    }
     savingGoalCDto.value.startDate = result[0].savingMonth;
     const lastDepositRateValue = useLast(result);
     savingGoalCDto.value.endDate = lastDepositRateValue.savingMonth;
     savingGoalCDto.value.depositRates = result;
+    isValid.value = true;
   }
 };
 </script>

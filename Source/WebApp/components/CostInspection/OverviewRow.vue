@@ -18,7 +18,7 @@
               <div
               v-if="creditDetailsVis"
               ref="target"
-              class="absolute w-[300px] max-h-72 overflow-auto -right-1/2 top-10 bg-background z-[999] border-border border-2 rounded-md p-2"
+              class="absolute w-[400px] max-h-72 overflow-auto -right-1/2 top-10 bg-secondary-content z-[999] border-primary border-2 rounded-md p-2"
             >
               <div class="flex flex-1 justify-end">
                 <Icon

@@ -127,42 +127,6 @@ const checkedFixedCost = async (changedFixedCost: CheckableFixedCostDto) => {
   } as UpdateCheckableFixedCostRequest);
 };
 
-const calculateCardColor = (): String => {
-  const sum = useSumBy(
-    selectedCostInspection.value.fixedCostChecklist,
-    function (fixedCost: CheckableFixedCostDto) {
-      return fixedCost?.value;
-    }
-  );
-  const checkedFixedCosts = useFilter(
-    selectedCostInspection.value.fixedCostChecklist,
-    function (fixedCost: CheckableFixedCostDto) {
-      return fixedCost.isChecked;
-    }
-  );
-  const checkedFixedCostSum = useSumBy(
-    checkedFixedCosts,
-    function (fixedCost: CheckableFixedCostDto) {
-      return fixedCost.fixedCost?.value;
-    }
-  );
-
-  const fixedCostProcent = (checkedFixedCostSum / sum) * 100;
-  return getBgColorInProcent(fixedCostProcent);
-};
-
-const getBgColorInProcent = (valueInProcent: number): String => {
-  switch (true) {
-    case valueInProcent > 50 && valueInProcent < 75:
-      return "bg-warning-content";
-    case valueInProcent > 75 && valueInProcent < 100:
-      return "bg-success-content";
-    case valueInProcent >= 100:
-      return "bg-success-content";
-    default:
-      return "bg-error-content";
-  }
-};
 </script>
 
 <style scoped>

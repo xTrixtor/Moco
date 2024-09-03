@@ -2,9 +2,9 @@
   <BaseFullScreenLoader v-if="loading" />
   <div v-else class="grid justify-center items-center h-screen">
     <div
-      class="w-[400px] h-[450px] shadow-xl rounded-lg p-4 flex flex-col border-2 shadow-primary-light bg-foreground"
+      class="w-[400px] h-[500px] shadow-xl rounded-lg p-4 flex flex-col gap-2 border-2 shadow-primary-light bg-foreground"
     >
-      <div class="justify-center flex flex-col items-center my-4">
+      <div class="justify-center flex flex-col items-center gap-2">
         <NuxtImg src="/logo/logo.png" class="h-36 object-cover" />
         <div class="flex w-full justify-between">
           <NuxtLink to="/" class="flex-1 flex-center">
@@ -18,7 +18,7 @@
         </div>
       </div>
       <div
-        class="w-full h-full flex-1 flex flex-col justify-evenly items-center"
+        class="w-full h-full flex-1 flex flex-col gap-2 justify-evenly items-center"
       >
         <InputText type="text" v-model="user.username" placeholder="Username" />
         <Password
@@ -28,6 +28,7 @@
         />
         <Button label="Anmelden" @click="handleLogin" outlined />
         <BasePrimaryButton
+          v-if="showRegisterBtn"
           btn-txt="Registirieren"
           :on-click="() => (data = true)"
           class="!bg-primary/20 !border-0 w-1/4 text-xs flex-center !rounded-lg"
@@ -68,6 +69,7 @@ onMounted(() => {
 const loading = ref(true);
 
 const user = reactive<User>({ username: "", password: "" });
+const showRegisterBtn = ref(false);
 
 const handleLogin = async () => {
   if (user.username && user.password) {
@@ -79,6 +81,12 @@ const handleLogin = async () => {
     const a = await userStore.login(loginRequest);
   }
 };
+
+onKeyStroke(["Shift", "U", "N"], (event) => {
+  if (event.shiftKey && event.key === 'U') {
+      showRegisterBtn.value = !showRegisterBtn.value;
+  }
+}, { dedupe: true });
 </script>
 
 <style scoped></style>

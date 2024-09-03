@@ -23,8 +23,6 @@ export const useInspectionStore = defineStore("costInspection", {
       return sum;
     }
 
-    const availableMoney:number = 0;
-    const fixedCostSum: number = 0;
     const chargesSum = calculateCharges();
 
     return {

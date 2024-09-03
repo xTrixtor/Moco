@@ -1,6 +1,6 @@
 <template>
   <div
-    class="h-full bg-foreground border-2 border-border overflow-auto rounded-lg"
+    class="h-full bg-foreground border-2 border-border rounded-lg overflow-hidden"
   >
     <div class="w-full p-2 flex justify-end">
       <Icon
@@ -29,8 +29,12 @@
       :value="lazyLoadDepositRates"
       @page="loadData($event)"
       :pt="{
+        root: { class: 'flex-1 h-[95%]' },
+        wrapper: { class: 'h-[90%]' },
+        table: { class: 'h-full' },
+        tbody: { class: 'h-full' },
         paginator: { root: 'p-0', paginatorWrapper: 'border-0 flex-1' },
-        bodyRow: { class: ' h-5' },
+        bodyRow: { class: 'h-[10%]' },
       }"
       :total-records="totalRates"
     >
@@ -47,7 +51,7 @@
         :pt="{ bodyCell: { class: 'p-3.5' } }"
       >
         <template #body="slotProps">
-          <p>{{ slotProps.data.value }} €</p>
+          <p>{{ useCeil(slotProps.data.value, 1) }} €</p>
         </template>
       </Column>
       <Column header="Aktions" :pt="{ bodyCell: { class: 'p-2' } }">
@@ -59,49 +63,87 @@
             v-else
             class="w-full flex flex-1 justify-start gap-6 items-center"
           >
-            <Icon
-              name="material-symbols:check"
-              class="opacity-30 hover:scale-150 hover:!opacity-100 duration-300 cursor-pointer hover:text-primary text-green-500"
-              size="1.5rem"
-              @click="() => handlePaid(slotProps.data.id)"
-            />
-            <div class="relative" @click="toggle">
+            <div
+              v-if="
+                slotProps.data.savingMonth <
+                  currentRate.savingMonth"
+              class="w-full flex flex-1 justify-start gap-6 items-center"
+            >
               <Icon
-                name="akar-icons:cross"
-                class="opacity-30 hover:scale-150 hover:!opacity-100 duration-300 cursor-pointer text-red-500"
-                size="1rem"
-                @click="() => handleNoPaySelect(slotProps.data)"
+                name="material-symbols:check"
+                class="opacity-30 hover:scale-150 hover:!opacity-100 duration-300 cursor-pointer hover:text-primary text-green-500"
+                size="1.5rem"
+                @click="() => handlePaid(slotProps.data.id)"
               />
-              <OverlayPanel ref="op" :show-close-icon="true">
-                <div class="flex flex-col p-2">
-                  <div
-                    class="text-highlight-text underline-offset-4"
-                  >
-                    <p>Wie viel Geld können Sie in diesem Monat einzahlen? </p>
-                    <desc class="flex underline decoration-primary font-bold">Eigentliche Einzahlungsrate: <p class="pl-2 font-bold">{{ selectedSavingGoal.depositRate }} €</p></desc>
-                  </div>
-                  <div class="flex gap-4 mt-4">
-                    <InputNumber
-                      size="small"
-                      v-model="newDepositRate"
-                      placeholder="Einzahlungswert"
-                      :pt="{ root: { class: 'flex-1' } }"
-                    />
-                    <Button
-                      outlined
-                      size="small"
-                      class="hover:bg-primary duration-700"
-                    >
-                      <Icon
-                        name="material-symbols:save-outline"
-                        class="text-highlight-text p-1"
-                        size="1.8rem"
-                        @click="() => handleSave()"
+              <div
+                v-if="selectedSavingGoal?.methodKey != 1"
+                class="relative"
+                @click="toggle"
+              >
+                <Icon
+                  name="akar-icons:cross"
+                  class="opacity-30 hover:scale-150 hover:!opacity-100 duration-300 cursor-pointer text-red-500"
+                  size="1rem"
+                  @click="() => handleNoPaySelect(slotProps.data)"
+                />
+                <OverlayPanel ref="op" :show-close-icon="true">
+                  <div class="flex flex-col p-2">
+                    <div class="text-highlight-text flex flex-col gap-1">
+                      <p
+                        class="text-lg underline decoration-primary underline-offset-4"
+                      >
+                        Wie viel Geld können Sie in diesem Monat einzahlen?
+                      </p>
+                      <div
+                        class="p-2 m-2 border-[1px] border-primary rounded-lg opacity-50 hover:opacity-100 duration-500 hover:cursor-pointer"
+                      >
+                        <desc class="flex font-bold"
+                          >Eigentliche Monatsrate
+                          <p class="pl-2 font-bold">
+                            {{ selectedSavingGoal.depositRate }} €
+                          </p>
+                        </desc>
+                        <desc class="flex font-bold"
+                          >Schon gespartes Geld
+                          <p class="pl-2 font-bold">
+                            {{ selectedSavingGoal.currentSaving }} €
+                          </p>
+                        </desc>
+                        <desc class="flex font-bold"
+                          >Ziel:
+                          <p class="pl-2 font-bold">
+                            {{ selectedSavingGoal.goalValue }} €
+                          </p>
+                        </desc>
+                      </div>
+                    </div>
+                    <div class="flex gap-4 mt-4">
+                      <InputNumber
+                        size="small"
+                        v-model="newDepositRate"
+                        placeholder="Einzahlungswert"
+                        :max="
+                          selectedSavingGoal.goalValue -
+                          selectedNoPayDepositRate?.value
+                        "
+                        :pt="{ root: { class: 'flex-1' } }"
                       />
-                    </Button>
+                      <Button
+                        outlined
+                        size="small"
+                        class="hover:bg-primary duration-700"
+                      >
+                        <Icon
+                          name="material-symbols:save-outline"
+                          class="text-highlight-text p-1"
+                          size="1.8rem"
+                          @click="() => handleSave()"
+                        />
+                      </Button>
+                    </div>
                   </div>
-                </div>
-              </OverlayPanel>
+                </OverlayPanel>
+              </div>
             </div>
           </div>
         </template>
@@ -118,24 +160,26 @@ import Column from "primevue/column";
 import { useApiStore } from "~/stores/apiStore";
 import { storeToRefs } from "pinia";
 import { useSavingGoalStore } from "~/stores/savingGoalStore";
-import { calculateDepositsWithMonthlyRate } from "~/metaData/savingGoalService";
-import { addMonths, startOfDay } from "date-fns";
+import {
+  calculateDepositsWithDate,
+  calculateDepositsWithMonthlyRate,
+} from "~/metaData/savingGoalService";
 
-export interface DepositHistoryProps {
-  savingGoal: SavingGoalDto;
-}
-const props = defineProps<DepositHistoryProps>();
 const { selectedSavingGoal } = storeToRefs(useSavingGoalStore());
 const selectedNoPayDepositRate = ref<DepositRateDto>();
 const loading = ref(false);
 const lazyLoadDepositRates = ref<DepositRateDto[]>(
-  props.savingGoal.depositRates ?? []
+  selectedSavingGoal.value.depositRates ?? []
 );
-const totalRates = ref(props.savingGoal.totalRates ?? 0)
+const totalRates = computed(() => selectedSavingGoal.value.totalRates ?? 0);
 const lazyParams = ref(undefined);
-const newDepositRate = ref<number>(undefined);
+const newDepositRate: Ref<number | undefined> = ref<number>(undefined);
 const op = ref();
 const showNotPaid = ref(false);
+
+let currentRate = computed(
+  () => lazyLoadDepositRates.value.filter((x) => x.isPaid == true)[0] ?? {}
+);
 
 const columns = [{ field: "key", header: "Month-Year" }];
 
@@ -145,45 +189,83 @@ const toggle = (event: any) => {
 };
 
 const handlePaid = async (depositRateId: number) => {
-  await useApiStore().SavingGoalsClient.payDepositRateEndpoint({
-    id: depositRateId,
-    savingGoalId: selectedSavingGoal.value.id,
-  });
+  const updatedRate =
+    await useApiStore().SavingGoalsClient.payDepositRateEndpoint({
+      id: depositRateId,
+      savingGoalId: selectedSavingGoal.value.id,
+    });
 
+  selectedSavingGoal.value.currentSaving =
+    selectedSavingGoal.value.currentSaving +
+    selectedSavingGoal.value.depositRate;
   await loadData(lazyParams.value ?? { first: 0 });
 };
 
 const rowClass = (data: DepositRateDto) => {
-  return [{ "bg-green-500": data.isPaid }];
+  return [
+    { "!bg-green-500": data.isPaid },
+    {
+      "":
+        data.savingMonth> currentRate.value.savingMonth ||
+        JSON.stringify(currentRate.value) == "{}",
+    },
+  ];
 };
 
-const handleNoPaySelect = (depositRate: DepositRateDto) =>{
-  selectedNoPayDepositRate.value = depositRate
-}
-
-const handleSave = () => {
-  updateRatesWithRates(selectedNoPayDepositRate.value);
+const handleNoPaySelect = (depositRate: DepositRateDto) => {
+  selectedNoPayDepositRate.value = depositRate;
 };
 
-const updateRatesWithRates = (lastRate: DepositRateDto) => {
-  const { depositRate, goalValue } = selectedSavingGoal.value;
+const handleSave = async () => {
+  const { methodKey } = selectedSavingGoal.value;
+  if (methodKey == 0)
+    await updateRatesWithRates(selectedNoPayDepositRate.value);
+  if (methodKey == 1)
+    await updateRatesWithDates(selectedNoPayDepositRate.value);
+};
+
+const updateRatesWithRates = async (currentRate: DepositRateDto) => {
+  const { depositRate, goalValue, id, depositRates, initialCapital } =
+    selectedSavingGoal.value;
+  const index = depositRates?.findIndex((x) => x.key == currentRate.key);
+  const rateBefore = depositRates[index - 1].value ?? initialCapital;
+
   const result = calculateDepositsWithMonthlyRate(
     depositRate,
     goalValue,
-    lastRate.value + newDepositRate.value - depositRate,
-    lastRate.savingMonth
+    rateBefore + newDepositRate.value,
+    currentRate.savingMonth
   );
-  console.log(result);
+
+  const response =
+    await useApiStore().SavingGoalsClient.updateDepositRatesEndpoint({
+      savingGoalId: id,
+      updatedDepositRates: result,
+    });
+
+  selectedSavingGoal.value = response.savingGoal;
 };
 
-const firstDeposit: DepositRateDto = props.savingGoal.depositRates[0];
+const updateRatesWithDates = async (currentRate: DepositRateDto) => {
+  const { endDate, goalValue, currentSaving, id } = selectedSavingGoal.value;
+  const result = calculateDepositsWithDate(
+    currentRate.savingMonth,
+    endDate,
+    goalValue,
+    currentSaving + newDepositRate.value
+  );
+  const response =
+    await useApiStore().SavingGoalsClient.updateDepositRatesEndpoint({
+      savingGoalId: id,
+      updatedDepositRates: result.depositRates,
+      newDateRate: result.monthRate,
+    });
+  selectedSavingGoal.value = response.savingGoal;
+};
 
 const loadData = async (event) => {
   loading.value = true;
   lazyParams.value = event;
-  const firstDepositRateInNextPage = startOfDay(
-    addMonths(firstDeposit.savingMonth, event.first)
-  );
 
   const response =
     await useApiStore().SavingGoalsClient.lazyLoadDepositRateEndpoint(
@@ -193,11 +275,17 @@ const loadData = async (event) => {
     );
   lazyLoadDepositRates.value = response.depositRates ?? [];
   totalRates.value = response.totalRates;
+  currentRate.value = lazyLoadDepositRates.value.filter(
+    (x) => x.isPaid == true
+  )[0];
   loading.value = false;
 };
-watch(showNotPaid, (newVal) =>{
-  loadData(lazyParams.value??{first:0});
-})
+watch(showNotPaid, (newVal) => {
+  loadData(lazyParams.value ?? { first: 0 });
+});
+watch(selectedSavingGoal, (newVal, OldVal) => {
+  lazyLoadDepositRates.value = newVal.depositRates;
+});
 </script>
 
 <style scoped></style>

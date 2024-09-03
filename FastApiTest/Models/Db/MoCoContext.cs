@@ -57,7 +57,7 @@ public class MoCoContext : DbContext
         };
         var fixCosts = new List<FixedCost>()
         {
-            new FixedCost{ Id = 1, Name = "Miete", Value = 670, GroupCostId = 1, TimeInterval = TimeInterval.monatlich},
+            new FixedCost{ Id = 1, Name = "Miete", Value = 650, GroupCostId = 1, TimeInterval = TimeInterval.monatlich},
             new FixedCost{ Id = 2, Name = "Strom", Value = 45, GroupCostId = 1, TimeInterval = TimeInterval.monatlich},
             new FixedCost{ Id = 3, Name = "Renten Basis", Value = 250, GroupCostId = 2, TimeInterval = TimeInterval.monatlich},
             new FixedCost{ Id = 4, Name = "Flexible", Value = 250, GroupCostId = 2, TimeInterval = TimeInterval.monatlich},

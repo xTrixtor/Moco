@@ -1,32 +1,21 @@
 <template>
   <div
-    class="xl:h-[15vh] w-full flex flex-col xl:flex-row justify-between items-center border-2 border-border bg-card rounded-lg text-primary-text shadow-lg mb-2"
+    class="xl:h-1/2 w-full flex flex-col xl:flex-row justify-between items-center border-2 border-border bg-card rounded-lg text-primary-text shadow-lg mb-2"
   >
     <div
-      class="w-full grid xl:grid-rows-3 xl:grid-cols-4 md:grid-cols-2 grid-cols-1 xl:grid-flow-col rounded-xl mx-2 p-1"
+      class="gridgrid-cols-2 gap-5 rounded-xl mx-2 p-1"
     >
-    
       <OverviewCell
-        v-for="(overviewCost, key) in overviewCosts"
+        v-for="(overviewCost, key) in combinedCosts.concat(combinedCosts).concat(combinedCosts)"
         :key="key"
         :name="overviewCost.name"
         :value="overviewCost.value"
+        class="!text-white"
         :class="[
-            selectedOverviewCost === overviewCost
-            ? 'duration-300 bg-primary !text-highlight-text'
+          selectedOverviewCost === overviewCost
+            ? 'duration-300 bg-primary'
             : '',
-        ]"
-      />
-      <OverviewCell
-        v-for="(groupCost, key) in groupCostOptions"
-        :key="key"
-        :name="groupCost.name"
-        :value="groupCost.sum"
-        class=""
-        :class="[
-          selectedGroupCost.id === groupCost.id
-            ? 'duration-500 bg-primary !text-highlight-text'
-            : '',
+          key % 2 == 0 ? 'bg-gray-700' : 'bg-background',
         ]"
       />
     </div>
@@ -34,10 +23,10 @@
 </template>
 
 <script setup lang="ts">
-import { useOverviewCostStore } from "~/stores/overviewCostStore";
+import { OverviewCost, useOverviewCostStore } from "~/stores/overviewCostStore";
 import OverviewCell from "./OverviewCell.vue";
 import { storeToRefs } from "pinia";
-import { useFixedCostStore } from "~/stores/fixedCostStore";
+import { GroupCostOption, useFixedCostStore } from "~/stores/fixedCostStore";
 
 const { overviewCosts, selectedOverviewCost } = storeToRefs(
   useOverviewCostStore()
@@ -45,6 +34,15 @@ const { overviewCosts, selectedOverviewCost } = storeToRefs(
 const { selectedGroupCost, groupCostOptions } = storeToRefs(
   useFixedCostStore()
 );
+
+const combinedCosts = computed(() => createCombiedOverviewCosts(groupCostOptions.value))
+
+const createCombiedOverviewCosts = (groupCost: GroupCostOption[]): OverviewCost[] => {
+  const convertedOverviewCosts = groupCost.map<OverviewCost>(x =>{
+    return {id: x.id, name: x.name, value: x.sum}
+  })
+  return convertedOverviewCosts.concat(overviewCosts.value);
+}
 </script>
 
 <style scoped>

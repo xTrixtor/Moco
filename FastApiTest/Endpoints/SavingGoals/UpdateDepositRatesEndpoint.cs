@@ -11,7 +11,7 @@ namespace Moco.Api.Endpoints.SavingGoals
     {
         public override void Configure()
         {
-            Get("/savingGoals/updateRates");
+            Put("/savingGoals/updateRates");
             Policies("User");
         }
 
@@ -19,16 +19,27 @@ namespace Moco.Api.Endpoints.SavingGoals
         {
             using (var dbContext = new MoCoContext())
             {
-                var savingGoal = await dbContext.DepositRates.FirstOrDefaultAsync(x => x.SavingGoalId == req.SavingGoalId);
-
-                var lastRate = req.UpdatedDepositRates.LastOrDefault();
+                var depositRates = dbContext.DepositRates.Where(x => x.SavingGoalId == req.SavingGoalId).ToList();
 
                 foreach (var rateUdto in req.UpdatedDepositRates)
                 {
-                    await rateUdto.UpdateAsync(dbContext);
+                    await rateUdto.AddOrUpdate(req.SavingGoalId, dbContext);
                 }
 
-                await SendAsync(new UpdateDepositRatesResponse { SavingGoal = { } });
+                if(req.UpdatedDepositRates.Count() < depositRates.Count())
+                {
+                    var lastNewRate = req.UpdatedDepositRates.LastOrDefault();
+                    var toDeleteRates = depositRates.Where(x => x.SavingMonth > lastNewRate.SavingMonth).ToList();
+                    dbContext.RemoveRange(toDeleteRates);
+                }
+
+                var savingGoal = await dbContext.SavingGoals.FirstOrDefaultAsync(x => x.Id == req.SavingGoalId);
+                if (req.NewDateRate is not 0.00) savingGoal.DepositRate = req.NewDateRate;
+
+                dbContext.SaveChanges();
+
+
+                await SendAsync(new UpdateDepositRatesResponse { SavingGoal = savingGoal.asDto() });
 
             }
         }
@@ -38,7 +49,8 @@ namespace Moco.Api.Endpoints.SavingGoals
         [FromClaim("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier")]
         public string UserId { get; set; }
         public required int SavingGoalId { get; set; }
-        public DepositRateUDto[] UpdatedDepositRates { get; set; }
+        public DepositRateDto[] UpdatedDepositRates { get; set; }
+        public double NewDateRate { get; set; }
     }
     public record UpdateDepositRatesResponse
     {

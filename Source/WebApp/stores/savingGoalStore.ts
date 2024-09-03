@@ -1,11 +1,11 @@
 import { defineStore } from "pinia";
-import { SavingGoalDto } from "./apiClient";
+import { SavingGoalDto, SavingGoalOption } from "./apiClient";
 import { useApiStore } from "./apiStore";
 
 export const useSavingGoalStore = defineStore("savingGoal", {
   state: () => {
-    const selectedSavingGoal: SavingGoalDto = undefined;
-    const savingGoals: SavingGoalDto[] = [];
+    const selectedSavingGoal: SavingGoalDto| undefined = {id:undefined};
+    const savingGoals: SavingGoalOption[] = [];
 
     return {
         savingGoals,
@@ -17,8 +17,8 @@ export const useSavingGoalStore = defineStore("savingGoal", {
   actions: {
         async fetch() {
             const response = await useApiStore().SavingGoalsClient.getAllSavingGoalsEndpoint();
-            if(response.allSavingGoals){
-                this.savingGoals = response.allSavingGoals;
+            if(response.savingGoalOptions){
+                this.savingGoals = response.savingGoalOptions;
             }
         },
         setSelectedSavingGoal(savingGoal: SavingGoalDto){

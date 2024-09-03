@@ -3,6 +3,7 @@ import {
   differenceInCalendarMonths,
   getMonth,
   getYear,
+  startOfDay,
 } from "date-fns";
 import { DepositRateDto } from "~/stores/apiClient";
 
@@ -16,9 +17,13 @@ export const calculateDepositsWithMonthlyRate = (
   goalValue: number,
   initialCapital: number,
   startDate?: Date
-): DepositRateDto[] => {
+): DepositRateDto[] | undefined  => {
   let goalCopy = goalValue - initialCapital;
   const depositRateNumber = goalCopy / rate;
+
+  if(depositRateNumber > 200){
+    return undefined;
+  }
   let capital = initialCapital;
 
   const start = startDate ?? addMonths(new Date(), 1);
@@ -34,7 +39,7 @@ export const calculateDepositsWithMonthlyRate = (
     const depositRate: DepositRateDto = {
       key: key,
       value: capital,
-      savingMonth: monthOfSaving,
+      savingMonth: startOfDay(monthOfSaving),
     };
     depositRates.push(depositRate);
     goalCopy = goalCopy - rate;
@@ -64,7 +69,9 @@ export const calculateDepositsWithDate = (
   const monthRate = useCeil(goalCopy / monthRange, 2);
   let capital = initialCapital;
 
-  const depositRates: DepositRateDto[] = [];
+  const depositRates: DepositRateDto[] = [
+    { key: GetKeyFromDate(addMonths(startDate, -1)), value: capital, savingMonth: startDate, isPaid:true },
+  ];
   for (let i = 1; i <= monthRange; i++) {
     const monthOfSaving = addMonths(startDate, i);
     const key = `${getMonth(monthOfSaving)}-${getYear(monthOfSaving)}`;

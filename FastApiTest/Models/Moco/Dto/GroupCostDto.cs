@@ -14,7 +14,7 @@ namespace Moco.Api.Models.Moco.Dto
             Id = db.Id;
             Name = db.Name;
             UserId = db.UserId;
-            FixedCosts = db.FixedCosts?.Select(x => x.asDto()).ToArray();
+            FixedCosts = db.FixedCosts.ToList().Select(x => x.asDto()).ToArray();
         }
         public int Id { get; set; }
         public string Name { get; set; }

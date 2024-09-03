@@ -1,6 +1,7 @@
 <template>
   <ConfirmDialog />
   <NuxtLayout>
+    <Toast/>
     <div id="editModal"></div>
     <NuxtPage />
   </NuxtLayout>
@@ -9,6 +10,7 @@
 <script setup>
 import { usePrimeVue } from "primevue/config";
 import { de } from "@/primevue/config/de.json"
+import Toast from 'primevue/toast';
 
 
 onMounted(() => {

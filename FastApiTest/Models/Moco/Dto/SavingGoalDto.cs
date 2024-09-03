@@ -20,6 +20,7 @@ namespace Moco.Api.Models.Moco.Dto
             this.EndDate = savingGoal.EndDate;
             this.StartDate   = savingGoal.StartDate;
             this.DepositRates = savingGoal?.DepositRates?.Take(10).Select(x => x.asDto()).ToArray();
+            this.CurrentSaving = savingGoal.DepositRates.Last(x => x.isPaid == true && x.SavingMonth >= savingGoal.StartDate).Value;
             this.MethodKey = savingGoal.MethodKey;
             this.TotalRates = savingGoal.DepositRates.Count();
         }
@@ -32,6 +33,7 @@ namespace Moco.Api.Models.Moco.Dto
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
         public DepositRateDto[]? DepositRates { get; set; }
+        public double CurrentSaving { get; set; }
         public int TotalRates { get; set; }
         public string UserId { get; set; }
     }

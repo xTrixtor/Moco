@@ -17,7 +17,7 @@ namespace Moco.Api.Endpoints.GroupCost
         {
             using (var dbContext = new MoCoContext())
             {
-                var groupCosts = dbContext.GroupCosts.Where(x => x.UserId == req.UserId).Select(x => x.asDto()).ToArray();
+                var groupCosts = dbContext.GroupCosts.ToList().Where(x => x.UserId == req.UserId).Select(x => x.asDto()).ToArray();
                 await SendAsync(new GetGroupCostResponse { GroupedCosts = groupCosts });
             }
         }

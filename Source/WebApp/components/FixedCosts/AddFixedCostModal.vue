@@ -27,11 +27,27 @@
       </div>
       <div class="flex">
         <p class="w-1/2 flex items-center !text-white">Time-Interval</p>
-        <Dropdown v-model="fixedCostCDto.timeInterval" placeholder="Auswählen" :options="createTimeIntervalSelectOptions()" option-label="label" option-value="value" :pt="{input:{class:'p-2'}}" class="w-full m-2"/>
+        <Dropdown
+          v-model="fixedCostCDto.timeInterval"
+          placeholder="Auswählen"
+          :options="createTimeIntervalSelectOptions()"
+          option-label="label"
+          option-value="value"
+          :pt="{ input: { class: 'p-2' } }"
+          class="w-full m-2"
+        />
       </div>
       <div class="flex">
         <p class="w-1/2 flex items-center !text-white">Gruppierung</p>
-        <Dropdown v-model="fixedCostCDto.groupCostId" placeholder="Auswählen" :options="groupCostOptions" option-label="name" option-value="id" :pt="{input:{class:'p-2'}}" class="w-full m-2"/>
+        <Dropdown
+          v-model="fixedCostCDto.groupCostId"
+          placeholder="Auswählen"
+          :options="groupCostOptions"
+          option-label="name"
+          option-value="id"
+          :pt="{ input: { class: 'p-2' } }"
+          class="w-full m-2"
+        />
       </div>
       <div
         class="flex flex-row-reverse justify-between"
@@ -68,8 +84,6 @@
 <script setup lang="ts">
 import {
   CreateFixedCDto,
-  GroupCostCDto,
-  GroupCostDto,
   TimeInterval,
 } from "~/stores/apiClient";
 import { useApiStore } from "~/stores/apiStore";
@@ -85,7 +99,8 @@ interface SelectOption {
   value: TimeInterval;
 }
 
-const apiStore = useApiStore();
+let activeIndex: Ref<number> = inject("activeIndex") ?? 0;
+
 const fixedCostStore = useFixedCostStore();
 const { groupCostOptions } = storeToRefs(fixedCostStore);
 
@@ -93,26 +108,19 @@ const props = defineProps<AddChargeModalProps>();
 const emit = defineEmits(["update:modelValue"]);
 
 const data = useVModel(props, "modelValue", emit);
-let fixedCostCDto = reactive<CreateFixedCDto>({
-} as CreateFixedCDto);
+let fixedCostCDto = reactive<CreateFixedCDto>({} as CreateFixedCDto);
 const newGroupCostName = ref<String>("");
 
 const isAdding = ref(false);
 const allowedToSafe = ref(false);
 
+watch(activeIndex, (newVal, oldVal) => {
+    fixedCostCDto.groupCostId = groupCostOptions.value[newVal]?.id ?? 0;
+});
+
 let calculatedMontlyChargeCost = computed<number>(() =>
   calculateMontlyChargeCost(fixedCostCDto)
 );
-
-const onConfirm = async () => {
-  if (allowedToSafe.value) {
-    await apiStore.GroupcostClient.createGroupCostEndpoint({
-      name: newGroupCostName.value,
-    } as GroupCostCDto);
-    await fixedCostStore.fetch();
-    clear();
-  }
-};
 
 const clear = () => {
   newGroupCostName.value = "";
@@ -150,10 +158,6 @@ onKeyStroke("Escape", async (e) => {
   data.value = false;
 });
 
-const handleClose = () => {
-  data.value = false;
-};
-
 watchDeep(fixedCostCDto, (newValue) => {
   const { name, timeInterval, value, groupCostId } = newValue;
 
@@ -162,6 +166,10 @@ watchDeep(fixedCostCDto, (newValue) => {
   } else {
     allowedToSafe.value = false;
   }
+});
+
+onMounted(() => {
+  fixedCostCDto.groupCostId = groupCostOptions.value[activeIndex.value].id;
 });
 </script>
 

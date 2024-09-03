@@ -17,13 +17,12 @@
 
 <script setup lang="ts">
 import { storeToRefs } from "pinia";
-import { BudgetDto, MonthlyBudgetDto } from "~/stores/apiClient";
+import { MonthlyBudgetDto } from "~/stores/apiClient";
 import { useBudgetStore } from "~/stores/budgetStore";
 import { useInspectionStore } from "~/stores/costInspectionStore";
 
 const budgetStore = useBudgetStore();
 
-const budgets = computed(() => budgetStore.budgets);
 const { selectedMontlyBudget, selectedCostInspection } = storeToRefs(useInspectionStore());
 const drawer = ref(false);
 

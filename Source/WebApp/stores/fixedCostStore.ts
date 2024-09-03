@@ -38,7 +38,7 @@ export const useFixedCostStore = defineStore("fixedCost", {
   },
 });
 
-interface GroupCostOption {
+export interface GroupCostOption {
   id: number;
   name: string;
   sum:number

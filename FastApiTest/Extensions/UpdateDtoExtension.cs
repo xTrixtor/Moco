@@ -11,20 +11,33 @@ using Moco.Api.Models.Moco.Dto;
 using Newtonsoft.Json;
 using Moco.Api.Endpoints.SavingGoals.Deposits;
 using Moco.Api.Endpoints.Credit;
+using Moco.Api.Endpoints.CostInspection.MonthlyBudget;
 
 namespace MocoApi.Extensions
 {
     public static class UpdateDtoExtension
     {
+        public static async Task<MonthlyBudget> Update(this MonthlyBudgetUDto uDto, MoCoContext dbContext)
+        {
+            var target = await dbContext.MonthlyBudgets.FirstOrDefaultAsync(x => x.Id.Equals(uDto.MonthlyBudgetId));
+            if (target is null)
+                throw new Exception("Charge data couldnt be found");
+
+            if (uDto.Name is not null) target.Name = uDto.Name;
+            if (uDto.Limit is not 0.0) target.Limit = uDto.Limit;
+
+            return target;
+        }
+
         public static async Task<Charge> Update(this ChargeUDto uDto, MoCoContext dbContext)
         {
             var target = await dbContext.Charges.FirstOrDefaultAsync(x => x.Id.Equals(uDto.Id));
             if (target is null)
                 throw new Exception("Charge data couldnt be found");
 
-            if(uDto.MonthlyBudgetId is not 0) target.MonthlyBudgetId = uDto.MonthlyBudgetId;
-            if(uDto.Name is not null) target.Name = uDto.Name;
-            if(uDto.Value is not 0.0) target.Value = uDto.Value;
+            if (uDto.MonthlyBudgetId is not 0) target.MonthlyBudgetId = uDto.MonthlyBudgetId;
+            if (uDto.Name is not null) target.Name = uDto.Name;
+            if (uDto.Value is not 0.0) target.Value = uDto.Value;
 
             return target;
         }
@@ -112,6 +125,28 @@ namespace MocoApi.Extensions
             if (selectedDepositRate.Value is not 0.0) selectedDepositRate.Value = uDto.Value;
 
             return selectedDepositRate;
+        }
+        public static async Task AddOrUpdate(this DepositRateDto dto, int goalId, MoCoContext dbContext)
+        {
+            var selectedDepositRate = await dbContext.DepositRates.FirstOrDefaultAsync(x => x.Key == dto.Key);
+            if (selectedDepositRate is null)
+            {
+                var newDepositRate = new DepositRate
+                {
+                    Key = dto.Key,
+                    SavingMonth = dto.SavingMonth,
+                    Value = dto.Value,
+                    isPaid = dto.isPaid,
+                    SavingGoalId = goalId,
+                };
+                await dbContext.DepositRates.AddAsync(newDepositRate);
+            }
+            else
+            {
+                if (selectedDepositRate.Value is not 0.0) selectedDepositRate.Value = dto.Value;
+                selectedDepositRate.isPaid = dto.isPaid;    
+
+            }
         }
 
         public static CheckableFixedCostDto toCheckable(this FixedCostDto fixedCost, int key)

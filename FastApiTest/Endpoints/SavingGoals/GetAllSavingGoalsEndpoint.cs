@@ -17,8 +17,8 @@ namespace Moco.Api.Endpoints.SavingGoals
         {
             using (var dbContext = new MoCoContext())
             {
-                var savingGoals = dbContext.SavingGoals.Where(x => x.UserId == req.UserId).ToList().Select(x => x.asDto()).ToArray();
-                await SendAsync(new GetAllSavingGoalsResponse { AllSavingGoals = savingGoals });
+                var options = dbContext.SavingGoals.Where(x => x.UserId == req.UserId).ToList().Select(x => new SavingGoalOption { Id = x.Id, Name = x.Name}).ToArray();
+                await SendAsync(new GetAllSavingGoalsResponse { SavingGoalOptions = options });
             }
         }
     }
@@ -30,6 +30,12 @@ namespace Moco.Api.Endpoints.SavingGoals
     }
     public record GetAllSavingGoalsResponse
     {
-        public SavingGoalDto[] AllSavingGoals { get; set; }
+        public SavingGoalOption[] SavingGoalOptions { get; set; }
+    }
+
+    public record SavingGoalOption
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
     }
 }

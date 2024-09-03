@@ -48,7 +48,6 @@
           />
         </div>
         <BasePrimaryButton btnTxt="Registrieren" :onClick="registerUser" />
-        <BasePrimaryButton btn-txt="Anmelden" :on-click="() => (data = false)" class="!bg-primary/20 !border-0 w-1/4 text-xs flex-center !rounded-lg"/>
       </div>
     </div>
   </div>

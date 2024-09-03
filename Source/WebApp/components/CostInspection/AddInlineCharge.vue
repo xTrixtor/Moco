@@ -67,7 +67,7 @@ const error = ref("");
 
 const validateValueInput = (): boolean => {
   const regexPattern = /^\d+(\.\d{1,2})?$/;
-  return regexPattern.test(chargeCDto.value);
+  return true;
 };
 
 const handleCreateCharge = async () => {

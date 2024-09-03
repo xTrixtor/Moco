@@ -1,14 +1,16 @@
 <template>
   <div>
-    <div v-if="editModus" class="wrapper relative">
-      <InputText
-        v-model="inputValue"
-        ref="target"
-        :type="props.type"
-        class="input outline-none bg-transparent py-1 caret-primary font-semibold text-primary border-r-2 border-border w-full relative"
-        :class="inputStyling"
+    <div v-if="editModus" class="wrapper relative gap-1 flex-center" ref="target">
+      <Calendar
+        v-model="dateValue"
+        :pt="{ input: { class: 'p-[2px] pl-2' } }"
       />
-      <span class="underline"></span>
+      <div class="w-14 h-8 flex-center bg-slate-50/20 p-1 rounded-lg hover:bg-primary cursor-pointer duration-500" @click="handleSave">
+        <Icon
+          name="material-symbols:save-outline"
+          size="1rem"
+        />
+      </div>
     </div>
     <p
       v-else
@@ -16,24 +18,25 @@
       :class="inputStyling"
       @click="handleLableClick"
     >
-      {{ inputValue + " " }} {{ inputExtension ?? "" }}
+      {{ formatDate(dateValue, props.format) }}
     </p>
   </div>
 </template>
 
 <script setup lang="ts">
-import InputText from 'primevue/inputtext';
+import Calendar from "primevue/calendar";
+import { formatDate } from "@vueuse/core";
 
 const props = defineProps<{
-  modelValue: string;
-  type: string;
-  inputExtension?: string;
+  modelValue: Date;
+  format: string;
   labelStyling?: string;
   inputStyling?: string;
 }>();
 const emit = defineEmits(["update:modelValue", "leave"]);
 
-const inputValue = useVModel(props, "modelValue", emit);
+const dateValue = useVModel(props, "modelValue", emit);
+const intialValue = props.modelValue;
 const editModus = ref(false);
 const target = ref(null);
 const { focused } = useFocus(target);
@@ -45,10 +48,10 @@ const handleLableClick = async () => {
   }, 10);
 };
 
-onClickOutside(target, async () => {
+const handleSave = () => {
+  emit("leave");
   editModus.value = false;
-  emit("leave", target.value);
-});
+};
 </script>
 
 <style scoped>
