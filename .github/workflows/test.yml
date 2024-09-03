@@ -64,12 +64,25 @@ jobs:
         run: |
           docker-compose -f FastApiTest/docker-compose.yml up --build -d
 
-      # Step 8: Run tests (if any)
-      - name: Run Tests
-        run: |
-          docker-compose exec <service_name> npm run test
-
-      # Step 9: Stop and clean up the containers
+      # Step 8: Stop and clean up the containers
       - name: Stop Docker Compose
         run: |
           docker-compose down
+
+      # Step 9: Formatting
+      - name: Run Prettier
+        run: |
+          cd Source/WebApp
+          npm run prettier:check
+      - name: Run .NET Format
+        run: dotnet format --verify-no-changes
+
+       # Optional: Commit the changes if any formatting was needed
+      - name: Commit formatted code
+        if: ${{ steps.format.outputs.changes_detected == 'true' }}
+        run: |
+          git config --global user.name "GitHub Action"
+          git config --global user.email "action@github.com"
+          git commit -am "Apply code formatting"
+          git push 
+        
