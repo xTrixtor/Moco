@@ -40,7 +40,7 @@ jobs:
           npm run build
 
       - name: Upload Nuxt build artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: nuxt3-build
           path: |
@@ -88,7 +88,7 @@ jobs:
           git push
           
       - name: Upload build artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: dotnet7-publish
           path: |
