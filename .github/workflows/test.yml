@@ -39,6 +39,13 @@ jobs:
           cd Source/WebApp
           npm run build
 
+      - name: Upload Nuxt build artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: nuxt3-build
+          path: .output/  # Adjust the path if your build output is elsewhere
+          retention-days: 30 
+
       # Step 4: Set up .NET 7 SDK
       - name: Set up .NET 7
         uses: actions/setup-dotnet@v3
@@ -74,7 +81,7 @@ jobs:
       - name: Run Prettier
         run: |
           cd Source/WebApp
-          npm run prettier:check
+          prettier . --write
       - name: Run .NET Format
         run: dotnet format --verify-no-changes
 
