@@ -43,7 +43,8 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: nuxt3-build
-          path: Source/WebApp/.output/ 
+          path: |
+            Source/WebApp/.output/ 
           retention-days: 30 
 
       # Step 4: Set up .NET 7 SDK
@@ -90,5 +91,6 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: dotnet7-publish
-          path: FastApiTest/publish/
+          path: |
+            FastApiTest/publish/
           retention-days: 30  # Adjust as needed
