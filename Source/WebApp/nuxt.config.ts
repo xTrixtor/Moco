@@ -1,6 +1,7 @@
 export default defineNuxtConfig({
   devtools: { enabled: true },
   css: ["~/main.css", "primevue/resources/themes/lara-dark-teal/theme.css"],
+
   modules: [
     "nuxt-primevue",
     "nuxt-icon",
@@ -19,10 +20,13 @@ export default defineNuxtConfig({
       },
     ],
   ],
+
   primevue: {
     usePrimeVue: true,
     options: {
       ripple: true,
     },
   },
+
+  compatibilityDate: "2024-09-04",
 });

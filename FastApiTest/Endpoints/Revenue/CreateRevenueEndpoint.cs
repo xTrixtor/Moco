@@ -9,6 +9,7 @@ namespace MocoApi.Endpoints.Revenue
         public override void Configure()
         {
             Post("/revenue");
+            Policies("User");
         }
 
         public async override Task HandleAsync(CreateRevenueRequest req, CancellationToken ct)

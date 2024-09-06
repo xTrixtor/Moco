@@ -1,10 +1,10 @@
 <template>
-  <div class="flex-center flex-1 relative w-full h-full">
+  <div class="flex-center flex-1 relative w-full p-10" >
     <Chart
       type="pie"
       :data="chartData"
       :options="chartOptions"
-      class="w-full flex-center p-10 absolute h-full"
+      class="flex flex-1 h-full justify-center items-center"
     />
     <div
       v-if="false"

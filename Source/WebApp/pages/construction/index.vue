@@ -10,7 +10,7 @@
           class="text-highlight-text"
           size="5rem"
         />
-        <Button size="Large" @click="() => navigateTo('/fixedcosts')"
+        <Button  @click="() => navigateTo('/fixedcosts')"
           >Zur Hompage</Button
         >
       </div>

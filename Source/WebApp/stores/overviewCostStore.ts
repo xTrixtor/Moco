@@ -9,6 +9,7 @@ import {
 import { useBudgetStore } from "./budgetStore";
 import { useApiStore } from "./apiStore";
 import { useInspectionStore } from "./costInspectionStore";
+import { useUserStore } from "./userStore";
 
 export interface OverviewCost {
   name: string;
@@ -68,12 +69,13 @@ export const useOverviewCostStore = defineStore("costOverview", {
       const budgetLimit = this.calculateBudgetSum();
       const chargesSum = this.calculateChargeSum(selectedCostInspection.value);
       const currentMoney: OverviewCost = {
-        name: "Verfügbares Einkommen",
+        name: "Geld für Luxus",
         info: "Geld nach allen Abzügen. \n Monatliches Gehalt - Vertragliche Kosten - Budget Limits",
         value: monthlyRevenue.value - (fixcostSum.value + budgetLimit.value),
       };
       const toPayMoney: OverviewCost = this.calculateToPayMoney(
         selectedCostInspection.value,
+        budgetLimit.value
       );
       const checkFixedCost = useSumBy(
         selectedCostInspection.value.fixedCostChecklist.filter(
@@ -90,7 +92,7 @@ export const useOverviewCostStore = defineStore("costOverview", {
       };
 
       const luxaryMoney: OverviewCost = {
-        name: "Geld für Luxus",
+        name: "Verfügbares Einkommen",
         value: monthlyRevenue.value - budgetLimit.value - fixcostSum.value,
         info: "Geld minus alle abgespeicherten Kosten",
       };
@@ -106,14 +108,14 @@ export const useOverviewCostStore = defineStore("costOverview", {
         monthlyRevenue,
       ];
     },
-    calculateToPayMoney(costInspection: CostInspectionDto): OverviewCost {
+    calculateToPayMoney(costInspection: CostInspectionDto, budgetSum: number): OverviewCost {
       const fixcostsToPay = useSumBy(
         costInspection?.fixedCostChecklist.filter((x) => !x.isChecked),
         function (f) {
           return f.value ?? 0;
         },
       );
-      return { name: "Maximal zu zahlende Summe", value: fixcostsToPay };
+      return { name: "Maximal zu zahlende Summe", value: fixcostsToPay + budgetSum, info: "Aktuelles Geld mit noch zu zahlenden Fixkosten + verfügbares Budget" };
     },
     calculateMonthyRevenue(costInspection: CostInspectionDto): OverviewCost {
       const revenue = useSumBy(costInspection?.credits ?? 0, function (r) {
@@ -175,7 +177,11 @@ export const useOverviewCostStore = defineStore("costOverview", {
       });
     },
     async setTotalRevenue() {
-      const revenues = (await useApiStore().RevenueClient.getRevenuesEndpoint())
+      const user = useUserStore().getUser;
+      const userId = user.sub;
+      if(!userId) return undefined;
+
+      const revenues = (await useApiStore().RevenueClient.getRevenuesOfUserEndpoint(user.sub))
         .revenues;
       this.totalRevenue.value = useSumBy(
         revenues,

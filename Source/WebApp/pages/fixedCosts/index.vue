@@ -1,35 +1,40 @@
 <template>
-  <div class="flex flex-col 2xl:flex-row gap-2 w-full">
+  <div class="flex flex-row w-full h-full">
     <div v-if="!loading" class="flex-1">
-      <div class="grid grid-rows-5 grid-cols-5 gap-4 h-full">
+      <div id="dashboard" class="gap-4 h-full w-full">
         <div
-          class="h-full col-span-3 row-span-2 w-full flex flex-col xl:flex-row justify-between items-center border-2 border-border bg-card rounded-lg text-primary-text shadow-lg"
+          class="h-full col-span-5 row-span-3 w-full flex flex-col xl:flex-row justify-between items-center border-2 border-border bg-card rounded-lg text-primary-text shadow-lg"
         >
-          <div
-            v-if="overviewCosts != undefined"
-            class="grid grid-cols-4 gap-2 rounded-xl w-full h-full p-5 overflow-auto"
-          >
-            <OverviewCell
-              v-for="(overviewCost, key) in overviewCosts"
-              :cost="overviewCost"
-              class="!text-white flex-center"
-              :class="[key % 2 == 0 ? 'bg-gray-700' : 'bg-background']"
-            />
-          </div>
-          <div v-else class="flex-center w-full">
-            <p class="text-xl text-highlight-text underlineAnimation">
-              Keine Daten
-            </p>
+          <div class="flex-1 w-full h-full flex-col p-4 overflow-auto">
+            <p class="font-semibold tracking-wide text-highlight-text text-lg underline underline-offset-2 mb-1">Kalkulierte & statische Beträge</p>
+            <div class="">
+              <div
+                v-if="overviewCosts != undefined"
+                class="grid grid-cols-4 gap-2 rounded-xl w-full h-full"
+              >
+                <OverviewCell
+                  v-for="(overviewCost, key) in overviewCosts"
+                  :cost="overviewCost"
+                  class="!text-white flex-center"
+                  :class="[key % 2 == 0 ? 'bg-gray-700' : 'bg-background']"
+                />
+              </div>
+              <div v-else class="flex-center w-full">
+                <p class="text-xl text-highlight-text underlineAnimation">
+                  Keine Daten
+                </p>
+              </div>
+            </div>
           </div>
         </div>
-
         <div
-          class="col-span-2 row-span-4 h-full w-full border-2 border-border rounded-lg rounded-bl-[2rem] rounded-tr-[2rem] shadow-xl py-4 px-2 bg-foreground"
+          class="col-span-2 row-span-4 flex flex-1 h-full w-full border-2 border-border rounded-lg rounded-bl-[2rem] rounded-tr-[2rem] shadow-xl bg-foreground"
         >
           <FixedCostsCostOverviewChart />
         </div>
+        
         <div
-          class="h-full px-2 col-span-3 row-span-2 w-full flex flex-col justify-between items-center border-2 border-border bg-card rounded-lg text-primary-text shadow-lg divide-border divide-y-2"
+          class="h-full px-2 col-span-3 row-span-4 w-full flex flex-col justify-between items-center border-2 border-border bg-card rounded-lg text-primary-text shadow-lg divide-border divide-y-2"
         >
           <div class="h-1/2 w-full overflow-auto overflow-x-hidden">
             <div
@@ -78,6 +83,7 @@
             </div>
           </div>
         </div>
+        
       </div>
     </div>
     <BaseFullScreenLoader v-else />
@@ -112,7 +118,7 @@ const { overviewCosts } = storeToRefs(overviewStore);
 const { selectedCostInspection } = storeToRefs(useInspectionStore());
 
 var butgetBars = computed(() =>
-  calculateBar(selectedCostInspection?.value?.monthlyBudgets ?? []),
+  calculateBar(selectedCostInspection?.value?.monthlyBudgets ?? [])
 );
 
 const calculateSumBgColor = (chargeSum: number, limit: number) => {
@@ -175,7 +181,9 @@ onMounted(async () => {
 </script>
 
 <style scoped>
-.test {
-  /* background: linear-gradient(to right, #22c55e 30%, #3b82f6 30%); */
+#dashboard{
+  display: grid;
+  grid-template-rows: repeat(7, minmax(0, 1fr));
+  grid-template-columns: repeat(5, minmax(0, 1fr));
 }
 </style>

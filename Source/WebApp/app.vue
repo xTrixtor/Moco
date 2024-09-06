@@ -3,7 +3,7 @@
   <NuxtLayout>
     <Toast />
     <div id="editModal"></div>
-    <NuxtPage />
+    <RouterView />
   </NuxtLayout>
 </template>
 

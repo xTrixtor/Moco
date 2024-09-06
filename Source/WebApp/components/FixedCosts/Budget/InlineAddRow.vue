@@ -40,7 +40,7 @@
     id="addButton"
     class="flex-center w-full cursor-pointer opacity-60 hover:opacity-100 duration-300 my-2"
   >
-    <Icon name="gridicons:add-outline" color="white" class="text-xl" />
+    <Icon :size="props.iconSize" name="gridicons:add-outline" color="white" class="text-xl" />
   </div>
 </template>
 
@@ -62,6 +62,8 @@ let createBudgetDto = reactive<BudgetCDto>({});
 const target = ref(null);
 const allowedToSafe = ref(false);
 const error = ref("");
+
+const props = defineProps<{iconSize?: string}>()
 
 const validateValueInput = (): boolean => {
   const regexPattern = /^\d+(\.\d{1,2})?$/;

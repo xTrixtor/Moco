@@ -22,7 +22,7 @@ namespace Moco.Api.Models.Moco.Dto
             this.DepositRates = savingGoal?.DepositRates?.Take(10).Select(x => x.asDto()).ToArray();
             this.CurrentSaving = savingGoal.DepositRates.Last(x => x.isPaid == true && x.SavingMonth >= savingGoal.StartDate).Value;
             this.MethodKey = savingGoal.MethodKey;
-            this.TotalRates = savingGoal.DepositRates.Count();
+            this.TotalRates = savingGoal.DepositRates.Count() - 1;
         }
         public int Id { get; set; }
         public string Name { get; set; }

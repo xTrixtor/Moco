@@ -26,7 +26,7 @@ export const calculateDepositsWithMonthlyRate = (
   }
   let capital = initialCapital;
 
-  const start = startDate ?? addMonths(new Date(), 1);
+  const start = startDate ?? addMonths(new Date(), 0);
 
   const depositRates: DepositRateDto[] = [
     {
@@ -60,6 +60,7 @@ export const calculateDepositsWithMonthlyRate = (
     };
     depositRates.push(depositRate);
   }
+
   return depositRates;
 };
 

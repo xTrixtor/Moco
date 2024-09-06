@@ -1,6 +1,8 @@
 ﻿using MocoApi.Models.Moco.Resource;
 using Microsoft.EntityFrameworkCore;
 using Moco.Api.Models.Moco.Resource;
+using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Storage;
 
 public class MoCoContext : DbContext
 {
@@ -25,6 +27,12 @@ public class MoCoContext : DbContext
     {
 
     }
+    public bool DatabaseExists()
+    {
+        var databaseCreator = this.Database.GetService<IRelationalDatabaseCreator>();
+        return databaseCreator.Exists();
+    }
+
 
     protected override void OnConfiguring(DbContextOptionsBuilder options)
     {
@@ -63,6 +71,13 @@ public class MoCoContext : DbContext
             new FixedCost{ Id = 4, Name = "Flexible", Value = 250, GroupCostId = 2, TimeInterval = TimeInterval.monatlich},
             new FixedCost{ Id = 5, Name = "Versicherung", Value = 250, GroupCostId = 3, TimeInterval = TimeInterval.jährlich},
             new FixedCost{ Id = 6, Name = "Kredit", Value = 244, GroupCostId = 3, TimeInterval = TimeInterval.monatlich},
+        };
+
+        var revenues = new List<Revenue>()
+        {
+            new Revenue { Source = "Inter Gmbh", Id = 1, UserId = "67f4dc76-02f5-4cf1-bbe8-85edbc2af1ed", Value = 2500.22 },
+            new Revenue { Source = "Knorrberry", Id = 2, UserId = "67f4dc76-02f5-4cf1-bbe8-85edbc2af1ed", Value = 450.98 },
+            new Revenue { Source = "Oma", Id = 3, UserId = "67f4dc76-02f5-4cf1-bbe8-85edbc2af1ed", Value = 25 }
         };
 
 
@@ -114,7 +129,7 @@ public class MoCoContext : DbContext
             .HasData(fixCosts);
 
         modelBuilder.Entity<Revenue>()
-            .HasData(new Revenue { Source = "Compoany", Id = 1, UserId = "67f4dc76-02f5-4cf1-bbe8-85edbc2af1ed", Value = 2500.22 });
+            .HasData(revenues);
 
         modelBuilder.Entity<User>()
             .HasData(

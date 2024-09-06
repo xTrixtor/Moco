@@ -76,7 +76,7 @@
               <div
                 v-if="selectedSavingGoal?.methodKey != 1"
                 class="relative"
-                @click="toggle"
+                @click="(e) => toggle(e)"
               >
                 <Icon
                   name="akar-icons:cross"
@@ -108,6 +108,16 @@
                           </p>
                         </desc>
                         <desc class="flex font-bold"
+                          >Maximale Rate:
+                          <p class="pl-2 font-bold">
+                            {{
+                              selectedSavingGoal.goalValue -
+                              selectedNoPayDepositRate?.value
+                            }}
+                            €
+                          </p>
+                        </desc>
+                        <desc class="flex font-bold"
                           >Ziel:
                           <p class="pl-2 font-bold">
                             {{ selectedSavingGoal.goalValue }} €
@@ -130,12 +140,13 @@
                         outlined
                         size="small"
                         class="hover:bg-primary duration-700"
+                        :disabled="!newDepositRate"
                       >
                         <Icon
                           name="material-symbols:save-outline"
                           class="text-highlight-text p-1"
                           size="1.8rem"
-                          @click="() => handleSave()"
+                          @click="(e) => handleSave(e)"
                         />
                       </Button>
                     </div>
@@ -162,12 +173,13 @@ import {
   calculateDepositsWithDate,
   calculateDepositsWithMonthlyRate,
 } from "~/metaData/savingGoalService";
+import { addMonths } from "date-fns";
 
 const { selectedSavingGoal } = storeToRefs(useSavingGoalStore());
 const selectedNoPayDepositRate = ref<DepositRateDto>();
 const loading = ref(false);
 const lazyLoadDepositRates = ref<DepositRateDto[]>(
-  selectedSavingGoal.value.depositRates ?? [],
+  selectedSavingGoal?.value.depositRates ?? []
 );
 const totalRates = computed(() => selectedSavingGoal.value.totalRates ?? 0);
 const lazyParams = ref(undefined);
@@ -176,7 +188,7 @@ const op = ref();
 const showNotPaid = ref(false);
 
 let currentRate = computed(
-  () => lazyLoadDepositRates.value.filter((x) => x.isPaid == true)[0] ?? {},
+  () => lazyLoadDepositRates.value.filter((x) => x.isPaid == true)[0] ?? {}
 );
 
 const columns = [{ field: "key", header: "Month-Year" }];
@@ -214,12 +226,14 @@ const handleNoPaySelect = (depositRate: DepositRateDto) => {
   selectedNoPayDepositRate.value = depositRate;
 };
 
-const handleSave = async () => {
+const handleSave = async (event) => {
   const { methodKey } = selectedSavingGoal.value;
   if (methodKey == 0)
     await updateRatesWithRates(selectedNoPayDepositRate.value);
   if (methodKey == 1)
     await updateRatesWithDates(selectedNoPayDepositRate.value);
+
+  toggle(event);
 };
 
 const updateRatesWithRates = async (currentRate: DepositRateDto) => {
@@ -232,7 +246,7 @@ const updateRatesWithRates = async (currentRate: DepositRateDto) => {
     depositRate,
     goalValue,
     rateBefore + newDepositRate.value,
-    currentRate.savingMonth,
+    currentRate.savingMonth
   );
 
   const response =
@@ -250,7 +264,7 @@ const updateRatesWithDates = async (currentRate: DepositRateDto) => {
     currentRate.savingMonth,
     endDate,
     goalValue,
-    currentSaving + newDepositRate.value,
+    currentSaving + newDepositRate.value
   );
   const response =
     await useApiStore().SavingGoalsClient.updateDepositRatesEndpoint({
@@ -269,12 +283,12 @@ const loadData = async (event) => {
     await useApiStore().SavingGoalsClient.lazyLoadDepositRateEndpoint(
       selectedSavingGoal.value.id,
       event.first,
-      showNotPaid.value,
+      showNotPaid.value
     );
   lazyLoadDepositRates.value = response.depositRates ?? [];
   totalRates.value = response.totalRates;
   currentRate.value = lazyLoadDepositRates.value.filter(
-    (x) => x.isPaid == true,
+    (x) => x.isPaid == true
   )[0];
   loading.value = false;
 };

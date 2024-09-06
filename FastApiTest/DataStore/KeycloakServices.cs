@@ -31,11 +31,14 @@ namespace MocoApi.DataStore
             };
             client.BaseAddress = new Uri(keycloakSettings.BaseURL);
 
+            Console.WriteLine(keycloakSettings.BaseURL + keycloakSettings.LoginPath);
+
             var response = await client.PostAsync(keycloakSettings.LoginPath, new FormUrlEncodedContent(data));
 
             if (!response.IsSuccessStatusCode)
             {
-                throw new Exception("Keycloak request failed");
+                Console.WriteLine(JsonConvert.SerializeObject(response));
+                throw new Exception($"Keycloak request failed!!! {JsonConvert.SerializeObject(response)}");
             }
             var jsonContent = await response.Content.ReadAsStringAsync();
 
@@ -84,7 +87,8 @@ namespace MocoApi.DataStore
 
             if (!response.IsSuccessStatusCode)
             {
-                throw new Exception("Keycloak request failed");
+                Console.WriteLine(JsonConvert.SerializeObject(response));
+                throw new Exception($"Keycloak request failed!!! {JsonConvert.SerializeObject(response)}");
             }
             var jsonString = await response.Content.ReadAsStringAsync();
 
@@ -112,7 +116,8 @@ namespace MocoApi.DataStore
 
             if (!response.IsSuccessStatusCode)
             {
-                throw new Exception("Keycloak request failed");
+                Console.WriteLine(JsonConvert.SerializeObject(response));
+                throw new Exception($"Keycloak request failed!!! {JsonConvert.SerializeObject(response)}");
             }
             var jsonContent = await response.Content.ReadAsStringAsync();
 

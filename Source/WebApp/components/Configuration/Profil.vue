@@ -10,19 +10,25 @@
       :class="key % 2 ? 'bg-slate-300/20' : 'bg-secondary-content'"
     >
       <div class="w-1/2 p-2">{{ probValue.label }}</div>
-      <div class="w-1/2 p-2">{{ user[probValue.propKey] }}</div>
+      <div class="w-1/2 p-2 truncate">{{ user[probValue.propKey] }}</div>
     </div>
     <div
       class="flex text-sm"
       :class="key % 2 ? 'bg-slate-300/20' : 'bg-secondary-content'"
     >
-      <div class="w-1/2 p-2">Gehalt</div>
+      <div v-if="revenues?.length == 1" class="w-1/2 p-2">Gehalt</div>
+      <div v-else class="w-1/2 p-2">Gehälter</div>
       <div class="w-1/2 p-2">
-        <BaseEditInput
-          v-model="revenue.value"
-          @leave="updateRevenue()"
-          :input-extension="'€'"
-        />
+        <div class="flex flex-col">
+          <div v-for="(revenue,key) in revenues" :key="`${revenue.id}-${key}`" class="flex-1 w-full">
+            <BaseEditInput
+              class=""
+              v-model="revenue.value"
+              @leave="updateRevenue(revenue)"
+              :input-extension="'€'"
+            />
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -41,8 +47,12 @@ interface PropertyValue {
 const revenueClient = useApiStore().RevenueClient;
 const loading = ref(false);
 
-const revenue: Ref<RevenueDto> = ref({ value: 0 });
 const user = computed(() => useUserStore().getUser);
+
+const userId = computed(() => user.value["sub"]);
+
+const revenues = ref<RevenueDto[]>();
+const initialRevenues = { ...revenues.value };
 
 const profilConfig: PropertyValue[] = [
   { label: "Id", propKey: "sub" },
@@ -53,16 +63,24 @@ const profilConfig: PropertyValue[] = [
 
 onMounted(async () => {
   loading.value = true;
-  const revenues = (await revenueClient.getRevenuesEndpoint()).revenues;
-
-  revenue.value = revenues[0];
-
+  revenues.value = (
+    await revenueClient.getRevenuesOfUserEndpoint(userId.value)
+  ).revenues;
   loading.value = false;
 });
 
-const updateRevenue = async () => {
+const updateRevenue = async (revenue : RevenueDto) => {
+  const oldVersion = useFindKey(initialRevenues, function (o: RevenueDto) {
+    return o.id == revenue.id;
+  }) as RevenueDto;
+  const isDirt =
+    oldVersion?.source !== revenue.source ||
+    oldVersion?.value !== revenue.value;
+
+  if (!isDirt) return;
+
   const request: UpdateRevenueRequest = {
-    uRevenueDto: { id: revenue.value.id, value: revenue.value.value },
+    uRevenueDto: { id: revenue.id, value: revenue.value },
   };
   await revenueClient.updateRevenueEndpoint(request);
 };

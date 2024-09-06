@@ -31,7 +31,7 @@ import { useFixedCostStore } from "~/stores/fixedCostStore";
 
 const selectedConfig = ref<string | undefined>(undefined);
 
-const configs = ["Fix-Kosten", "Budgets", "Profil"];
+const configs = ["Profil", "Fix-Kosten", "Budgets"] ;
 onMounted(async () => {
   await useFixedCostStore().fetch();
 });

@@ -21,7 +21,7 @@
             v-model="budget.name"
             type="text"
             @leave="handleUpdateCharge(budget)"
-            class="truncate flex-1 text-md p-1 items-center flex justify-start"
+            class="truncate flex-1 text-[16px] p-2 items-center flex justify-start"
           />
         </div>
 
@@ -30,7 +30,7 @@
             v-model="budget.limit"
             type="number"
             @leave="handleUpdateCharge(budget)"
-            class="truncate flex-1 text-md p-1 items-center flex justify-center"
+            class="truncate flex-1 text-md p-2 items-center flex justify-center text-[16px]"
             input-extension="€"
           />
         </div>
@@ -40,10 +40,11 @@
             :dto="budget"
             label="dieses Budget"
             :delete-api-call="() => deleteBudgetById(budget.id)"
+            class="!text-xl"
           />
         </div>
       </div>
-      <InlineAddRow model="createBudgetModalVis" />
+      <InlineAddRow model="createBudgetModalVis" icon-size="1.8rem" />
     </div>
   </div>
 </template>

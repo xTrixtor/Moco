@@ -29,7 +29,7 @@ namespace Moco.Api.Endpoints.SavingGoals
                 if(req.UpdatedDepositRates.Count() < depositRates.Count())
                 {
                     var lastNewRate = req.UpdatedDepositRates.LastOrDefault();
-                    var toDeleteRates = depositRates.Where(x => x.SavingMonth > lastNewRate.SavingMonth).ToList();
+                    var toDeleteRates = depositRates.Where(x => x.SavingMonth > lastNewRate.SavingMonth.AddDays(1)).ToList();
                     dbContext.RemoveRange(toDeleteRates);
                 }
 

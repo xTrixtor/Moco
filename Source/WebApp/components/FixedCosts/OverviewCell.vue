@@ -19,12 +19,12 @@
       <div class="w-full flex justify-end mb-2">
         <Icon
           name="material-symbols:info-outline"
-          size="2rem"
+          size="1.5rem"
           class="hover:text-primary hover:cursor-pointer"
           @click="() => (showInfo = true)"
         />
       </div>
-      <div class="flex-1 flex-center flex-col text-lg">
+      <div class="flex-1 flex-center flex-col">
         <div class="w-full mb-2">
           <p class="underline underline-offset-2">{{ props.cost.name }}</p>
         </div>
@@ -37,7 +37,7 @@
 </template>
 
 <script setup lang="ts">
-import { OverviewCost } from "@/stores/overviewCostStore";
+import type { OverviewCost } from "@/stores/overviewCostStore";
 
 const showInfo = ref(false);
 

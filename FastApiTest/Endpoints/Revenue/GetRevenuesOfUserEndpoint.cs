@@ -4,19 +4,20 @@ using FastEndpoints;
 
 namespace MocoApi.Endpoints.Revenue
 {
-    public class GetRevenuesEndpoint : EndpointWithoutRequest<GetRevenuesResponse>
+    public class GetRevenuesOfUserEndpoint : EndpointWithoutRequest<GetRevenuesResponse>
     {
         public override void Configure()
         {
-            Get("/revenue");
-            AllowAnonymous();
+            Get("/revenue/{UserId}");
+            Policies("User");
         }
 
         public async override Task HandleAsync(CancellationToken ct)
         {
+            var userId = Route<string>("UserId");
             using (var dbContext = new MoCoContext())
             {
-                var revenues = dbContext.Revenue.ToList().Select(x => x.asDto()).ToList();
+                var revenues = dbContext.Revenue.ToList().Where(x => x.UserId.Equals(userId)).Select(x => x.asDto()).ToList();
                 await SendAsync(new GetRevenuesResponse { Revenues = revenues });
             }
         }
@@ -24,6 +25,6 @@ namespace MocoApi.Endpoints.Revenue
 
     public record GetRevenuesResponse
     {
-        public IEnumerable<RevenueDto> Revenues { get; set; }
+        public IEnumerable<RevenueDto>  Revenues { get; set; }
     }
 }

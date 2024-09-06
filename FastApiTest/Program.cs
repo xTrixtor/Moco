@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using NSwag;
 using MocoApi.Handler;
 using Moco.Api.Factories.Db;
+using Microsoft.EntityFrameworkCore;
 
 IConfigurationRoot config = new ConfigurationBuilder()
     .AddJsonFile("appsettings.json")
@@ -106,7 +107,14 @@ app.UseAuthentication() //add this
 }
 #endif
 {
-    app.Run();
+    using (var dbContext = new MoCoContext())
+    {
+        if (!dbContext.DatabaseExists())
+        {
+            dbContext.Database.EnsureCreated();
+        }
+    }
+        app.Run();
 }
 
 
