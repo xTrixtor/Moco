@@ -40,7 +40,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: nuxt3-build
-          path: ./.output
+          path: ./Source/WebApp/.output
           retention-days: 30 
 
       - name: Set up .NET 7
