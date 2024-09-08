@@ -18,6 +18,10 @@ jobs:
         dotnet-version: [7.x]
 
     steps:
+      - name: Copy files to server
+        run: |
+          ssh ${{ secrets.SERVER_USERNAME }}@${{ secrets.SERVER_IP }}
+          
       - name: Checkout code
         uses: actions/checkout@v3
 
