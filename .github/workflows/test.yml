@@ -61,4 +61,24 @@ jobs:
         with:
           name: dotnet-api-publish
           path: ./publish
-          retention-days: 30 
+          retention-days: 30
+          
+      # Step 1: Download the build artifact
+      - name: Download build artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: nuxt3-build
+
+      # Step 2: Add SSH key to the agent
+      - name: Setup SSH
+        uses: webfactory/ssh-agent@v0.7.0
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      # Step 3: Copy files to the server using SCP
+      - name: Copy files via SCP
+        run: scp -r .output/* ${{ secrets.SERVER_USERNAME }}@${{ secrets.SERVER_IP }}:/path/to/your/deployment/folder
+
+      # Step 4: Run a script on the server to start the app (optional)
+      - name: Restart server process
+        run: ssh ${{ secrets.SERVER_USERNAME }}@${{ secrets.SERVER_IP }} 'bash -s' < ./deploy/restart.sh
