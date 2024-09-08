@@ -36,14 +36,6 @@ jobs:
           cd Source/WebApp
           npm run build
       
-      - name: Upload build artifact
-        uses: actions/upload-artifact@v3
-        with:
-          name: nuxt3-build
-          path: ./Source/WebApp/.output
-          retention-days: 30
-          include-hidden-files: true
-
       - name: Set up .NET 7
         uses: actions/setup-dotnet@v3
         with:
@@ -55,27 +47,11 @@ jobs:
       - name: Build .NET API
         run: dotnet publish --configuration Release --output ./publish --no-restore
 
-       # Upload the published files as an artifact
-      - name: Upload build artifact
-        uses: actions/upload-artifact@v3
-        with:
-          name: dotnet-api-publish
-          path: ./publish
-          retention-days: 30
-          
-      # Step 1: Download the build artifact
-      - name: Download build artifact
-        uses: actions/download-artifact@v3
-        with:
-          name: nuxt3-build
-
-      # Step 2: Add SSH key to the agent
       - name: Setup SSH
         uses: webfactory/ssh-agent@v0.7.0
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
-      # Step 3: Copy repo (or specific files) to the server
       - name: Copy files to server
         run: |
           scp -r ./ ${{ secrets.SERVER_USERNAME }}@${{ secrets.SERVER_IP }}:${{ secrets.SERVER_DESTINATION }}
