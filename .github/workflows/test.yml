@@ -36,11 +36,11 @@ jobs:
           cd Source/WebApp
           npm run build
       
-      - name: Upload Nuxt build artifact
-        uses: actions/upload-artifact@v4
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v3
         with:
-          name: frontend-build
-          path: ./dist
+          name: nuxt3-build
+          path: .output/  
           retention-days: 30 
 
       - name: Set up .NET 7
@@ -54,9 +54,10 @@ jobs:
       - name: Build .NET API
         run: dotnet publish --configuration Release --output ./publish --no-restore
 
+       # Upload the published files as an artifact
       - name: Upload build artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v3
         with:
-          name: dotnet7-publish
-          path: ./dist
+          name: dotnet-api-publish
+          path: ./publish
           retention-days: 30 
