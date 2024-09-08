@@ -18,10 +18,6 @@ jobs:
         dotnet-version: [7.x]
 
     steps:
-      - name: Copy files to server
-        run: |
-          ssh ${{ secrets.SERVER_USERNAME }}@${{ secrets.SERVER_IP }}
-          
       - name: Checkout code
         uses: actions/checkout@v3
 
@@ -51,12 +47,12 @@ jobs:
       - name: Build .NET API
         run: dotnet publish --configuration Release --output ./publish --no-restore
 
-      - name: Setup SSH
+      - name: Setup SSH agent
         uses: webfactory/ssh-agent@v0.7.0
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
-      - name: Copy files to server
+      - name: Copy files via SCP
         run: |
           scp -r ./ ${{ secrets.SERVER_USERNAME }}@${{ secrets.SERVER_IP }}:${{ secrets.SERVER_DESTINATION }}
 
