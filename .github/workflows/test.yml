@@ -78,7 +78,3 @@ jobs:
       # Step 3: Copy files to the server using SCP
       - name: Copy files via SCP
         run: scp -r .output/* ${{ secrets.SERVER_USERNAME }}@${{ secrets.SERVER_IP }}:/home/deploy/moco
-
-      # Step 4: Run a script on the server to start the app (optional)
-      - name: Restart server process
-        run: ssh ${{ secrets.SERVER_USERNAME }}@${{ secrets.SERVER_IP }} 'bash -s' < ./deploy/restart.sh
