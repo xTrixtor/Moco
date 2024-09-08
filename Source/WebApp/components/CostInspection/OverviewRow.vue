@@ -1,6 +1,6 @@
 <template>
   <div
-    class="bg-foreground border-border border-2 rounded-md p-2 flex gap-3 text-highlight-text divide-x-2 flex-center"
+    class="bg-foreground border-border border-2 rounded-md p-2 flex gap-3 text-highlight-text lg:divide-x-2 flex-center text-xs lg:text-base flex-col lg:flex-row"
   >
     <div class="flex-center gap-2 relative">
       <p class="flex">

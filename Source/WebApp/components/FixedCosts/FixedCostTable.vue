@@ -26,11 +26,11 @@
         class="w-full py-1 flex border-b-2 border-border text-highlight-text"
         :class="[key == 0 ? 'rounded-tr-2xl' : '']"
       >
-        <div class="w-[60%]" :class="cellStyling">
-          <p class="truncate flex-1">{{ cost.name }}</p>
+        <div class="w-1/2 lg:w-[60%]" :class="cellStyling">
+          <p class="truncate flex-1 text-xs lg:text-base flex items-center">{{ cost.name }}</p>
         </div>
 
-        <div class="w-[25%] flex-1" :class="cellStyling">
+        <div class="w-[25%] flex-1 text-xs lg:text-base flex items-center" :class="cellStyling">
           <p class="truncate flex-1">{{ calculateMontlyChargeCost(cost) }} €</p>
         </div>
         <div class="flex justify-center items-center">

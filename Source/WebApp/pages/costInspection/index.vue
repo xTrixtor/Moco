@@ -11,21 +11,27 @@
         />
       </div>
     </div>
-    <div v-if="!selectedCostInspection" class="flex-center">
+    <div v-if="!selectedCostInspection" class="flex-center flex-1">
       <CostInspectionCreateInspectionButton />
     </div>
     <div
       v-else
-      class="grid grid-rows-2 xl:grid-cols-5 xl:grid-rows-1 flex-1 gap-3"
+      class="grid grid-cols-1 xl:grid-cols-5 xl:grid-rows-1 flex-1 xl:gap-3"
     >
-      <div class="col-span-3 xl:col-span-2 flex-col flex gap-3">
+      <div class="xl:col-span-2 flex-col flex gap-3">
         <CostInspectionOverviewRow />
         <div class="flex flex-1 w-full h-full gap-2">
           <CostInspectionFixedCostChecklist />
-          <CostInspectionBudgetInspection />
+          <CostInspectionBudgetInspection v-if="!isMobil" />
+        </div>
+        <CostInspectionBudgetInspection v-if="isMobil" />
+        <div v-if="isMobil"
+          class="bg-background/10 flex-1 w-full border-2 border-border rounded-lg"
+        >
+          <CostInspectionBudgetSideBySideChart />
         </div>
       </div>
-      <div class="col-span-3 flex-col flex">
+      <div v-if="!isMobil" class="col-span-3 flex-col flex ">
         <div
           class="bg-background/10 flex-1 w-full border-2 border-border rounded-lg"
         >
@@ -43,6 +49,9 @@ import { useFixedCostStore } from "~/stores/fixedCostStore";
 import { useConfirm } from "primevue/useconfirm";
 import { useToast } from "primevue/usetoast";
 import { useApiStore } from "~/stores/apiStore";
+import { useUtilStore } from "~/stores/utilStore";
+
+const { isMobil } = storeToRefs(useUtilStore());
 
 const { selectedCostInspection } = storeToRefs(useInspectionStore());
 const confirm = useConfirm();
@@ -57,7 +66,7 @@ const confirmDelete = () => {
     icon: "pi pi-exclamation-triangle",
     accept: async () => {
       await costInspectionClient.deleteCostInspectionEndpoint(
-        selectedCostInspection.value.id,
+        selectedCostInspection.value.id
       );
       toast.add({
         severity: "info",

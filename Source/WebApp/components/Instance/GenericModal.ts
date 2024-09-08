@@ -21,7 +21,6 @@ export class GenericModalInstance {
       this.app.mount(this.mountTarget);
       return true;
     } else {
-      console.log("modal already mounted");
       return false;
     }
   }
@@ -31,7 +30,6 @@ export class GenericModalInstance {
       this.app = undefined;
       return true;
     } else {
-      console.log("modal already unmounted");
       return false;
     }
   }

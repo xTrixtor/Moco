@@ -10,6 +10,8 @@ import { useBudgetStore } from "./budgetStore";
 import { useApiStore } from "./apiStore";
 import { useInspectionStore } from "./costInspectionStore";
 import { useUserStore } from "./userStore";
+import { useUtilStore } from "~/stores/utilStore";
+
 
 export interface OverviewCost {
   name: string;
@@ -96,6 +98,17 @@ export const useOverviewCostStore = defineStore("costOverview", {
         value: monthlyRevenue.value - budgetLimit.value - fixcostSum.value,
         info: "Geld minus alle abgespeicherten Kosten",
       };
+      const { isMobil } = useUtilStore();
+
+      if(isMobil){
+        this.overviewCosts = [
+          availableMoney,
+          currentMoney,
+          toPayMoney,
+          chargesSum,
+        ];
+        return;
+      }
 
       this.overviewCosts = [
         availableMoney,
@@ -164,7 +177,7 @@ export const useOverviewCostStore = defineStore("costOverview", {
           groupCost.fixedCosts,
           function (fixedcost: FixedCostDto) {
             return calculateMontlyChargeCost(fixedcost);
-          },
+          }
         );
         fixedCostSumTemp += groupCostSum;
       });

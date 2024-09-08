@@ -1,6 +1,6 @@
 <template>
   <div
-    class="w-full flex justify-center items-center my-4 !cursor-pointer h-20"
+    class="w-full flex justify-center items-center my-4 !cursor-pointer h-20 gap-1"
   >
     <div @click="previousMonth" id="datePickerIcon" class="flex-center flex-1">
       <Icon name="bxs:left-arrow" size="2rem" class="text-border" />
@@ -11,7 +11,7 @@
       v-model="selectedDate"
       showIcon
       iconDisplay="input"
-      class="w-1/4"
+      class="w-full lg:w-1/4 lg:min-w-[200px]"
       @date-select="handleChange"
       @month-change="handleChange"
       @year-change="handleChange"

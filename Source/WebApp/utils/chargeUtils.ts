@@ -36,16 +36,3 @@ export const createMonthlyGroupCost = (
     return groupCost;
   });
 };
-
-export const createCalculatedFixedCost = (
-  fixedCost: FixedCostDto,
-): FixedCostDto => {
-  return {
-    value: calculateMontlyChargeCost(fixedCost),
-    costGroup: fixedCost.costGroup,
-    groupCostId: fixedCost.groupCostId,
-    id: fixedCost.id,
-    name: fixedCost.name,
-    timeInterval: fixedCost.timeInterval,
-  } as FixedCostDto;
-};

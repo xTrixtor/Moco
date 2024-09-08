@@ -1,6 +1,6 @@
 <template>
-  <div class="flex flex-col h-full w-full p-4">
-    <p class="text-xl text-primary underline underline-offset-4">
+  <div class="flex flex-col h-full w-full lg:p-4">
+    <p class="text-xl text-primary underline underline-offset-4 mb-2">
       Fixkosten pro Monat
     </p>
     <Accordion v-if="groupCosts.length != 0" v-model:activeIndex="activeIndex">
@@ -8,7 +8,7 @@
         v-for="(groupCost, key) in groupCosts"
         :key="key"
         :header="groupCost.name"
-        :pt="{ content: { class: 'justify-center items-center' } }"
+        :pt="{ content: { class: 'justify-center items-center p-1 lg:p-4' } }"
       >
         <FixedCostTable :fixedcosts="groupCost.fixedCosts ?? []" />
       </AccordionTab>

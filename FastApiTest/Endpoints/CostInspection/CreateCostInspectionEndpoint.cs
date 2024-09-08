@@ -1,6 +1,8 @@
 ﻿using FastEndpoints;
 using Microsoft.EntityFrameworkCore;
+using Moco.Api.DataStore;
 using Moco.Api.Factories.Db;
+using Moco.Api.Models.Moco.Dto;
 using MocoApi.Extensions;
 using Newtonsoft.Json;
 
@@ -9,10 +11,12 @@ namespace Moco.Api.Endpoints.CostInspection
     public class CreateCostInspectionEndpoint : Endpoint<CostInspectionCRequest, CostInspectionCResponse>
     {
         private readonly MocoContextFactory mocoContextFactory;
+        private readonly UtilsService utilsService;
 
-        public CreateCostInspectionEndpoint(MocoContextFactory mocoContextFactory, IHttpClientFactory httpClientFactory)
+        public CreateCostInspectionEndpoint(MocoContextFactory mocoContextFactory, IHttpClientFactory httpClientFactory, UtilsService utilsService)
         {
             this.mocoContextFactory = mocoContextFactory;
+            this.utilsService = utilsService;
         }
         public override void Configure()
         {
@@ -26,9 +30,20 @@ namespace Moco.Api.Endpoints.CostInspection
 
             using (var dbContext = mocoContextFactory.CreateMocoContext())
             {
-                var groupCosts = dbContext.GroupCosts.ToList().Where(x => x.UserId == req.UserId).Select(x => x.asDto()).ToArray();
+                var fixedCosts = dbContext.GroupCosts.Where(x => x.UserId == req.UserId).ToList().SelectMany(x => x.FixedCosts).ToArray().Select(x => x.asDto());
+                var checkableFixcost = new List<CheckableFixedCostDto>();
 
-                var checkableFixcost = groupCosts.SelectMany(x => x.FixedCosts).Select((x, key) => x.toCheckable(key)).ToArray();
+                foreach (var fixedCost in fixedCosts)
+                {
+                    var key = 0;
+
+                    var calculatedCost = utilsService.calculateMontlyChargeCost(fixedCost);
+                    fixedCost.Value = calculatedCost;
+
+                    checkableFixcost.Add(fixedCost.toCheckable(key));
+                    key++;
+                }
+
                 var checkableFixcostJson = JsonConvert.SerializeObject(checkableFixcost);
 
                 var newCostInspection = new MocoApi.Models.Moco.Resource.CostInspection

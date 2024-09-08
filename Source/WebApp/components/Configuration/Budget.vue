@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col h-full w-full p-4">
+  <div class="flex flex-col h-full w-full lg:p-4">
     <p class="text-xl text-primary underline underline-offset-4">
       Variable Kosten pro Monat
     </p>

@@ -1223,6 +1223,11 @@ export interface IFixedcostClient {
    * @return Success
    */
   deleteFixedCostEndpoint(fixedCostId: number): Promise<any>;
+
+  /**
+   * @return Success
+   */
+  getFixedCostsByTimeIntervalEndpoint(): Promise<GetFixedCostsByTimeIntervalResponse>;
 }
 
 export class FixedcostClient extends BaseAPIClient implements IFixedcostClient {
@@ -1504,6 +1509,70 @@ export class FixedcostClient extends BaseAPIClient implements IFixedcostClient {
       });
     }
     return Promise.resolve<any>(null as any);
+  }
+
+  /**
+   * @return Success
+   */
+  getFixedCostsByTimeIntervalEndpoint(): Promise<GetFixedCostsByTimeIntervalResponse> {
+    let url_ = this.baseUrl + "/api/fixedCost/byTimeInterval";
+    url_ = url_.replace(/[?&]$/, "");
+
+    let options_: RequestInit = {
+      method: "GET",
+      headers: {
+        Accept: "application/json",
+      },
+    };
+
+    return this.transformOptions(options_)
+      .then((transformedOptions_) => {
+        return this.http.fetch(url_, transformedOptions_);
+      })
+      .then((_response: Response) => {
+        return this.transformResult(url_, _response, (_response: Response) =>
+          this.processGetFixedCostsByTimeIntervalEndpoint(_response)
+        );
+      });
+  }
+
+  protected processGetFixedCostsByTimeIntervalEndpoint(
+    response: Response
+  ): Promise<GetFixedCostsByTimeIntervalResponse> {
+    const status = response.status;
+    let _headers: any = {};
+    if (response.headers && response.headers.forEach) {
+      response.headers.forEach((v: any, k: any) => (_headers[k] = v));
+    }
+    if (status === 200) {
+      return response.text().then((_responseText) => {
+        let result200: any = null;
+        let resultData200 =
+          _responseText === ""
+            ? null
+            : JSON.parse(_responseText, this.jsonParseReviver);
+        result200 = GetFixedCostsByTimeIntervalResponse.fromJS(resultData200);
+        return result200;
+      });
+    } else if (status === 401) {
+      return response.text().then((_responseText) => {
+        return throwException("Unauthorized", status, _responseText, _headers);
+      });
+    } else if (status === 403) {
+      return response.text().then((_responseText) => {
+        return throwException("Forbidden", status, _responseText, _headers);
+      });
+    } else if (status !== 200 && status !== 204) {
+      return response.text().then((_responseText) => {
+        return throwException(
+          "An unexpected server error occurred.",
+          status,
+          _responseText,
+          _headers
+        );
+      });
+    }
+    return Promise.resolve<GetFixedCostsByTimeIntervalResponse>(null as any);
   }
 }
 
@@ -5276,6 +5345,97 @@ export class GetAllFixedCostsRequest implements IGetAllFixedCostsRequest {
 }
 
 export interface IGetAllFixedCostsRequest {}
+
+export class GetFixedCostsByTimeIntervalResponse
+  implements IGetFixedCostsByTimeIntervalResponse
+{
+  fixedCostsByTimeInterval?: {
+    [key in keyof typeof TimeInterval]?: FixedCostDto[];
+  };
+
+  constructor(data?: IGetFixedCostsByTimeIntervalResponse) {
+    if (data) {
+      for (var property in data) {
+        if (data.hasOwnProperty(property))
+          (<any>this)[property] = (<any>data)[property];
+      }
+    }
+  }
+
+  init(_data?: any) {
+    if (_data) {
+      if (_data["fixedCostsByTimeInterval"]) {
+        this.fixedCostsByTimeInterval = {} as any;
+        for (let key in _data["fixedCostsByTimeInterval"]) {
+          if (_data["fixedCostsByTimeInterval"].hasOwnProperty(key))
+            (<any>this.fixedCostsByTimeInterval)![key] = _data[
+              "fixedCostsByTimeInterval"
+            ][key]
+              ? _data["fixedCostsByTimeInterval"][key].map((i: any) =>
+                  FixedCostDto.fromJS(i)
+                )
+              : [];
+        }
+      }
+    }
+  }
+
+  static fromJS(data: any): GetFixedCostsByTimeIntervalResponse {
+    data = typeof data === "object" ? data : {};
+    let result = new GetFixedCostsByTimeIntervalResponse();
+    result.init(data);
+    return result;
+  }
+
+  toJSON(data?: any) {
+    data = typeof data === "object" ? data : {};
+    if (this.fixedCostsByTimeInterval) {
+      data["fixedCostsByTimeInterval"] = {};
+      for (let key in this.fixedCostsByTimeInterval) {
+        if (this.fixedCostsByTimeInterval.hasOwnProperty(key))
+          (<any>data["fixedCostsByTimeInterval"])[key] = (<any>(
+            this.fixedCostsByTimeInterval
+          ))[key];
+      }
+    }
+    return data;
+  }
+}
+
+export interface IGetFixedCostsByTimeIntervalResponse {
+  fixedCostsByTimeInterval?: {
+    [key in keyof typeof TimeInterval]?: FixedCostDto[];
+  };
+}
+  
+export class GetFixedCostsByTimeIntervalRequest
+  implements IGetFixedCostsByTimeIntervalRequest
+{
+  constructor(data?: IGetFixedCostsByTimeIntervalRequest) {
+    if (data) {
+      for (var property in data) {
+        if (data.hasOwnProperty(property))
+          (<any>this)[property] = (<any>data)[property];
+      }
+    }
+  }
+
+  init(_data?: any) {}
+
+  static fromJS(data: any): GetFixedCostsByTimeIntervalRequest {
+    data = typeof data === "object" ? data : {};
+    let result = new GetFixedCostsByTimeIntervalRequest();
+    result.init(data);
+    return result;
+  }
+
+  toJSON(data?: any) {
+    data = typeof data === "object" ? data : {};
+    return data;
+  }
+}
+
+export interface IGetFixedCostsByTimeIntervalRequest {}
 
 export class FixedCostUDto implements IFixedCostUDto {
   id?: number;

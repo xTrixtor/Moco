@@ -8,11 +8,11 @@
     <div v-else class="bg-background h-screen">
       <div class="grid-cols-5 flex">
         <div class="col-span-2">
-          <Sidebar />
+          <Sidebar v-if="!isMobil" />
         </div>
         <div class="col-span-3 flex-1">
           <Navbar />
-          <div class="flex w-full h-[90svh] p-6">
+          <div class="flex w-full  p-6" :class="isMobil?'h-full':'h-[90svh]'">
             <slot />
           </div>
         </div>

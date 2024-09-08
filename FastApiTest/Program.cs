@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using NSwag;
 using MocoApi.Handler;
 using Moco.Api.Factories.Db;
-using Microsoft.EntityFrameworkCore;
+using Moco.Api.DataStore;
 
 IConfigurationRoot config = new ConfigurationBuilder()
     .AddJsonFile("appsettings.json")
@@ -74,6 +74,7 @@ bld.Services.AddScoped<CachedAdminTokenHandler>();
 bld.Services.AddHttpClient("adminKeycloak").AddHttpMessageHandler<CachedAdminTokenHandler>();
 bld.Services.AddSingleton<IConfiguration>(bld.Configuration);
 bld.Services.AddScoped<KeycloakServices>();
+bld.Services.AddScoped<UtilsService>();
 bld.Services.AddMemoryCache();
 bld.Services.AddSingleton<MocoContextFactory>();
 

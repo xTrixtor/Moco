@@ -1,11 +1,130 @@
 <template>
   <Dialog
+    :breakpoints="{ '1199px': '75vw', '575px': '90vw' }"
     v-model:visible="data"
     modal
     header="Neues Sparziel erstellen"
     :style="{ width: '50%' }"
   >
-    <div>
+    <div v-if="isMobil">
+      <div class="flex flex-col gap-2">
+        <label class="text-xs">Name</label>
+        <InputText
+          v-model="savingGoalCDto.name"
+          size="small"
+          :pt="{ root: { class: 'p-1 w-full' } }"
+        />
+        <label class="text-xs">Ziel Wert</label>
+        <InputNumber
+          v-model="savingGoalCDto.goalValue"
+          size="small"
+          :pt="{ root: { class: 'numberInput' } }"
+          @update:model-value="calculateGoal"
+          :min="0"
+          :maxFractionDigits="2"
+          mode="currency"
+          currency="EUR"
+          locale="de-DE"
+        />
+        <label class="text-xs">Start-Kapital</label>
+        <InputNumber
+          v-model="savingGoalCDto.initialCapital"
+          size="small"
+          :pt="{ root: { class: 'numberInput' } }"
+          :max="savingGoalCDto.goalValue"
+          @update:model-value="calculateGoal"
+          :min="0"
+          :maxFractionDigits="2"
+          mode="currency"
+          currency="EUR"
+          locale="de-DE"
+        />
+        <label class="text-xs">Spar-Methode</label>
+        <Dropdown
+          class="flex-1"
+          :pt="{ input: { class: 'p-1 text-sm' } }"
+          v-model="savingGoalCDto.methodKey"
+          @update:model-value="calculateGoal"
+          :options="savingOptions"
+          placeholder="Bitte auswählen"
+          optionLabel="label"
+          option-value="key"
+        />
+        <label class="text-xs">Monatliche Rate</label>
+        <InputNumber
+          v-model="savingGoalCDto.depositRate"
+          size="small"
+          :pt="{ root: { class: 'numberInput' } }"
+          :min="0"
+          :maxFractionDigits="2"
+          @update:model-value="calculateGoal"
+          :disabled="savingGoalCDto.methodKey != 0"
+          :max="savingGoalCDto.goalValue - 1"
+          mode="currency"
+          currency="EUR"
+          locale="de-DE"
+          :placeholder="
+            savingGoalCDto.methodKey != 0
+              ? 'Wird berechnet...'
+              : 'Bitte Monatliche Rate angeben...'
+          "
+        />
+        <label class="text-xs">Start-Datum</label>
+        <Calendar
+          :pt="{ input: { class: 'p-1 text-sm' } }"
+          view="month"
+          dateFormat="M-yy"
+          class="flex-1"
+          v-model="savingGoalCDto.startDate"
+          @update:model-value="calculateGoal"
+          :min-date="minDate"
+          :disabled="savingGoalCDto.methodKey != 1"
+          :placeholder="
+            savingGoalCDto.methodKey != 1
+              ? 'Wird berechnet...'
+              : 'Bitte Start-Datum auswählen...'
+          "
+        />
+        <label class="text-xs">End-Datum</label>
+        <Calendar
+          :pt="{ input: { class: 'p-1 text-sm' } }"
+          view="month"
+          dateFormat="M-yy"
+          class="flex-1"
+          v-model="savingGoalCDto.endDate"
+          :max-date="addYears(savingGoalCDto.startDate, 20)"
+          :min-date="addMonths(savingGoalCDto.startDate, 1)"
+          @update:model-value="calculateGoal"
+          :disabled="savingGoalCDto.methodKey != 1"
+          :placeholder="
+            savingGoalCDto.methodKey != 1
+              ? 'Wird berechnet...'
+              : 'Bitte End-Datum auswählen...'
+          "
+        />
+        <div class="flex justify-end gap-2">
+          <Button
+            :pt="{ root: { class: 'p-2' } }"
+            outlined
+            type="button"
+            label="Abbrechen"
+            severity="secondary"
+            @click="data = false"
+            size="small"
+          ></Button>
+          <Button
+            :pt="{ root: { class: 'p-2' } }"
+            outlined
+            type="button"
+            label="Erstellen"
+            @click="handleCreate"
+            :disabled="!canSave"
+            size="small"
+          ></Button>
+        </div>
+      </div>
+    </div>
+    <div v-else>
       <div :class="modalRowStyling">
         <p class="w-1/4">Name</p>
         <InputText class="flex-1" type="text" v-model="savingGoalCDto.name" />
@@ -140,7 +259,9 @@ import {
 import { storeToRefs } from "pinia";
 import { addMonths, addYears } from "date-fns";
 import { useToast } from "primevue/usetoast";
+import { useUtilStore } from "~/stores/utilStore";
 
+const { isMobil } = storeToRefs(useUtilStore());
 const toast = useToast();
 
 const modalRowStyling = "flex-center justify-between gap-6 my-3";
@@ -159,15 +280,15 @@ const canSave = computed(() =>
     savingGoalCDto.value.name &&
       savingGoalCDto.value.goalValue &&
       savingGoalCDto.value.depositRate &&
-      isValid.value,
-  ),
+      isValid.value
+  )
 );
 const isValid = ref(false);
 
 const handleCreate = async () => {
   const newSavingGoal =
     await useApiStore().SavingGoalsClient.createSavingGoalEndpoint(
-      savingGoalCDto.value,
+      savingGoalCDto.value
     );
   selectedSavingGoal.value = newSavingGoal;
   savingGoals.value = [...savingGoals.value, newSavingGoal];
@@ -184,7 +305,7 @@ watch(
       savingGoalCDto.value.startDate = undefined;
       savingGoalCDto.value.endDate = undefined;
     }
-  },
+  }
 );
 
 const calculateGoal = () => {
@@ -205,7 +326,7 @@ const calculateGoalWithDate = () => {
       savingGoalCDto.value.startDate,
       savingGoalCDto.value.endDate,
       savingGoalCDto.value.goalValue,
-      savingGoalCDto.value.initialCapital ?? 0,
+      savingGoalCDto.value.initialCapital ?? 0
     );
     savingGoalCDto.value.depositRates = result.depositRates;
     savingGoalCDto.value.depositRate = result.monthRate;
@@ -218,7 +339,7 @@ const calculateGoalWithRates = () => {
     const result = calculateDepositsWithMonthlyRate(
       savingGoalCDto.value.depositRate,
       savingGoalCDto.value.goalValue,
-      savingGoalCDto.value.initialCapital ?? 0,
+      savingGoalCDto.value.initialCapital ?? 0
     );
     if (result == undefined) {
       toast.add({
@@ -239,4 +360,9 @@ const calculateGoalWithRates = () => {
 };
 </script>
 
-<style scoped></style>
+<style>
+.numberInput .p-inputtext {
+  padding: 0.25rem !important;
+  font-size: 0.875rem !important;
+}
+</style>

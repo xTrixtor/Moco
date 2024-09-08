@@ -2,7 +2,7 @@
   <div
     class="h-full bg-foreground border-2 border-border rounded-lg overflow-hidden"
   >
-    <div class="w-full p-2 flex justify-end">
+    <div class="w-full px-2 pt-2 flex justify-end">
       <Icon
         v-if="showNotPaid"
         name="iconoir:eye-solid"
@@ -29,8 +29,8 @@
       :value="lazyLoadDepositRates"
       @page="loadData($event)"
       :pt="{
-        root: { class: 'flex-1 h-[95%]' },
-        wrapper: { class: 'h-[90%]' },
+        root: { class: 'flex-1 h-[95.8%] w-full' },
+        wrapper: { class: 'h-[90%] w-full !overflow-y-hidden' },
         table: { class: 'h-full' },
         tbody: { class: 'h-full' },
         paginator: { root: 'p-0', paginatorWrapper: 'border-0 flex-1' },
@@ -54,7 +54,7 @@
           <p>{{ useCeil(slotProps.data.value, 1) }} €</p>
         </template>
       </Column>
-      <Column header="Aktions" :pt="{ bodyCell: { class: 'p-2' } }">
+      <Column header="Aktions" :pt="{ bodyCell: { class: 'p-3.5' } }">
         <template #body="slotProps">
           <div v-if="slotProps.data.isPaid">
             <p class="font-bold text-lg">Bezahlt</p>
@@ -173,7 +173,6 @@ import {
   calculateDepositsWithDate,
   calculateDepositsWithMonthlyRate,
 } from "~/metaData/savingGoalService";
-import { addMonths } from "date-fns";
 
 const { selectedSavingGoal } = storeToRefs(useSavingGoalStore());
 const selectedNoPayDepositRate = ref<DepositRateDto>();

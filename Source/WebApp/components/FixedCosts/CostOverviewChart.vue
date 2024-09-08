@@ -37,9 +37,7 @@
 import { storeToRefs } from "pinia";
 import Chart from "primevue/chart";
 import { useOverviewCostStore } from "~/stores/overviewCostStore";
-import { useUtilStore } from "~/stores/utilStore";
 
-const { isMobil } = useUtilStore();
 const { pieChartData } = storeToRefs(useOverviewCostStore());
 
 const chartData = computed(() => setChartData());

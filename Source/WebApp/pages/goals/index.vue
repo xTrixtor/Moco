@@ -1,5 +1,30 @@
 <template>
-  <div class="h-full w-full flex flex-col">
+  <div v-if="isMobil" class="w-full">
+    <div class="flex-1 flex w-full gap-2 mb-4">
+      <div class="flex-center">
+        <Icon
+          name="gridicons:add-outline"
+          size="1.5rem"
+          class="text-highlight-text"
+          @click="() => (showCreateDialog = true)"
+        />
+      </div>
+      <Dropdown
+        class="w-full"
+        :pt="{ root: { class: 'flex-1 flex w-full' } }"
+        v-model="selectedSavingGoal"
+        :options="savingGoals"
+        placeholder="Bitte auswählen"
+        optionLabel="name"
+        data-key="id"
+        @change="(item: any) => handleChange(item.value)"
+      />
+    </div>
+    <div v-if="selectedSavingGoal.id" class="flex-center w-[85svw]">
+      <SavingGoalsDepositHistory />
+    </div>
+  </div>
+  <div v-else class="h-full w-full flex flex-col">
     <div
       class="h-[10vh] w-full bg-foreground flex items-center gap-4 px-4 my-2 border-2 rounded-lg border-border"
     >
@@ -65,6 +90,10 @@ import { useSavingGoalStore } from "~/stores/savingGoalStore";
 import { SavingGoalDto } from "~/stores/apiClient";
 import { useConfirm } from "primevue/useconfirm";
 import { useApiStore } from "~/stores/apiStore";
+import { useUtilStore } from "~/stores/utilStore";
+
+const { isMobil } = storeToRefs(useUtilStore());
+
 const savingGoalStore = useSavingGoalStore();
 const { selectedSavingGoal, savingGoals } = storeToRefs(savingGoalStore);
 
@@ -89,7 +118,7 @@ const handleDelete = () => {
     acceptLabel: "Löschen",
     accept: async () => {
       await useApiStore().SavingGoalsClient.deleteSavingGoalEndpoint(
-        selectedSavingGoal.value.id,
+        selectedSavingGoal.value.id
       );
       savingGoalStore.fetch();
       selectedSavingGoal.value = { id: undefined };

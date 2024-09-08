@@ -61,7 +61,7 @@ export const useUserStore = defineStore("user", {
         request as RefreshAuthTokenRequest,
       );
       if (res === undefined) {
-        throw new Error("Refreshedfaild");
+        throw new Error("Refreshed failed");
       }
       this.authToken = res.jwtToken ?? "";
       sessionStorage.setItem("authToken", res.jwtToken);

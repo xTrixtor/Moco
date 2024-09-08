@@ -1,5 +1,24 @@
 <template>
   <div
+    v-if="isMobil"
+    class="w-full bg-foreground border-2 border-border rounded-lg relative"
+  >
+    <TabView class="w-full h-full flex flex-col" :scrollable="true" :pt="{ nav: { class: 'w-1' } }" v-model:activeIndex="active">
+      <TabPanel
+        v-for="(config, key) in configs"
+        :key="key"
+        :header="config"
+        @click="() => (selectedConfig = config)"
+        >
+        <ConfigurationProfil v-if="active == 0" />
+        <ConfigurationFixedCost v-if="active == 1" />
+        <ConfigurationBudget v-if="active == 2" />
+      </TabPanel>
+    </TabView>
+  </div>
+
+  <div
+    v-else
     class="w-5/6 bg-foreground border-2 border-border rounded-lg grid grid-cols-5 divide-x-2 divide-border p-6"
   >
     <div class="col-span-2 px-2">
@@ -28,10 +47,17 @@
 
 <script setup lang="ts">
 import { useFixedCostStore } from "~/stores/fixedCostStore";
+import { useUtilStore } from "~/stores/utilStore";
+import { storeToRefs } from "pinia";
+import TabView from "primevue/tabview";
+import TabPanel from "primevue/tabpanel";
+
+const { isMobil } = storeToRefs(useUtilStore());
+const active = ref(0);
 
 const selectedConfig = ref<string | undefined>(undefined);
 
-const configs = ["Profil", "Fix-Kosten", "Budgets"] ;
+const configs = ["Profil", "Fix-Kosten", "Budgets"];
 onMounted(async () => {
   await useFixedCostStore().fetch();
 });

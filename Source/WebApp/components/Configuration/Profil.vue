@@ -1,32 +1,46 @@
 <template>
-  <div class="flex-1 divide-y-2 p-4 text-lg text-highlight-text">
-    <div class="flex bg-primary">
+  <div class="flex flex-col divide-y-2 text-highlight-text lg:p-10">
+    <div class="flex bg-teal-500/50">
       <div class="w-1/2 p-2">Name</div>
       <div class="w-1/2 p-2">Wert</div>
     </div>
     <div
-      class="flex text-sm"
       v-for="(probValue, key) in profilConfig"
-      :class="key % 2 ? 'bg-slate-300/20' : 'bg-secondary-content'"
+      :key="key"
+      class="flex w-full"
     >
-      <div class="w-1/2 p-2">{{ probValue.label }}</div>
-      <div class="w-1/2 p-2 truncate">{{ user[probValue.propKey] }}</div>
+      <div
+        class="w-1/2 max-w-[100px] lg:max-w-[50%] py-2 text-xs lg:text-sm pl-2"
+      >
+        {{ probValue.label }}
+      </div>
+      <div
+        class="w-1/2 max-w-[100px] lg:max-w-[50%] py-2 text-xs lg:text-sm truncate"
+      >
+        {{ user[probValue.propKey] }}
+      </div>
     </div>
-    <div
-      class="flex text-sm"
-      :class="key % 2 ? 'bg-slate-300/20' : 'bg-secondary-content'"
-    >
-      <div v-if="revenues?.length == 1" class="w-1/2 p-2">Gehalt</div>
-      <div v-else class="w-1/2 p-2">Gehälter</div>
+    <div class="flex lg:text-base text-xs w-full">
+      <div v-if="revenues?.length == 1" class="w-1/2 p-2 text-xs lg:text-sm">
+        Gehalt
+      </div>
+      <div v-else class="w-1/2 p-2 text-xs lg:text-sm">Gehälter</div>
       <div class="w-1/2 p-2">
         <div class="flex flex-col">
-          <div v-for="(revenue,key) in revenues" :key="`${revenue.id}-${key}`" class="flex-1 w-full">
-            <BaseEditInput
-              class=""
-              v-model="revenue.value"
-              @leave="updateRevenue(revenue)"
-              :input-extension="'€'"
-            />
+          <div
+            v-for="(revenue, key) in revenues"
+            :key="`${revenue.id}-${key}`"
+            class="flex-1 w-full text-xs lg:text-sm"
+          >
+            <div class="flex flex-1 items-center gap-2">
+              <p>{{ revenue.source }}:</p>
+              <BaseEditInput
+                class="text-primary"
+                v-model="revenue.value"
+                @leave="updateRevenue(revenue)"
+                :input-extension="'€'"
+              />
+            </div>
           </div>
         </div>
       </div>
@@ -69,7 +83,7 @@ onMounted(async () => {
   loading.value = false;
 });
 
-const updateRevenue = async (revenue : RevenueDto) => {
+const updateRevenue = async (revenue: RevenueDto) => {
   const oldVersion = useFindKey(initialRevenues, function (o: RevenueDto) {
     return o.id == revenue.id;
   }) as RevenueDto;

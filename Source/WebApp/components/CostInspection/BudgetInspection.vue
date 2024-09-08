@@ -33,7 +33,6 @@ const { selectedMontlyBudget, selectedCostInspection } = storeToRefs(
 const drawer = ref(false);
 
 const setBudget = (budget: MonthlyBudgetDto) => {
-  console.log(budget);
   selectedMontlyBudget.value = budget;
   drawer.value = true;
 };

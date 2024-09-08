@@ -7,6 +7,10 @@
     <NuxtLink to="/">
       <NuxtImg class="h-12" src="/logo/logo.png" alt="FinanzHorus Logo" />
     </NuxtLink>
+    <div class="flex-1 flex-center font-black text-xl">
+      <p class="text-highlight-text">Finanz</p>
+      <p class="text-primary">Horus</p>
+    </div>
     <div
       class="duration-300 rounded-full p-2 flex-center"
       :class="mobilMenuClick ? 'ring-2 ring-primary' : ''"
@@ -33,32 +37,29 @@
       </NuxtLink>
     </div>
   </div>
-  <div v-if="mobilMenuClick" class="bg-slate-200">
-    <NuxtLink
-      v-for="(navItem, key) in navBarItems"
-      :key="key"
-      :to="navItem.link"
-      class="border-b-2"
-      @click="mobilNavItemClick"
-    >
-      <p
-        class="flex-center py-2 text-lg font-medium text-thin underlineAnimation"
+  <Transition>
+    <div v-if="mobilMenuClick" class="bg-foreground text-highlight-text border-b-2 rounded-sm">
+      <NuxtLink
+        v-for="(navItem, key) in navBarItems"
+        :key="key"
+        :to="navItem.link"
+        class="border-b-2"
+        @click="mobilNavItemClick"
       >
-        {{ navItem.name }}
-      </p>
-    </NuxtLink>
-  </div>
+        <p
+          class="flex-center py-2 text-lg font-medium text-thin underlineAnimation"
+        >
+          {{ navItem.name }}
+        </p>
+      </NuxtLink>
+    </div>
+  </Transition>
 </template>
 
 <script lang="ts" setup>
 import { ref } from "vue";
-import { useUserStore } from "~/stores/userStore";
 import { navBarItems } from "../metaData/navaBarData";
 import { useUtilStore } from "~/stores/utilStore";
-
-const logout = () => {
-  useUserStore().logout();
-};
 
 const { isMobil } = useUtilStore();
 
@@ -80,5 +81,25 @@ const mobilNavItemClick = () => {
 }
 li:has(.router-link-active) {
   @apply bg-primary-light !text-highlight-text rounded-lg;
+}
+
+.v-enter-active {
+  transition: all .7s ease;
+}
+
+.v-leave-active {
+  transition: all .5s ease;
+}
+
+.v-leave-to {
+  transform: translateY(-100px);
+  opacity: 0;
+}
+.v-enter-from {
+  transform: translateY(-100px);
+  opacity: 0;
+}
+.v-enter-to {
+  opacity: 1;
 }
 </style>
