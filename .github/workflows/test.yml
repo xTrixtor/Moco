@@ -40,8 +40,9 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: nuxt3-build
-          path: ./Source/WebApp/.output
-          retention-days: 30 
+          path: ./custom-output/public
+          retention-days: 30
+          include-hidden-files: true
 
       - name: Set up .NET 7
         uses: actions/setup-dotnet@v3
