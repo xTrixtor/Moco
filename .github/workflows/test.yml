@@ -75,6 +75,12 @@ jobs:
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
-      # Step 3: Copy files to the server using SCP
-      - name: Copy files via SCP
-        run: scp -r .output/* ${{ secrets.SERVER_USERNAME }}@${{ secrets.SERVER_IP }}:/home/deploy/moco
+      # Step 3: Copy repo (or specific files) to the server
+      - name: Copy files to server
+        run: |
+          scp -r ./ ${{ secrets.SERVER_USERNAME }}@${{ secrets.SERVER_IP }}:${{ secrets.SERVER_DESTINATION }}
+
+      # Step 4 (Optional): SSH into the server and run deployment scripts (e.g., restart services, etc.)
+      - name: Execute remote commands
+        run: 
+            docker-compose down -v && docker-compose up -d
