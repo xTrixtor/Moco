@@ -27,6 +27,4 @@ export default defineNuxtConfig({
       ripple: true,
     },
   },
-
-  compatibilityDate: "2024-09-04",
 });
