@@ -67,6 +67,12 @@ import { useUserStore } from "~/stores/userStore";
 
 const { text } = storeToRefs(useTimeoutStore());
 
+watch(text, (oldValue, newValue) => {
+  if(newValue == "5:00"){
+    handleRefreshClick()
+  }   
+})
+
 const hover = ref(false);
 const refreshLoading = ref(false);
 

@@ -10,7 +10,7 @@
         :header="groupCost.name"
         :pt="{ content: { class: 'justify-center items-center p-1 lg:p-4' } }"
       >
-        <FixedCostTable :fixedcosts="groupCost.fixedCosts ?? []" />
+        <FixedCostTable :groupCost="groupCost" :fixedcosts="groupCost.fixedCosts ?? []" />
       </AccordionTab>
     </Accordion>
     <AddGroupCostCard />

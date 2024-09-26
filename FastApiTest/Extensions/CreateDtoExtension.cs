@@ -30,20 +30,19 @@ namespace MocoApi.Extensions
             return charge;
         }
 
-        public static Revenue Prepare(this RevenueDto dto)
+        public static Revenue Prepare(this RevenueDto dto, string userId)
         {
             return new Revenue
             {
-                Id = dto.Id,
                 Source = dto.Source,
                 Value = dto.Value,
-                UserId = dto.UserId
+                UserId = userId
             };
         }
 
-        public static async Task<Revenue> PrepareAddAsync(this RevenueDto dto, MoCoContext moCoContext)
+        public static async Task<Revenue> PrepareAddAsync(this RevenueDto dto, MoCoContext moCoContext, string userId)
         {
-            var revenue = dto.Prepare();
+            var revenue = dto.Prepare(userId);
             await moCoContext.Revenue.AddAsync(revenue);
             return revenue;
         }

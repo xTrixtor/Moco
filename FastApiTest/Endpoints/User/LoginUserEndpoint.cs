@@ -35,7 +35,7 @@ namespace MocoApi.Endpoints.User
             {
                 s.Summary = "Login into Keycloak";
                 s.Description = "Send Userdata to Keycloak login Service to get JWTtoken";
-                s.ExampleRequest = new LoginRequest { Username = "nico", Password = "123" };
+                s.ExampleRequest = new LoginRequest { Username = "test", Password = "123" };
                 s.ResponseExamples[200] = new LoginResponse { Success = true, JWTToken = "asföljasföaskdfjsafsadf231231412" };
                 s.Responses[200] = "Returns JWT token";
                 s.Responses[403] = "Forbidden";

@@ -16,7 +16,7 @@ namespace MocoApi.Endpoints.Revenue
         {
             using(var dbContext = new MoCoContext())
             {
-                //var rev = await req.RevenueCDto.PrepareAddAsync(dbContext);
+                var rev = await req.Revenue.PrepareAddAsync(dbContext, req.UserId);
                 dbContext.SaveChanges();
             }
 
@@ -27,7 +27,7 @@ namespace MocoApi.Endpoints.Revenue
     {
         [FromClaim("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier")]
         public string UserId { get; set; }
-        public required RevenueCDto RevenueCDto { get; set; }
+        public required RevenueDto Revenue { get; set; }
     }
     public record CreateRevenueResponse
     {

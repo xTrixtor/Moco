@@ -20,6 +20,22 @@ namespace Moco.Api.Endpoints.SavingGoals
                 var savingGoal = await req.PrepareAddAsync(dbContext);
                 dbContext.SaveChanges();
 
+                var savingGoalGroupCost = dbContext.GroupCosts.FirstOrDefault(x => x.Name.Equals("Sparziel"));
+
+                if(savingGoalGroupCost is null)
+                {
+                    var newGroupCost = new Models.Moco.Resource.GroupCost { Name = "Sparziel", UserId = req.UserId };
+                    dbContext.GroupCosts.Add(newGroupCost);
+                    await dbContext.SaveChangesAsync();
+
+                    savingGoalGroupCost = newGroupCost;
+                }
+
+                var fixcost = new Models.Moco.Resource.FixedCost { Name = req.Name, TimeInterval = MocoApi.Models.Moco.Resource.TimeInterval.monatlich, Value = req.DepositRates[1].Value, GroupCostId = savingGoalGroupCost.Id };
+                dbContext.FixedCosts.Add(fixcost);
+
+                await dbContext.SaveChangesAsync();
+
                 foreach (var depositDto in req.DepositRates)
                 {
                     var deposit = new DepositRate

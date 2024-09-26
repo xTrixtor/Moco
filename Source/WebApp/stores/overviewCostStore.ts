@@ -134,7 +134,7 @@ export const useOverviewCostStore = defineStore("costOverview", {
       const revenue = useSumBy(costInspection?.credits ?? 0, function (r) {
         return r.value;
       });
-      return { name: "Monatliches Gehalt", value: revenue, info: "" };
+      return { name: "Monatliches Gehalt", value: revenue };
     },
     calculateFixedCostSum(costInspection: CostInspectionDto): OverviewCost {
       const sum = useSumBy(costInspection?.fixedCostChecklist, function (f) {

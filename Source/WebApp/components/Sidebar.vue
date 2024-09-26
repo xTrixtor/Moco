@@ -5,7 +5,7 @@
         class="border-b-2 h-[10vh] w-full flex-center border-border border-opacity-5"
       >
         <NuxtLink to="/">
-          <NuxtImg src="/logo/logo.png" alt="Moco Logo" class="h-24" />
+          <img :src="Logo" alt="Moco Logo" class="h-24" />
         </NuxtLink>
       </div>
       <div class="flex flex-col w-full items-start my-5">
@@ -35,6 +35,7 @@
 
 <script setup lang="ts">
 import { navBarItems } from "../metaData/navaBarData";
+import Logo from "@/public/logo.png"
 </script>
 
 <style scoped></style>

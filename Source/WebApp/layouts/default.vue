@@ -18,7 +18,8 @@
         </div>
       </div>
     </div>
-    <BaseScrollButton v-if="isMobil" />
+    <BaseScrollButton v-if="isMobil && loggedIn" />
+    <BaseLogoutButton v-if="isMobil && loggedIn"/>
   </BaseMocoErrorBoundry>
 </template>
 

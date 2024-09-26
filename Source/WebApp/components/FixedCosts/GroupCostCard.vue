@@ -20,7 +20,7 @@
         />
       </Button>
     </div>
-    <FixedCostTable :fixedcosts="props.groupCost.fixedCosts ?? []" />
+    <FixedCostTable :fixedcosts="props.groupCost.fixedCosts ?? []" class="h-full" />
   </div>
 </template>
 
@@ -53,16 +53,16 @@ const confirmDelete = () => {
       await deleteGroupCost();
       toast.add({
         severity: "info",
-        summary: "Confirmed",
-        detail: "You have accepted",
+        summary: "Erfolgreich!",
+        detail: "Die Kosten-Gruppe wurde gelöscht.",
         life: 3000,
       });
     },
     reject: () => {
       toast.add({
         severity: "error",
-        summary: "Rejected",
-        detail: "You have rejected",
+        summary: "Abgebrochen",
+        detail: "Löschung abgebrochen",
         life: 3000,
       });
     },

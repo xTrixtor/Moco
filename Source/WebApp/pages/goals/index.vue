@@ -130,6 +130,10 @@ const handleDelete = () => {
 onBeforeMount(async () => {
   await savingGoalStore.fetch();
 });
+
+onBeforeUnmount(() => {
+  selectedSavingGoal.value = { id: undefined };
+})
 </script>
 
 <style></style>

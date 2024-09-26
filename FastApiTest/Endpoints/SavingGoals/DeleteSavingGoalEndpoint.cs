@@ -1,4 +1,5 @@
 ﻿using FastEndpoints;
+using Microsoft.EntityFrameworkCore;
 using Moco.Api.Endpoints.Credit;
 
 namespace Moco.Api.Endpoints.SavingGoals
@@ -22,6 +23,10 @@ namespace Moco.Api.Endpoints.SavingGoals
                         ThrowError("Could not find SavingGoal with given Id");
 
                     dbContext.SavingGoals.Remove(savingGoal);
+
+                    var savingGoalFixedCost = dbContext.FixedCosts.FirstOrDefault(x => x.Name.Equals(savingGoal.Name));
+                    dbContext.FixedCosts.Remove(savingGoalFixedCost);
+
                     await dbContext.SaveChangesAsync();
 
                     await SendOkAsync();

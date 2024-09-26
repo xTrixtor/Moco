@@ -1,7 +1,7 @@
 <template>
-  <div class="flex flex-col px-1 mt-2 overflow-auto max-h-[30vh]">
+  <div class="flex flex-col px-1 mt-2 overflow-auto max-h-[30vh] lg:h-full lg:max-h-full">
     <div
-      v-if="!props.fixedcosts || props.fixedcosts.length === 0"
+      v-if="!props.fixedcosts || props.fixedcosts.length === 0 && props.groupCost.name !='Sparziel'"
       class="overflow-hidden flex-center flex-col"
     >
       <p class="text-center underlineAnimation w-1/2 text-highlight-text">
@@ -41,10 +41,12 @@
             label="diese Kosten"
             :delete-api-call="() => deleteFixedcostById(cost.id ?? 0)"
             :edit-modal-type="EditModalType.FixedCost"
+            :exclude-action="props.groupCost.name=='Sparziel'?ModalType.Edit:undefined"
           />
         </div>
       </div>
       <div
+        v-if="props.groupCost.name !='Sparziel'"
         id="addButton"
         class="w-full my-2 flex-center opacity-70 hover:opacity-100"
         @click="() => (addFixedCostModalVis = true)"
@@ -65,11 +67,12 @@ import { cellStyling } from "~/metaData/styling";
 import TableActionCell from "./TableActionCell.vue";
 import { useApiStore } from "~/stores/apiStore";
 import { useFixedCostStore } from "~/stores/fixedCostStore";
-import { EditModalType } from "@/metaData/enums";
+import { EditModalType, ModalType } from "@/metaData/enums";
 import AddFixedCostModal from "./AddFixedCostModal.vue";
 import { useOverviewCostStore } from "~/stores/overviewCostStore";
 
 interface ChargeTableProps {
+  groupCost: GroupCostDto;
   fixedcosts: FixedCostDto[];
 }
 

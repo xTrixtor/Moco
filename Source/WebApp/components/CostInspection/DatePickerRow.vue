@@ -17,22 +17,31 @@
       @year-change="handleChange"
     />
     <div
+      v-if="isInThePast"
       id="datePickerIcon"
       class="flex-center flex-1 duration-300"
       @click="nextMonth"
     >
       <Icon name="bxs:right-arrow" class="text-border" size="2rem" />
     </div>
+    <div v-else class="flex-center flex-1 duration-300" />
   </div>
 </template>
 
 <script setup lang="ts">
-import { addMonths } from "date-fns";
+import { addMonths, format } from "date-fns";
 import { storeToRefs } from "pinia";
 import { useInspectionStore } from "~/stores/costInspectionStore";
 import Calendar from "primevue/calendar";
 
 const { selectedDate } = storeToRefs(useInspectionStore());
+
+const todayDateKey = format(new Date(), "M-yy")
+
+const isInThePast = computed(() => {
+  const selectedDateKey = format(selectedDate.value, "M-yy")
+  return selectedDateKey != todayDateKey;
+})
 
 const handleChange = async () => {
   await useInspectionStore().fetch();

@@ -42,6 +42,14 @@
               />
             </div>
           </div>
+          <div>
+            <Icon
+              name="gridicons:add-outline"
+              class="text-2xl duration-500 text-highlight-text"
+              @click="() => showModal = !showModal"
+            />
+            <AddRevenueModal v-model="showModal" />
+          </div>
         </div>
       </div>
     </div>
@@ -52,6 +60,7 @@
 import { RevenueDto, UpdateRevenueRequest, UserDto } from "~/stores/apiClient";
 import { useApiStore } from "~/stores/apiStore";
 import { useUserStore } from "~/stores/userStore";
+import AddRevenueModal from "./AddRevenueModal.vue";
 
 interface PropertyValue {
   propKey: String;
@@ -64,6 +73,8 @@ const loading = ref(false);
 const user = computed(() => useUserStore().getUser);
 
 const userId = computed(() => user.value["sub"]);
+
+const showModal = ref(false);
 
 const revenues = ref<RevenueDto[]>();
 const initialRevenues = { ...revenues.value };
@@ -98,6 +109,7 @@ const updateRevenue = async (revenue: RevenueDto) => {
   };
   await revenueClient.updateRevenueEndpoint(request);
 };
+
 </script>
 
 <style scoped></style>

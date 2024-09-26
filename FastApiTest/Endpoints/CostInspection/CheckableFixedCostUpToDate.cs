@@ -30,6 +30,7 @@ namespace Moco.Api.Endpoints.CostInspection
 
                 var groupCosts = context.GroupCosts.ToList().Where(x => x.UserId == req.UserId).Select(x => x.asDto()).ToArray();
                 var checkableFixcost = groupCosts.SelectMany(x => x.FixedCosts).Select((x, key) => x.toCheckable(key)).ToArray();
+
                 var checkableFixcostJson = JsonConvert.SerializeObject(checkableFixcost);
 
                 costInspection.MonthlyFixedcostsJson = checkableFixcostJson;

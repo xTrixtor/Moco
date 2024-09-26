@@ -3,7 +3,7 @@
     <p class="text-xl text-primary underline underline-offset-4">
       Variable Kosten pro Monat
     </p>
-    <div>
+    <div class="h-full">
       <BudgetOverviewTable />
     </div>
   </div>

@@ -33,10 +33,9 @@ namespace Moco.Api.Endpoints.CostInspection
                 var fixedCosts = dbContext.GroupCosts.Where(x => x.UserId == req.UserId).ToList().SelectMany(x => x.FixedCosts).ToArray().Select(x => x.asDto());
                 var checkableFixcost = new List<CheckableFixedCostDto>();
 
+                var key = 0;
                 foreach (var fixedCost in fixedCosts)
                 {
-                    var key = 0;
-
                     var calculatedCost = utilsService.calculateMontlyChargeCost(fixedCost);
                     fixedCost.Value = calculatedCost;
 

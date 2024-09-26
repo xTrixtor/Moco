@@ -5,7 +5,7 @@
     id="navbar"
   >
     <NuxtLink to="/">
-      <NuxtImg class="h-12" src="/logo/logo.png" alt="FinanzHorus Logo" />
+      <img class="h-12" :src="Logo" alt="FinanzHorus Logo" />
     </NuxtLink>
     <div class="flex-1 flex-center font-black text-xl">
       <p class="text-highlight-text">Finanz</p>
@@ -60,6 +60,7 @@
 import { ref } from "vue";
 import { navBarItems } from "../metaData/navaBarData";
 import { useUtilStore } from "~/stores/utilStore";
+import Logo from "@/public/logo.png"
 
 const { isMobil } = useUtilStore();
 

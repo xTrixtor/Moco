@@ -2,7 +2,7 @@
   <Dialog
     v-if="data"
     modal
-    class="w-1/3"
+    class="m-4 lg:w-1/3"
     v-model:visible="data"
     header="Hinzufügen von Kosten"
   >
@@ -115,19 +115,20 @@ watch(activeIndex, (newVal, oldVal) => {
   fixedCostCDto.groupCostId = groupCostOptions.value[newVal]?.id ?? 0;
 });
 
-let calculatedMontlyChargeCost = computed<number>(() =>
-  calculateMontlyChargeCost(fixedCostCDto),
-);
+const calculatedMontlyChargeCost = ref(0)
 
 const clear = () => {
   newGroupCostName.value = "";
   isAdding.value = false;
+  fixedCostCDto = {groupCostId:groupCostOptions.value[activeIndex.value].id} as CreateFixedCDto;
+  //@ts-ignore
+  calculatedMontlyChargeCost.value = 0;
 };
 
 const handleCreateCharge = async () => {
   if (allowedToSafe.value) {
     await useApiStore().FixedcostClient.createFixedCostEndpoint(fixedCostCDto);
-    fixedCostCDto = {} as CreateFixedCDto;
+    
     await useFixedCostStore().fetch();
     data.value = false;
   }
@@ -159,14 +160,17 @@ watchDeep(fixedCostCDto, (newValue) => {
   const { name, timeInterval, value, groupCostId } = newValue;
 
   if (name && timeInterval && value && groupCostId) {
+    calculatedMontlyChargeCost.value = calculateMontlyChargeCost(newValue)
     allowedToSafe.value = true;
   } else {
     allowedToSafe.value = false;
+    calculatedMontlyChargeCost.value = calculateMontlyChargeCost(newValue)
   }
 });
 
 onMounted(() => {
   fixedCostCDto.groupCostId = groupCostOptions.value[activeIndex.value].id;
+  calculatedMontlyChargeCost.value = calculateMontlyChargeCost(fixedCostCDto)
 });
 </script>
 

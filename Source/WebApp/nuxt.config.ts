@@ -1,4 +1,8 @@
 export default defineNuxtConfig({
+  server:{
+    port: 3001
+  },
+
   devtools: { enabled: true },
   css: ["~/main.css", "primevue/resources/themes/lara-dark-teal/theme.css"],
 
@@ -27,4 +31,6 @@ export default defineNuxtConfig({
       ripple: true,
     },
   },
+
+  compatibilityDate: "2024-09-25",
 });

@@ -29,8 +29,15 @@ namespace Moco.Api.Endpoints.FixedCost
                         ThrowError("Could not find Fixed Cost with given Id");
 
                     dbContext.FixedCosts.Remove(selectedFixedCost);
-                    await dbContext.SaveChangesAsync();
+                    var savingGoalGroupCost = dbContext.GroupCosts.FirstOrDefault(x => x.Name.Equals("Sparziel"));
 
+                    if (selectedFixedCost.GroupCostId == savingGoalGroupCost.Id)
+                    {
+                        var savingGoal = await dbContext.SavingGoals.FirstOrDefaultAsync(x => x.Name == selectedFixedCost.Name);
+                        dbContext.SavingGoals.Remove(savingGoal);
+                    }
+
+                    await dbContext.SaveChangesAsync();
                     await SendOkAsync();
                 }
                 catch (Exception)

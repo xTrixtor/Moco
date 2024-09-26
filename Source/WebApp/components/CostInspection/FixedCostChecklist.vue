@@ -23,28 +23,23 @@
       Fixkosten
     </p>
     <div
-      v-for="fixcost in selectedCostInspection.fixedCostChecklist"
+      v-for="fixcost in sortedChecklist"
       :key="fixcost.key"
       class="flex-center relative border-b-2 border-border py-2 cursor-pointer text-highlight-text"
     >
-      <div
-        v-if="fixcost.isChecked"
-        class="w-full absolute h-full z-10"
-        @click="checkedFixedCost(fixcost)"
-      >
-        <div class="border-b-2 border-background h-1/2" />
-      </div>
       <Checkbox
         v-model="fixcost.isChecked"
         :inputId="fixcost.key"
         :value="fixcost.name"
         :binary="true"
-        @click="checkedFixedCost(fixcost)"
+        @click="checkFixcost(fixcost)"
       />
-      <div class="flex-center justify-between w-full mx-2">
-        <label :for="fixcost.key" class="flex-1">{{ fixcost.name }}</label>
-        <label :for="fixcost.key">{{ fixcost.value }} €</label>
-      </div>
+      <label :for="`${fixcost.key}`" class="ml-6 flex-1">
+        {{ fixcost.name }}
+      </label>
+      <label :for="`${fixcost.key}`" class="ml-2 flex-1 flex justify-end mr-6">
+        {{ fixcost.value }} €
+      </label>
     </div>
   </div>
 </template>
@@ -68,39 +63,66 @@ const { groupCosts } = storeToRefs(useFixedCostStore());
 const { fetch, selectedCostInspection, isUpgradeable } =
   storeToRefs(costInspectionStore);
 
+var sortedChecklist = ref(
+  useOrderBy(
+    selectedCostInspection.value.fixedCostChecklist,
+    ["value"],
+    ["desc"]
+  ),
+  []
+);
+
 const isUpdateable = computed(() => calculateUpgradeable());
 const calculateUpgradeable = (): Boolean => {
-  const totalFixedcosts = getTotalFixcosts();
+  const allFixcosts = getAllFixcosts();
 
   if (
-    totalFixedcosts.length !=
+    allFixcosts.length !=
     selectedCostInspection.value.fixedCostChecklist?.length
-  )
+  ) {
     return true;
+  }
   const checklistCompareArray =
-    selectedCostInspection.value.fixedCostChecklist.map((x) => {
-      return { name: x.name, value: x.value };
+    selectedCostInspection.value.fixedCostChecklist.map((checkableFixcost) => {
+      const originFixcost = useFilter(allFixcosts, [
+        "name",
+        checkableFixcost.name,
+      ])[0];
+      return {
+        name: checkableFixcost.name,
+        value: calculateMontlyChargeCost({value: checkableFixcost.value, timeInterval: originFixcost.timeInterval} as FixedCostDto),
+      };
     });
-  const totalFixedcostCompareArray = totalFixedcosts.map((x) => {
+
+  const totalFixedcostCompareArray = allFixcosts.map((x) => {
     {
-      return { name: x.name, value: x.value };
+      return { name: x.name, value: calculateMontlyChargeCost(x) };
     }
   });
+
+  const totalFixedCosts = useSumBy(allFixcosts, function (cost) {
+    return calculateMontlyChargeCost(cost);
+  });
+
+  const totalCheckableFixcosts = useSumBy(
+    checklistCompareArray,
+    function (cost: FixedCostDto) {
+      return useCeil(cost.value, 2);
+    }
+  );
+  if (useCeil(totalFixedCosts, 2) != useCeil(totalCheckableFixcosts, 2)) {
+    return true;
+  }
+
   const isEqualBool = isEqual(
     totalFixedcostCompareArray,
-    checklistCompareArray,
+    checklistCompareArray
   );
   return !isEqualBool;
 };
 
-const getTotalFixcosts = (): FixedCostDto[] => {
+const getAllFixcosts = (): FixedCostDto[] => {
   return groupCosts.value.flatMap((a) => a.fixedCosts);
-};
-const getFixcostCount = (): number => {
-  const groupCostFixCount = groupCosts.value.map((x) => {
-    return x.fixedCosts?.length;
-  });
-  return useSum(groupCostFixCount);
 };
 
 const fixedCostUpToDate = async () => {
@@ -111,11 +133,19 @@ const fixedCostUpToDate = async () => {
   const request: CheckableFixedCostUptoDateRequest = {
     costInspectionId: insp.id,
   };
+  const { selectedDate } = storeToRefs(useInspectionStore());
   await useApiStore().InspectionClient.checkableFixedCostUptoDate(request);
   await costInspectionStore.fetch();
+
+  sortedChecklist.value = useOrderBy(
+    selectedCostInspection.value.fixedCostChecklist,
+    ["value"],
+    ["desc"]
+  ),
+  []
 };
 
-const checkedFixedCost = async (changedFixedCost: CheckableFixedCostDto) => {
+const checkFixcost = async (changedFixedCost: CheckableFixedCostDto) => {
   changedFixedCost.isChecked = !changedFixedCost.isChecked;
   const uDto: CheckableFixedCostUDto = {
     checkableFixcostKey: changedFixedCost.key,

@@ -5407,7 +5407,7 @@ export interface IGetFixedCostsByTimeIntervalResponse {
     [key in keyof typeof TimeInterval]?: FixedCostDto[];
   };
 }
-  
+
 export class GetFixedCostsByTimeIntervalRequest
   implements IGetFixedCostsByTimeIntervalRequest
 {
@@ -6718,7 +6718,7 @@ export interface ICreateRevenueResponse {
 }
 
 export class CreateRevenueRequest implements ICreateRevenueRequest {
-  revenueCDto?: RevenueCDto;
+  revenue?: RevenueDto;
 
   constructor(data?: ICreateRevenueRequest) {
     if (data) {
@@ -6731,8 +6731,8 @@ export class CreateRevenueRequest implements ICreateRevenueRequest {
 
   init(_data?: any) {
     if (_data) {
-      this.revenueCDto = _data["revenueCDto"]
-        ? RevenueCDto.fromJS(_data["revenueCDto"])
+      this.revenue = _data["revenue"]
+        ? RevenueDto.fromJS(_data["revenue"])
         : <any>undefined;
     }
   }
@@ -6746,98 +6746,13 @@ export class CreateRevenueRequest implements ICreateRevenueRequest {
 
   toJSON(data?: any) {
     data = typeof data === "object" ? data : {};
-    data["revenueCDto"] = this.revenueCDto
-      ? this.revenueCDto.toJSON()
-      : <any>undefined;
+    data["revenue"] = this.revenue ? this.revenue.toJSON() : <any>undefined;
     return data;
   }
 }
 
 export interface ICreateRevenueRequest {
-  revenueCDto?: RevenueCDto;
-}
-
-export class RevenueCDto implements IRevenueCDto {
-  name?: string;
-  value?: number;
-
-  constructor(data?: IRevenueCDto) {
-    if (data) {
-      for (var property in data) {
-        if (data.hasOwnProperty(property))
-          (<any>this)[property] = (<any>data)[property];
-      }
-    }
-  }
-
-  init(_data?: any) {
-    if (_data) {
-      this.name = _data["name"];
-      this.value = _data["value"];
-    }
-  }
-
-  static fromJS(data: any): RevenueCDto {
-    data = typeof data === "object" ? data : {};
-    let result = new RevenueCDto();
-    result.init(data);
-    return result;
-  }
-
-  toJSON(data?: any) {
-    data = typeof data === "object" ? data : {};
-    data["name"] = this.name;
-    data["value"] = this.value;
-    return data;
-  }
-}
-
-export interface IRevenueCDto {
-  name?: string;
-  value?: number;
-}
-
-export class GetRevenuesResponse implements IGetRevenuesResponse {
-  revenues?: RevenueDto[];
-
-  constructor(data?: IGetRevenuesResponse) {
-    if (data) {
-      for (var property in data) {
-        if (data.hasOwnProperty(property))
-          (<any>this)[property] = (<any>data)[property];
-      }
-    }
-  }
-
-  init(_data?: any) {
-    if (_data) {
-      if (Array.isArray(_data["revenues"])) {
-        this.revenues = [] as any;
-        for (let item of _data["revenues"])
-          this.revenues!.push(RevenueDto.fromJS(item));
-      }
-    }
-  }
-
-  static fromJS(data: any): GetRevenuesResponse {
-    data = typeof data === "object" ? data : {};
-    let result = new GetRevenuesResponse();
-    result.init(data);
-    return result;
-  }
-
-  toJSON(data?: any) {
-    data = typeof data === "object" ? data : {};
-    if (Array.isArray(this.revenues)) {
-      data["revenues"] = [];
-      for (let item of this.revenues) data["revenues"].push(item.toJSON());
-    }
-    return data;
-  }
-}
-
-export interface IGetRevenuesResponse {
-  revenues?: RevenueDto[];
+  revenue?: RevenueDto;
 }
 
 export class RevenueDto implements IRevenueDto {
@@ -6886,6 +6801,49 @@ export interface IRevenueDto {
   source?: string;
   value?: number;
   userId?: string;
+}
+
+export class GetRevenuesResponse implements IGetRevenuesResponse {
+  revenues?: RevenueDto[];
+
+  constructor(data?: IGetRevenuesResponse) {
+    if (data) {
+      for (var property in data) {
+        if (data.hasOwnProperty(property))
+          (<any>this)[property] = (<any>data)[property];
+      }
+    }
+  }
+
+  init(_data?: any) {
+    if (_data) {
+      if (Array.isArray(_data["revenues"])) {
+        this.revenues = [] as any;
+        for (let item of _data["revenues"])
+          this.revenues!.push(RevenueDto.fromJS(item));
+      }
+    }
+  }
+
+  static fromJS(data: any): GetRevenuesResponse {
+    data = typeof data === "object" ? data : {};
+    let result = new GetRevenuesResponse();
+    result.init(data);
+    return result;
+  }
+
+  toJSON(data?: any) {
+    data = typeof data === "object" ? data : {};
+    if (Array.isArray(this.revenues)) {
+      data["revenues"] = [];
+      for (let item of this.revenues) data["revenues"].push(item.toJSON());
+    }
+    return data;
+  }
+}
+
+export interface IGetRevenuesResponse {
+  revenues?: RevenueDto[];
 }
 
 export class UpdateRevenueResponse implements IUpdateRevenueResponse {

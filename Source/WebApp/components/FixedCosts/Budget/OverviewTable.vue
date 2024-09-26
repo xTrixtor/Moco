@@ -1,5 +1,5 @@
 <template>
-  <div class="flex-1 flex-col px-1 mt-2 overflow-auto max-h-[30vh]">
+  <div class="flex-1 flex-col px-1 mt-2 overflow-auto  lg:h-full">
     <div
       v-if="!budgets || budgets.length === 0"
       class="overflow-hidden flex-center flex-col"

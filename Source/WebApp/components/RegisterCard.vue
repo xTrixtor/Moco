@@ -6,7 +6,7 @@
       class="w-[500px] h-2/5 bg-foreground shadow-secondary-light shadow-lg rounded-lg p-4 flex flex-col"
     >
       <div class="justify-center flex my-4">
-        <NuxtImg src="/logo/MoFo-Logo-Hor.png" class="h-16" />
+        <img :src="Logo" class="h-16" />
       </div>
       <div
         class="w-full h-full flex-1 flex flex-col justify-evenly items-center"
@@ -54,6 +54,7 @@ import { useApiStore } from "~/stores/apiStore";
 import CustomInput from "./Base/CustomInput.vue";
 import { CreateUserRequest } from "~/stores/apiClient";
 import { useUserStore } from "~/stores/userStore";
+import Logo from "@/public/logo.png"
 
 const props = defineProps<{
   modelValue: boolean;
