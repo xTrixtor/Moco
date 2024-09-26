@@ -47,16 +47,17 @@ jobs:
       - name: Build .NET API
         run: dotnet publish --configuration Release --output ./publish --no-restore
 
-      - name: Setup SSH agent
-        uses: webfactory/ssh-agent@v0.7.0
-        with:
-          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
-
-      - name: Copy files via SCP
-        run: |
-          scp -r ./ ${{ secrets.SERVER_USERNAME }}@${{ secrets.SERVER_IP }}:${{ secrets.SERVER_DESTINATION }}
-
-      # Step 4 (Optional): SSH into the server and run deployment scripts (e.g., restart services, etc.)
-      - name: Execute remote commands
-        run: 
-            docker-compose down -v && docker-compose up -d
+  run_pull:
+    name: run pull
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: install ssh keys
+      run: |
+        install -m 600 -D /dev/null ~/.ssh/id_rsa
+        echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+        ssh-keyscan -H ${{ SERVER_IP }} > ~/.ssh/known_hosts
+    - name: connect and pull
+      run: ssh ${{ secrets.SERVER_USERNAME }}@${{ secrets.SERVER_IP }} "cd ${{ secrets.SERVER_DESTINATION }} && git checkout ${{ secrets.MAIN_BRANCH }} && git pull && exit"
+    - name: cleanup
+      run: touch foo.txt
