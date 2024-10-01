@@ -1,31 +1,30 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+	<PropertyGroup>
+		<OutputType>Exe</OutputType>
+		<TargetFramework>net7.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+		<Configurations>Debug;Release;DebugClean</Configurations>
+	</PropertyGroup>
 
-  <PropertyGroup>
-    <OutputType>Exe</OutputType>
-    <TargetFramework>net7.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-	<Configurations>Debug;Release;DebugClean</Configurations>
-  </PropertyGroup>
+	<ItemGroup>
+		<_ContentIncludedByDefault Remove="appsettings.production.json" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <_ContentIncludedByDefault Remove="appsettings.production.json" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="FastEndpoints" Version="5.18.0" />
-    <PackageReference Include="FastEndpoints.Security" Version="5.18.0" />
-    <PackageReference Include="FastEndpoints.Swagger" Version="5.18.0" />
-    <PackageReference Include="Keycloak.AuthServices.Authentication" Version="1.5.2" />
-    <PackageReference Include="Keycloak.AuthServices.Authorization" Version="1.5.2" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.12" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.12">
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-      <PrivateAssets>all</PrivateAssets>
-    </PackageReference>
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" Version="7.0.12" />
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-    <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="7.0.0" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="FastEndpoints" Version="5.18.0" />
+		<PackageReference Include="FastEndpoints.Security" Version="5.18.0" />
+		<PackageReference Include="FastEndpoints.Swagger" Version="5.18.0" />
+		<PackageReference Include="Keycloak.AuthServices.Authentication" Version="1.5.2" />
+		<PackageReference Include="Keycloak.AuthServices.Authorization" Version="1.5.2" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.12" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.12">
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+			<PrivateAssets>all</PrivateAssets>
+		</PackageReference>
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" Version="7.0.12" />
+		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+		<PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="7.0.0" />
+	</ItemGroup>
 
 </Project>

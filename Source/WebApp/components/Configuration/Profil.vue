@@ -21,7 +21,7 @@
       </div>
     </div>
     <div class="flex lg:text-base text-xs w-full">
-      <div v-if="revenues?.length == 1" class="w-1/2 p-2 text-xs lg:text-sm">
+      <div v-if="revenues?.length != 1" class="w-1/2 p-2 text-xs lg:text-sm">
         Gehalt
       </div>
       <div v-else class="w-1/2 p-2 text-xs lg:text-sm">Gehälter</div>
@@ -35,10 +35,15 @@
             <div class="flex flex-1 items-center gap-2">
               <p>{{ revenue.source }}:</p>
               <BaseEditInput
-                class="text-primary"
+                class="text-primary flex-1 justify-end flex"
                 v-model="revenue.value"
                 @leave="updateRevenue(revenue)"
                 :input-extension="'€'"
+              />
+              <Icon
+                class="flex justify-center items-center cursor-pointer text-red-600 duration-300 mr-1 opacity-60 hover:opacity-100 text-2xl"
+                name="material-symbols:delete-outline"
+                @click="() => confirmDelete(revenue)"
               />
             </div>
           </div>
@@ -46,7 +51,7 @@
             <Icon
               name="gridicons:add-outline"
               class="text-2xl duration-500 text-highlight-text"
-              @click="() => showModal = !showModal"
+              @click="() => (showModal = !showModal)"
             />
             <AddRevenueModal v-model="showModal" />
           </div>
@@ -67,6 +72,9 @@ interface PropertyValue {
   label: String;
 }
 
+const confirm = useConfirm();
+const toast = useToast();
+
 const revenueClient = useApiStore().RevenueClient;
 const loading = ref(false);
 
@@ -78,6 +86,8 @@ const showModal = ref(false);
 
 const revenues = ref<RevenueDto[]>();
 const initialRevenues = { ...revenues.value };
+
+provide("revenues", revenues);
 
 const profilConfig: PropertyValue[] = [
   { label: "Id", propKey: "sub" },
@@ -110,6 +120,35 @@ const updateRevenue = async (revenue: RevenueDto) => {
   await revenueClient.updateRevenueEndpoint(request);
 };
 
+const confirmDelete = (revenueDto: RevenueDto) => {
+  confirm.require({
+    message: `Willst du ${revenueDto.source} wirklich löschen?`,
+    header: "Achtung!",
+    icon: "pi pi-exclamation-triangle",
+    accept: async () => {
+      loading.value = true;
+      await revenueClient.deleteRevenueEndpoint(revenueDto.id);
+
+      revenues.value = useFilter(revenues.value, function (revenue: RevenueDto) {
+        return revenue.id != revenueDto.id;
+      });
+
+      loading.value = false;
+      toast.add({
+        severity: "info",
+        summary: "Erfolgreich!",
+        life: 3000,
+      });
+    },
+    reject: () => {
+      toast.add({
+        severity: "error",
+        summary: "Abgebrochen",
+        life: 3000,
+      });
+    },
+  });
+};
 </script>
 
 <style scoped></style>

@@ -46,6 +46,7 @@
 </template>
 
 <script setup lang="ts">
+import type { RevenueDto } from "~/stores/apiClient";
 import { useApiStore } from "~/stores/apiStore";
 
 interface AddChargeModalProps {
@@ -58,6 +59,8 @@ const emit = defineEmits(["update:modelValue"]);
 const data = useVModel(props, "modelValue", emit);
 let revenueCDTO = reactive<RevenueDto>({} as RevenueDto);
 
+let revenues: Ref<RevenueDto[]> = inject("revenues") ?? 0;
+
 const isAdding = ref(false);
 const allowedToSafe = computed(() => {
   return revenueCDTO.value && revenueCDTO.source;
@@ -69,7 +72,8 @@ const clear = () => {
 
 const handleCreateRevenue = async () => {
   if (allowedToSafe.value) {
-    useApiStore().RevenueClient.createRevenueEndpoint({ revenue: revenueCDTO });
+    const response = await useApiStore().RevenueClient.createRevenueEndpoint({ revenue: revenueCDTO });
+    revenues.value = [...revenues.value, response.newRevenueDto];
     data.value = !data.value;
   }
   clear();

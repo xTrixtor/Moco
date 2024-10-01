@@ -19,7 +19,7 @@ export class BaseAPIClient {
     castFunction: (resp: Response) => Promise<any>,
   ): Promise<any> {
     if (resp.status === 401) {
-      //logout
+      useUserStore().logout();
     }
     return await castFunction(resp);
   }

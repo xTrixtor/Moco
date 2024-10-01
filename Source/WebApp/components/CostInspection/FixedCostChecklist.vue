@@ -84,13 +84,9 @@ const calculateUpgradeable = (): Boolean => {
   }
   const checklistCompareArray =
     selectedCostInspection.value.fixedCostChecklist.map((checkableFixcost) => {
-      const originFixcost = useFilter(allFixcosts, [
-        "name",
-        checkableFixcost.name,
-      ])[0];
       return {
         name: checkableFixcost.name,
-        value: calculateMontlyChargeCost({value: checkableFixcost.value, timeInterval: originFixcost.timeInterval} as FixedCostDto),
+        value: checkableFixcost.value
       };
     });
 
@@ -110,6 +106,8 @@ const calculateUpgradeable = (): Boolean => {
       return useCeil(cost.value, 2);
     }
   );
+
+
   if (useCeil(totalFixedCosts, 2) != useCeil(totalCheckableFixcosts, 2)) {
     return true;
   }
@@ -133,16 +131,15 @@ const fixedCostUpToDate = async () => {
   const request: CheckableFixedCostUptoDateRequest = {
     costInspectionId: insp.id,
   };
-  const { selectedDate } = storeToRefs(useInspectionStore());
   await useApiStore().InspectionClient.checkableFixedCostUptoDate(request);
   await costInspectionStore.fetch();
 
-  sortedChecklist.value = useOrderBy(
+  (sortedChecklist.value = useOrderBy(
     selectedCostInspection.value.fixedCostChecklist,
     ["value"],
     ["desc"]
-  ),
-  []
+  )),
+    [];
 };
 
 const checkFixcost = async (changedFixedCost: CheckableFixedCostDto) => {

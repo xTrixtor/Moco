@@ -14,13 +14,15 @@ namespace MocoApi.Endpoints.Revenue
 
         public async override Task HandleAsync(CreateRevenueRequest req, CancellationToken ct)
         {
+            RevenueDto newRevenue;
             using(var dbContext = new MoCoContext())
             {
                 var rev = await req.Revenue.PrepareAddAsync(dbContext, req.UserId);
                 dbContext.SaveChanges();
+                newRevenue = rev.asDto();
             }
 
-            await SendAsync(new CreateRevenueResponse { Success = true });
+            await SendAsync(new CreateRevenueResponse {NewRevenueDto = newRevenue });
         }
     }
     public record CreateRevenueRequest
@@ -31,8 +33,7 @@ namespace MocoApi.Endpoints.Revenue
     }
     public record CreateRevenueResponse
     {
-        public bool Success { get; set; }
-        public int MyProperty { get; set; }     
+        public RevenueDto NewRevenueDto { get; set; }
     }
     public record RevenueCDto
     {

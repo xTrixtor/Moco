@@ -899,6 +899,323 @@ export class SavinggoalsClient
   }
 }
 
+export interface IRevenueClient {
+  /**
+   * @return Success
+   */
+  deleteRevenueEndpoint(revenueId: number): Promise<any>;
+
+  /**
+   * @return Success
+   */
+  createRevenueEndpoint(
+    createRevenueRequest: CreateRevenueRequest
+  ): Promise<CreateRevenueResponse>;
+
+  /**
+   * @return Success
+   */
+  updateRevenueEndpoint(
+    updateRevenueRequest: UpdateRevenueRequest
+  ): Promise<UpdateRevenueResponse>;
+
+  /**
+   * @return Success
+   */
+  getRevenuesOfUserEndpoint(
+    userId: string | null
+  ): Promise<GetRevenuesResponse>;
+}
+
+export class RevenueClient extends BaseAPIClient implements IRevenueClient {
+  private http: {
+    fetch(url: RequestInfo, init?: RequestInit): Promise<Response>;
+  };
+  private baseUrl: string;
+  protected jsonParseReviver: ((key: string, value: any) => any) | undefined =
+    undefined;
+
+  constructor(
+    baseUrl?: string,
+    http?: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> }
+  ) {
+    super();
+    this.http = http ? http : (window as any);
+    this.baseUrl = this.getBaseUrl("https://localhost:53084", baseUrl);
+  }
+
+  /**
+   * @return Success
+   */
+  deleteRevenueEndpoint(revenueId: number): Promise<any> {
+    let url_ = this.baseUrl + "/api/revenue/{RevenueId}";
+    if (revenueId === undefined || revenueId === null)
+      throw new Error("The parameter 'revenueId' must be defined.");
+    url_ = url_.replace("{RevenueId}", encodeURIComponent("" + revenueId));
+    url_ = url_.replace(/[?&]$/, "");
+
+    let options_: RequestInit = {
+      method: "DELETE",
+      headers: {
+        Accept: "text/plain",
+      },
+    };
+
+    return this.transformOptions(options_)
+      .then((transformedOptions_) => {
+        return this.http.fetch(url_, transformedOptions_);
+      })
+      .then((_response: Response) => {
+        return this.transformResult(url_, _response, (_response: Response) =>
+          this.processDeleteRevenueEndpoint(_response)
+        );
+      });
+  }
+
+  protected processDeleteRevenueEndpoint(response: Response): Promise<any> {
+    const status = response.status;
+    let _headers: any = {};
+    if (response.headers && response.headers.forEach) {
+      response.headers.forEach((v: any, k: any) => (_headers[k] = v));
+    }
+    if (status === 200) {
+      return response.text().then((_responseText) => {
+        let result200: any = null;
+        let resultData200 =
+          _responseText === ""
+            ? null
+            : JSON.parse(_responseText, this.jsonParseReviver);
+        result200 = resultData200 !== undefined ? resultData200 : <any>null;
+
+        return result200;
+      });
+    } else if (status === 401) {
+      return response.text().then((_responseText) => {
+        return throwException("Unauthorized", status, _responseText, _headers);
+      });
+    } else if (status === 403) {
+      return response.text().then((_responseText) => {
+        return throwException("Forbidden", status, _responseText, _headers);
+      });
+    } else if (status !== 200 && status !== 204) {
+      return response.text().then((_responseText) => {
+        return throwException(
+          "An unexpected server error occurred.",
+          status,
+          _responseText,
+          _headers
+        );
+      });
+    }
+    return Promise.resolve<any>(null as any);
+  }
+
+  /**
+   * @return Success
+   */
+  createRevenueEndpoint(
+    createRevenueRequest: CreateRevenueRequest
+  ): Promise<CreateRevenueResponse> {
+    let url_ = this.baseUrl + "/api/revenue";
+    url_ = url_.replace(/[?&]$/, "");
+
+    const content_ = JSON.stringify(createRevenueRequest);
+
+    let options_: RequestInit = {
+      body: content_,
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+    };
+
+    return this.transformOptions(options_)
+      .then((transformedOptions_) => {
+        return this.http.fetch(url_, transformedOptions_);
+      })
+      .then((_response: Response) => {
+        return this.transformResult(url_, _response, (_response: Response) =>
+          this.processCreateRevenueEndpoint(_response)
+        );
+      });
+  }
+
+  protected processCreateRevenueEndpoint(
+    response: Response
+  ): Promise<CreateRevenueResponse> {
+    const status = response.status;
+    let _headers: any = {};
+    if (response.headers && response.headers.forEach) {
+      response.headers.forEach((v: any, k: any) => (_headers[k] = v));
+    }
+    if (status === 200) {
+      return response.text().then((_responseText) => {
+        let result200: any = null;
+        let resultData200 =
+          _responseText === ""
+            ? null
+            : JSON.parse(_responseText, this.jsonParseReviver);
+        result200 = CreateRevenueResponse.fromJS(resultData200);
+        return result200;
+      });
+    } else if (status === 401) {
+      return response.text().then((_responseText) => {
+        return throwException("Unauthorized", status, _responseText, _headers);
+      });
+    } else if (status === 403) {
+      return response.text().then((_responseText) => {
+        return throwException("Forbidden", status, _responseText, _headers);
+      });
+    } else if (status !== 200 && status !== 204) {
+      return response.text().then((_responseText) => {
+        return throwException(
+          "An unexpected server error occurred.",
+          status,
+          _responseText,
+          _headers
+        );
+      });
+    }
+    return Promise.resolve<CreateRevenueResponse>(null as any);
+  }
+
+  /**
+   * @return Success
+   */
+  updateRevenueEndpoint(
+    updateRevenueRequest: UpdateRevenueRequest
+  ): Promise<UpdateRevenueResponse> {
+    let url_ = this.baseUrl + "/api/revenue";
+    url_ = url_.replace(/[?&]$/, "");
+
+    const content_ = JSON.stringify(updateRevenueRequest);
+
+    let options_: RequestInit = {
+      body: content_,
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+    };
+
+    return this.transformOptions(options_)
+      .then((transformedOptions_) => {
+        return this.http.fetch(url_, transformedOptions_);
+      })
+      .then((_response: Response) => {
+        return this.transformResult(url_, _response, (_response: Response) =>
+          this.processUpdateRevenueEndpoint(_response)
+        );
+      });
+  }
+
+  protected processUpdateRevenueEndpoint(
+    response: Response
+  ): Promise<UpdateRevenueResponse> {
+    const status = response.status;
+    let _headers: any = {};
+    if (response.headers && response.headers.forEach) {
+      response.headers.forEach((v: any, k: any) => (_headers[k] = v));
+    }
+    if (status === 200) {
+      return response.text().then((_responseText) => {
+        let result200: any = null;
+        let resultData200 =
+          _responseText === ""
+            ? null
+            : JSON.parse(_responseText, this.jsonParseReviver);
+        result200 = UpdateRevenueResponse.fromJS(resultData200);
+        return result200;
+      });
+    } else if (status === 401) {
+      return response.text().then((_responseText) => {
+        return throwException("Unauthorized", status, _responseText, _headers);
+      });
+    } else if (status !== 200 && status !== 204) {
+      return response.text().then((_responseText) => {
+        return throwException(
+          "An unexpected server error occurred.",
+          status,
+          _responseText,
+          _headers
+        );
+      });
+    }
+    return Promise.resolve<UpdateRevenueResponse>(null as any);
+  }
+
+  /**
+   * @return Success
+   */
+  getRevenuesOfUserEndpoint(
+    userId: string | null
+  ): Promise<GetRevenuesResponse> {
+    let url_ = this.baseUrl + "/api/revenue/{UserId}";
+    if (userId === undefined || userId === null)
+      throw new Error("The parameter 'userId' must be defined.");
+    url_ = url_.replace("{UserId}", encodeURIComponent("" + userId));
+    url_ = url_.replace(/[?&]$/, "");
+
+    let options_: RequestInit = {
+      method: "GET",
+      headers: {
+        Accept: "application/json",
+      },
+    };
+
+    return this.transformOptions(options_)
+      .then((transformedOptions_) => {
+        return this.http.fetch(url_, transformedOptions_);
+      })
+      .then((_response: Response) => {
+        return this.transformResult(url_, _response, (_response: Response) =>
+          this.processGetRevenuesOfUserEndpoint(_response)
+        );
+      });
+  }
+
+  protected processGetRevenuesOfUserEndpoint(
+    response: Response
+  ): Promise<GetRevenuesResponse> {
+    const status = response.status;
+    let _headers: any = {};
+    if (response.headers && response.headers.forEach) {
+      response.headers.forEach((v: any, k: any) => (_headers[k] = v));
+    }
+    if (status === 200) {
+      return response.text().then((_responseText) => {
+        let result200: any = null;
+        let resultData200 =
+          _responseText === ""
+            ? null
+            : JSON.parse(_responseText, this.jsonParseReviver);
+        result200 = GetRevenuesResponse.fromJS(resultData200);
+        return result200;
+      });
+    } else if (status === 401) {
+      return response.text().then((_responseText) => {
+        return throwException("Unauthorized", status, _responseText, _headers);
+      });
+    } else if (status === 403) {
+      return response.text().then((_responseText) => {
+        return throwException("Forbidden", status, _responseText, _headers);
+      });
+    } else if (status !== 200 && status !== 204) {
+      return response.text().then((_responseText) => {
+        return throwException(
+          "An unexpected server error occurred.",
+          status,
+          _responseText,
+          _headers
+        );
+      });
+    }
+    return Promise.resolve<GetRevenuesResponse>(null as any);
+  }
+}
+
 export interface IGroupcostClient {
   /**
    * @return Success
@@ -2504,252 +2821,6 @@ export class RefreshClient extends BaseAPIClient implements IRefreshClient {
       });
     }
     return Promise.resolve<RefreshAuthTokenResponse>(null as any);
-  }
-}
-
-export interface IRevenueClient {
-  /**
-   * @return Success
-   */
-  createRevenueEndpoint(
-    createRevenueRequest: CreateRevenueRequest
-  ): Promise<CreateRevenueResponse>;
-
-  /**
-   * @return Success
-   */
-  updateRevenueEndpoint(
-    updateRevenueRequest: UpdateRevenueRequest
-  ): Promise<UpdateRevenueResponse>;
-
-  /**
-   * @return Success
-   */
-  getRevenuesOfUserEndpoint(
-    userId: string | null
-  ): Promise<GetRevenuesResponse>;
-}
-
-export class RevenueClient extends BaseAPIClient implements IRevenueClient {
-  private http: {
-    fetch(url: RequestInfo, init?: RequestInit): Promise<Response>;
-  };
-  private baseUrl: string;
-  protected jsonParseReviver: ((key: string, value: any) => any) | undefined =
-    undefined;
-
-  constructor(
-    baseUrl?: string,
-    http?: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> }
-  ) {
-    super();
-    this.http = http ? http : (window as any);
-    this.baseUrl = this.getBaseUrl("https://localhost:53084", baseUrl);
-  }
-
-  /**
-   * @return Success
-   */
-  createRevenueEndpoint(
-    createRevenueRequest: CreateRevenueRequest
-  ): Promise<CreateRevenueResponse> {
-    let url_ = this.baseUrl + "/api/revenue";
-    url_ = url_.replace(/[?&]$/, "");
-
-    const content_ = JSON.stringify(createRevenueRequest);
-
-    let options_: RequestInit = {
-      body: content_,
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-    };
-
-    return this.transformOptions(options_)
-      .then((transformedOptions_) => {
-        return this.http.fetch(url_, transformedOptions_);
-      })
-      .then((_response: Response) => {
-        return this.transformResult(url_, _response, (_response: Response) =>
-          this.processCreateRevenueEndpoint(_response)
-        );
-      });
-  }
-
-  protected processCreateRevenueEndpoint(
-    response: Response
-  ): Promise<CreateRevenueResponse> {
-    const status = response.status;
-    let _headers: any = {};
-    if (response.headers && response.headers.forEach) {
-      response.headers.forEach((v: any, k: any) => (_headers[k] = v));
-    }
-    if (status === 200) {
-      return response.text().then((_responseText) => {
-        let result200: any = null;
-        let resultData200 =
-          _responseText === ""
-            ? null
-            : JSON.parse(_responseText, this.jsonParseReviver);
-        result200 = CreateRevenueResponse.fromJS(resultData200);
-        return result200;
-      });
-    } else if (status === 401) {
-      return response.text().then((_responseText) => {
-        return throwException("Unauthorized", status, _responseText, _headers);
-      });
-    } else if (status === 403) {
-      return response.text().then((_responseText) => {
-        return throwException("Forbidden", status, _responseText, _headers);
-      });
-    } else if (status !== 200 && status !== 204) {
-      return response.text().then((_responseText) => {
-        return throwException(
-          "An unexpected server error occurred.",
-          status,
-          _responseText,
-          _headers
-        );
-      });
-    }
-    return Promise.resolve<CreateRevenueResponse>(null as any);
-  }
-
-  /**
-   * @return Success
-   */
-  updateRevenueEndpoint(
-    updateRevenueRequest: UpdateRevenueRequest
-  ): Promise<UpdateRevenueResponse> {
-    let url_ = this.baseUrl + "/api/revenue";
-    url_ = url_.replace(/[?&]$/, "");
-
-    const content_ = JSON.stringify(updateRevenueRequest);
-
-    let options_: RequestInit = {
-      body: content_,
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-    };
-
-    return this.transformOptions(options_)
-      .then((transformedOptions_) => {
-        return this.http.fetch(url_, transformedOptions_);
-      })
-      .then((_response: Response) => {
-        return this.transformResult(url_, _response, (_response: Response) =>
-          this.processUpdateRevenueEndpoint(_response)
-        );
-      });
-  }
-
-  protected processUpdateRevenueEndpoint(
-    response: Response
-  ): Promise<UpdateRevenueResponse> {
-    const status = response.status;
-    let _headers: any = {};
-    if (response.headers && response.headers.forEach) {
-      response.headers.forEach((v: any, k: any) => (_headers[k] = v));
-    }
-    if (status === 200) {
-      return response.text().then((_responseText) => {
-        let result200: any = null;
-        let resultData200 =
-          _responseText === ""
-            ? null
-            : JSON.parse(_responseText, this.jsonParseReviver);
-        result200 = UpdateRevenueResponse.fromJS(resultData200);
-        return result200;
-      });
-    } else if (status === 401) {
-      return response.text().then((_responseText) => {
-        return throwException("Unauthorized", status, _responseText, _headers);
-      });
-    } else if (status !== 200 && status !== 204) {
-      return response.text().then((_responseText) => {
-        return throwException(
-          "An unexpected server error occurred.",
-          status,
-          _responseText,
-          _headers
-        );
-      });
-    }
-    return Promise.resolve<UpdateRevenueResponse>(null as any);
-  }
-
-  /**
-   * @return Success
-   */
-  getRevenuesOfUserEndpoint(
-    userId: string | null
-  ): Promise<GetRevenuesResponse> {
-    let url_ = this.baseUrl + "/api/revenue/{UserId}";
-    if (userId === undefined || userId === null)
-      throw new Error("The parameter 'userId' must be defined.");
-    url_ = url_.replace("{UserId}", encodeURIComponent("" + userId));
-    url_ = url_.replace(/[?&]$/, "");
-
-    let options_: RequestInit = {
-      method: "GET",
-      headers: {
-        Accept: "application/json",
-      },
-    };
-
-    return this.transformOptions(options_)
-      .then((transformedOptions_) => {
-        return this.http.fetch(url_, transformedOptions_);
-      })
-      .then((_response: Response) => {
-        return this.transformResult(url_, _response, (_response: Response) =>
-          this.processGetRevenuesOfUserEndpoint(_response)
-        );
-      });
-  }
-
-  protected processGetRevenuesOfUserEndpoint(
-    response: Response
-  ): Promise<GetRevenuesResponse> {
-    const status = response.status;
-    let _headers: any = {};
-    if (response.headers && response.headers.forEach) {
-      response.headers.forEach((v: any, k: any) => (_headers[k] = v));
-    }
-    if (status === 200) {
-      return response.text().then((_responseText) => {
-        let result200: any = null;
-        let resultData200 =
-          _responseText === ""
-            ? null
-            : JSON.parse(_responseText, this.jsonParseReviver);
-        result200 = GetRevenuesResponse.fromJS(resultData200);
-        return result200;
-      });
-    } else if (status === 401) {
-      return response.text().then((_responseText) => {
-        return throwException("Unauthorized", status, _responseText, _headers);
-      });
-    } else if (status === 403) {
-      return response.text().then((_responseText) => {
-        return throwException("Forbidden", status, _responseText, _headers);
-      });
-    } else if (status !== 200 && status !== 204) {
-      return response.text().then((_responseText) => {
-        return throwException(
-          "An unexpected server error occurred.",
-          status,
-          _responseText,
-          _headers
-        );
-      });
-    }
-    return Promise.resolve<GetRevenuesResponse>(null as any);
   }
 }
 
@@ -4784,6 +4855,33 @@ export interface IDepositRateUDto {
   savingMonth?: Date;
 }
 
+export class DeleteChargesRequest implements IDeleteChargesRequest {
+  constructor(data?: IDeleteChargesRequest) {
+    if (data) {
+      for (var property in data) {
+        if (data.hasOwnProperty(property))
+          (<any>this)[property] = (<any>data)[property];
+      }
+    }
+  }
+
+  init(_data?: any) {}
+
+  static fromJS(data: any): DeleteChargesRequest {
+    data = typeof data === "object" ? data : {};
+    let result = new DeleteChargesRequest();
+    result.init(data);
+    return result;
+  }
+
+  toJSON(data?: any) {
+    data = typeof data === "object" ? data : {};
+    return data;
+  }
+}
+
+export interface IDeleteChargesRequest {}
+
 export class GroupCostCDto implements IGroupCostCDto {
   name?: string;
 
@@ -6492,13 +6590,9 @@ export interface ILoginResponse {
   expireTime?: Date;
 }
 
-/** the dto used to send an error response to the client */
 export class ErrorResponse implements IErrorResponse {
-  /** the http status code sent to the client. default is 400. */
   statusCode?: number;
-  /** the message for the error response */
   message?: string;
-  /** the collection of errors for the current context */
   errors?: { [key: string]: string[] };
 
   constructor(data?: IErrorResponse) {
@@ -6547,13 +6641,9 @@ export class ErrorResponse implements IErrorResponse {
   }
 }
 
-/** the dto used to send an error response to the client */
 export interface IErrorResponse {
-  /** the http status code sent to the client. default is 400. */
   statusCode?: number;
-  /** the message for the error response */
   message?: string;
-  /** the collection of errors for the current context */
   errors?: { [key: string]: string[] };
 }
 
@@ -6678,8 +6768,7 @@ export interface IRefreshAuthTokenRequest {
 }
 
 export class CreateRevenueResponse implements ICreateRevenueResponse {
-  success?: boolean;
-  myProperty?: number;
+  newRevenueDto?: RevenueDto;
 
   constructor(data?: ICreateRevenueResponse) {
     if (data) {
@@ -6692,8 +6781,9 @@ export class CreateRevenueResponse implements ICreateRevenueResponse {
 
   init(_data?: any) {
     if (_data) {
-      this.success = _data["success"];
-      this.myProperty = _data["myProperty"];
+      this.newRevenueDto = _data["newRevenueDto"]
+        ? RevenueDto.fromJS(_data["newRevenueDto"])
+        : <any>undefined;
     }
   }
 
@@ -6706,53 +6796,15 @@ export class CreateRevenueResponse implements ICreateRevenueResponse {
 
   toJSON(data?: any) {
     data = typeof data === "object" ? data : {};
-    data["success"] = this.success;
-    data["myProperty"] = this.myProperty;
+    data["newRevenueDto"] = this.newRevenueDto
+      ? this.newRevenueDto.toJSON()
+      : <any>undefined;
     return data;
   }
 }
 
 export interface ICreateRevenueResponse {
-  success?: boolean;
-  myProperty?: number;
-}
-
-export class CreateRevenueRequest implements ICreateRevenueRequest {
-  revenue?: RevenueDto;
-
-  constructor(data?: ICreateRevenueRequest) {
-    if (data) {
-      for (var property in data) {
-        if (data.hasOwnProperty(property))
-          (<any>this)[property] = (<any>data)[property];
-      }
-    }
-  }
-
-  init(_data?: any) {
-    if (_data) {
-      this.revenue = _data["revenue"]
-        ? RevenueDto.fromJS(_data["revenue"])
-        : <any>undefined;
-    }
-  }
-
-  static fromJS(data: any): CreateRevenueRequest {
-    data = typeof data === "object" ? data : {};
-    let result = new CreateRevenueRequest();
-    result.init(data);
-    return result;
-  }
-
-  toJSON(data?: any) {
-    data = typeof data === "object" ? data : {};
-    data["revenue"] = this.revenue ? this.revenue.toJSON() : <any>undefined;
-    return data;
-  }
-}
-
-export interface ICreateRevenueRequest {
-  revenue?: RevenueDto;
+  newRevenueDto?: RevenueDto;
 }
 
 export class RevenueDto implements IRevenueDto {
@@ -6801,6 +6853,44 @@ export interface IRevenueDto {
   source?: string;
   value?: number;
   userId?: string;
+}
+
+export class CreateRevenueRequest implements ICreateRevenueRequest {
+  revenue?: RevenueDto;
+
+  constructor(data?: ICreateRevenueRequest) {
+    if (data) {
+      for (var property in data) {
+        if (data.hasOwnProperty(property))
+          (<any>this)[property] = (<any>data)[property];
+      }
+    }
+  }
+
+  init(_data?: any) {
+    if (_data) {
+      this.revenue = _data["revenue"]
+        ? RevenueDto.fromJS(_data["revenue"])
+        : <any>undefined;
+    }
+  }
+
+  static fromJS(data: any): CreateRevenueRequest {
+    data = typeof data === "object" ? data : {};
+    let result = new CreateRevenueRequest();
+    result.init(data);
+    return result;
+  }
+
+  toJSON(data?: any) {
+    data = typeof data === "object" ? data : {};
+    data["revenue"] = this.revenue ? this.revenue.toJSON() : <any>undefined;
+    return data;
+  }
+}
+
+export interface ICreateRevenueRequest {
+  revenue?: RevenueDto;
 }
 
 export class GetRevenuesResponse implements IGetRevenuesResponse {
@@ -7042,8 +7132,8 @@ export interface IChargeCDto {
   monthlyBudgetId?: number;
 }
 
-export class DeleteChargesRequest implements IDeleteChargesRequest {
-  constructor(data?: IDeleteChargesRequest) {
+export class DeleteChargesRequest2 implements IDeleteChargesRequest2 {
+  constructor(data?: IDeleteChargesRequest2) {
     if (data) {
       for (var property in data) {
         if (data.hasOwnProperty(property))
@@ -7054,9 +7144,9 @@ export class DeleteChargesRequest implements IDeleteChargesRequest {
 
   init(_data?: any) {}
 
-  static fromJS(data: any): DeleteChargesRequest {
+  static fromJS(data: any): DeleteChargesRequest2 {
     data = typeof data === "object" ? data : {};
-    let result = new DeleteChargesRequest();
+    let result = new DeleteChargesRequest2();
     result.init(data);
     return result;
   }
@@ -7067,7 +7157,7 @@ export class DeleteChargesRequest implements IDeleteChargesRequest {
   }
 }
 
-export interface IDeleteChargesRequest {}
+export interface IDeleteChargesRequest2 {}
 
 export class GetChargesByTimeIntervalRequest
   implements IGetChargesByTimeIntervalRequest
