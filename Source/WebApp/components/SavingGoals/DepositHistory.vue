@@ -51,7 +51,7 @@
         :pt="{ bodyCell: { class: 'p-3.5' } }"
       >
         <template #body="slotProps">
-          <p>{{ useCeil(slotProps.data.value, 1) }} €</p>
+          <p>{{ useRound(slotProps.data.value, 1) }} €</p>
         </template>
       </Column>
       <Column header="Aktions" :pt="{ bodyCell: { class: 'p-3.5' } }">

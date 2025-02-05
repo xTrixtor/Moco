@@ -40,7 +40,7 @@ namespace Moco.Api.Endpoints.CostInspection
 
                 context.SaveChanges();
             }
-            await SendAsync(true);
+            await SendOkAsync();
         }
     }
     public record CheckableFixedCostUptoDateRequest

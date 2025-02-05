@@ -1,14 +1,12 @@
 <template>
   <div v-if="isMobil" class="w-full">
-    <div class="flex-1 flex w-full gap-2 mb-4">
-      <div class="flex-center">
-        <Icon
-          name="gridicons:add-outline"
-          size="1.5rem"
-          class="text-highlight-text"
-          @click="() => (showCreateDialog = true)"
-        />
-      </div>
+    <div class="flex-1 flex flex-center w-full gap-2 mb-4">
+      <Icon
+        name="gridicons:add-outline"
+        size="1.5rem"
+        class="text-highlight-text"
+        @click="() => (showCreateDialog = true)"
+      />
       <Dropdown
         class="w-full"
         :pt="{ root: { class: 'flex-1 flex w-full' } }"
@@ -19,8 +17,14 @@
         data-key="id"
         @change="(item: any) => handleChange(item.value)"
       />
+      <Icon
+        class="flex justify-center items-center cursor-pointer text-red-600 duration-300 opacity-60 hover:opacity-100"
+        size="1.8rem"
+        name="material-symbols:delete-outline"
+        @click="handleDelete"
+      />
     </div>
-    <div v-if="selectedSavingGoal.id" class="flex-center w-[85svw]">
+    <div v-if="selectedSavingGoal.id" class="flex-center">
       <SavingGoalsDepositHistory />
     </div>
   </div>
@@ -133,7 +137,7 @@ onBeforeMount(async () => {
 
 onBeforeUnmount(() => {
   selectedSavingGoal.value = { id: undefined };
-})
+});
 </script>
 
 <style></style>

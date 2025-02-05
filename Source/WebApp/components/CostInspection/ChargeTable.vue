@@ -27,12 +27,14 @@
         >
           <div class="w-1/2">
             <BaseEditInput
+              class="truncate"
               v-model="charge.name"
               @leave="updateBudgetCharge(charge)"
             />
           </div>
           <div class="w-[30%]">
             <BaseEditInput
+              class="truncate"  
               v-model="charge.value"
               @leave="updateBudgetCharge(charge)"
               input-extension="€"

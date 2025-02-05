@@ -1,5 +1,8 @@
 <template>
-  <div class="flex flex-col flex-1 w-full h-full">
+  <BaseFullScreenLoader v-if="loading" />
+  <div
+  v-else 
+  class="flex flex-col flex-1 w-full h-full">
     <div class="flex">
       <CostInspectionDatePickerRow />
       <div v-if="selectedCostInspection">
@@ -56,8 +59,7 @@ const { isMobil } = storeToRefs(useUtilStore());
 const { selectedCostInspection } = storeToRefs(useInspectionStore());
 const confirm = useConfirm();
 const toast = useToast();
-
-const costInspectionClient = useApiStore().InspectionClient;
+const loading = ref(false);
 
 const confirmDelete = () => {
   confirm.require({
@@ -65,9 +67,9 @@ const confirmDelete = () => {
     header: "Achtung!",
     icon: "pi pi-exclamation-triangle",
     accept: async () => {
-      await costInspectionClient.deleteCostInspectionEndpoint(
-        selectedCostInspection.value.id
-      );
+
+      useInspectionStore().deleteSelectedCostInspectionFetch();
+
       toast.add({
         severity: "info",
         summary: "Confirmed",
@@ -89,8 +91,10 @@ const confirmDelete = () => {
 
 onMounted(async () => {
   try {
+    loading.value = true;
     await useInspectionStore().fetch();
     await useFixedCostStore().fetch();
+    loading.value = false;
   } catch (e) {}
 });
 </script>

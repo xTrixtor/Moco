@@ -4,7 +4,7 @@
   >
     <div class="flex-center gap-2 relative">
       <p class="flex">
-        Monatliches Guthaben: {{ useCeil(monthyRevenue, 2) }} €
+        Monatliches Guthaben: {{ useRound(monthyRevenue, 2) }} €
       </p>
       <Icon
         name="material-symbols:info-outline"
@@ -17,7 +17,7 @@
         <div
           v-if="creditDetailsVis"
           ref="target"
-          class="absolute w-[400px] max-h-72 overflow-auto -right-1/2 top-10 bg-secondary-content z-[999] border-primary border-2 rounded-md p-2"
+          class="absolute w-[400px] max-h-72 overflow-auto -right-1/2 top-10 bg-secondary-content z-[999] border-primary border-2 rounded-md p-6"
         >
           <div class="flex flex-1 justify-end">
             <Icon
@@ -27,6 +27,7 @@
               @click="() => (creditDetailsVis = false)"
             />
           </div>
+          
           <div class="p-2 divide-y-2">
             <div
               v-if="selectedCostInspection.credits?.length > 0"
@@ -58,16 +59,26 @@
             <div v-else class="flex-center pb-2">Keine Daten</div>
             <CostInspectionAddInlineCredit class="pt-2" />
           </div>
+            <div class="flex flex-1 justify-end">
+            <Button outlined size="small" @click="() => (creditDetailsVis = false)">OK</Button>
+          </div>
         </div>
       </Transition>
     </div>
-    <p class="flex pl-2">Aktuelles Geld: {{ useCeil(currentMoney, 2) }} €</p>
+    <p class="flex pl-2">
+      Aktuelles Geld: {{ useRound(currentMoney, 2) }} € 
+    </p>
   </div>
 </template>
 
 <script setup lang="ts">
 import { storeToRefs } from "pinia";
-import { CreditDto, UpdateCreditRequest } from "~/stores/apiClient";
+import {
+  ChargeDto,
+  CreditDto,
+  MonthlyBudgetDto,
+  UpdateCreditRequest,
+} from "~/stores/apiClient";
 import { useApiStore } from "~/stores/apiStore";
 import { useInspectionStore } from "~/stores/costInspectionStore";
 import { useConfirm } from "primevue/useconfirm";
@@ -80,21 +91,38 @@ const confirm = useConfirm();
 const monthyRevenue = computed(() =>
   useSumBy(selectedCostInspection.value.credits, function (r) {
     return r.value;
-  }),
+  })
 );
 
 onClickOutside(target, async () => {
   creditDetailsVis.value = false;
+  console.log(target)
 });
 
 const calculateCharges = (): number => {
-  let sum = 0;
+  let sum = 0 as number;
 
-  selectedCostInspection.value.monthlyBudgets.forEach((monthlyBudget) => {
-    sum += useSumBy(monthlyBudget.charges, function (c) {
-      return c.value;
-    });
-  });
+  if (selectedCostInspection.value.monthlyBudgets == undefined) {
+    return sum;
+  }
+
+  selectedCostInspection.value.monthlyBudgets.forEach(
+    (monthlyBudget: MonthlyBudgetDto) => {
+      const budgetSum = useSumBy(
+        monthlyBudget.charges,
+        function (charge: ChargeDto) {
+          if (typeof charge.value == "string")
+            return parseInt(charge.value) ?? 0;
+
+          return charge.value;
+        }
+      );
+      if (budgetSum != 0 || budgetSum != "0") {
+        sum += budgetSum as number;
+      }
+    }
+  );
+
   return sum;
 };
 
@@ -103,14 +131,14 @@ const calculateFixedCostSum = (): number => {
     selectedCostInspection.value.fixedCostChecklist?.filter((x) => x.isChecked),
     function (f) {
       return f.value;
-    },
+    }
   );
 };
 const fixedCostSum = computed(() => calculateFixedCostSum());
 const chargesSum = computed(() => calculateCharges());
 
 const currentMoney = computed(
-  () => monthyRevenue.value - (fixedCostSum.value + chargesSum.value),
+  () => monthyRevenue.value - (fixedCostSum.value + chargesSum.value)
 );
 
 const handleCreditUpdate = async (credit: CreditDto) => {

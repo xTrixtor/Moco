@@ -10,22 +10,22 @@
       class="flex w-full"
     >
       <div
-        class="w-1/2 max-w-[100px] lg:max-w-[50%] py-2 text-xs lg:text-sm pl-2"
+        class="w-1/2 max-w-[100px] lg:max-w-[50%] py-2 text-xs lg:text-sm pl-2 "
       >
         {{ probValue.label }}
       </div>
       <div
-        class="w-1/2 max-w-[100px] lg:max-w-[50%] py-2 text-xs lg:text-sm truncate"
+        class="w-1/2 max-w-[200px] lg:max-w-[50%] py-2 text-xs lg:text-sm truncate"
       >
         {{ user[probValue.propKey] }}
       </div>
     </div>
-    <div class="flex lg:text-base text-xs w-full">
-      <div v-if="revenues?.length != 1" class="w-1/2 p-2 text-xs lg:text-sm">
+    <div class="flex w-full">
+      <div v-if="revenues?.length <= 1" class="w-1/2 max-w-[100px] lg:max-w-[50%] py-2 text-xs lg:text-sm truncate pl-2">
         Gehalt
       </div>
-      <div v-else class="w-1/2 p-2 text-xs lg:text-sm">Gehälter</div>
-      <div class="w-1/2 p-2">
+      <div v-else class="w-1/2 max-w-[100px] lg:max-w-[50%] py-2 pl-2 text-xs lg:text-sm truncate">Gehälter</div>
+      <div class="py-2 text-xs lg:text-sm truncate flex-1">
         <div class="flex flex-col">
           <div
             v-for="(revenue, key) in revenues"
@@ -33,7 +33,7 @@
             class="flex-1 w-full text-xs lg:text-sm"
           >
             <div class="flex flex-1 items-center gap-2">
-              <p>{{ revenue.source }}:</p>
+              <p class="text-xs lg:text-sm">{{ revenue.source }}:</p>
               <BaseEditInput
                 class="text-primary flex-1 justify-end flex"
                 v-model="revenue.value"
@@ -41,13 +41,13 @@
                 :input-extension="'€'"
               />
               <Icon
-                class="flex justify-center items-center cursor-pointer text-red-600 duration-300 mr-1 opacity-60 hover:opacity-100 text-2xl"
+                class="flex justify-center items-center cursor-pointer text-red-600 duration-300 mr-1 opacity-60 hover:opacity-100 lg:text-2xl text-sm"
                 name="material-symbols:delete-outline"
                 @click="() => confirmDelete(revenue)"
               />
             </div>
           </div>
-          <div>
+          <div class="flex-center">
             <Icon
               name="gridicons:add-outline"
               class="text-2xl duration-500 text-highlight-text"

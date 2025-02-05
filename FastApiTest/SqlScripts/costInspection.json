@@ -1,0 +1,44 @@
+[
+  {
+    "Id": 3,
+    "UserYearMonthKey": "972fd094-321e-4b1d-a658-42f933cacb21-2024-9",
+    "MonthlyFixedcostsJson": "[]",
+    "CreatedAt": "2024-10-07 23:02:41.349855"
+  },
+  {
+    "Id": 10,
+    "UserYearMonthKey": "ce8b7be8-9b8d-4286-9c2a-bacbddd8288a-2024-10",
+    "MonthlyFixedcostsJson": "[{\"Key\":0,\"Name\":\"FitX\",\"Value\":24.0,\"IsChecked\":true,\"CreatedAt\":\"2024-11-02T21:54:42.7362912+00:00\"},{\"Key\":1,\"Name\":\"Handy\",\"Value\":12.99,\"IsChecked\":true,\"CreatedAt\":\"2024-11-02T21:54:42.736293+00:00\"},{\"Key\":2,\"Name\":\"Hetzner\",\"Value\":5.18,\"IsChecked\":true,\"CreatedAt\":\"2024-11-02T21:54:42.7362934+00:00\"},{\"Key\":3,\"Name\":\"Spotify\",\"Value\":5.0,\"IsChecked\":true,\"CreatedAt\":\"2024-11-02T21:54:42.7362937+00:00\"},{\"Key\":4,\"Name\":\"Kredit\",\"Value\":248.18,\"IsChecked\":true,\"CreatedAt\":\"2024-11-02T21:54:42.7362939+00:00\"},{\"Key\":5,\"Name\":\"Lebensversicherung\",\"Value\":257.92,\"IsChecked\":true,\"CreatedAt\":\"2024-11-02T21:54:42.7362947+00:00\"},{\"Key\":6,\"Name\":\"Berufsunf\u00e4higkeit\",\"Value\":38.94,\"IsChecked\":true,\"CreatedAt\":\"2024-11-02T21:54:42.7362951+00:00\"},{\"Key\":7,\"Name\":\"Miete\",\"Value\":650.0,\"IsChecked\":true,\"CreatedAt\":\"2024-11-02T21:54:42.7362953+00:00\"},{\"Key\":8,\"Name\":\"J\u00e4hrliche Kosten R\u00fccklage\",\"Value\":125.0,\"IsChecked\":true,\"CreatedAt\":\"2024-11-02T21:54:42.7362955+00:00\"}]",
+    "CreatedAt": "2024-11-02 21:54:42.736374"
+  },
+  {
+    "Id": 12,
+    "UserYearMonthKey": "ffc028fc-5c14-4584-841c-bc7344b8aab8-2024-10",
+    "MonthlyFixedcostsJson": "[{\"Key\":0,\"Name\":\"Miete\",\"Value\":900.0,\"IsChecked\":false,\"CreatedAt\":\"2024-11-12T08:55:13.6286368+00:00\"},{\"Key\":1,\"Name\":\"Auto-Versicherung\",\"Value\":66.67,\"IsChecked\":false,\"CreatedAt\":\"2024-11-12T08:55:13.6286386+00:00\"}]",
+    "CreatedAt": "2024-11-12 08:55:13.628682"
+  },
+  {
+    "Id": 13,
+    "UserYearMonthKey": "ce8b7be8-9b8d-4286-9c2a-bacbddd8288a-2024-11",
+    "MonthlyFixedcostsJson": "[{\"Key\":0,\"Name\":\"FitX\",\"Value\":24.0,\"IsChecked\":true,\"CreatedAt\":\"2024-11-30T23:50:04.9242484+00:00\"},{\"Key\":1,\"Name\":\"Handy\",\"Value\":12.99,\"IsChecked\":true,\"CreatedAt\":\"2024-11-30T23:50:04.9242505+00:00\"},{\"Key\":2,\"Name\":\"Hetzner\",\"Value\":5.18,\"IsChecked\":true,\"CreatedAt\":\"2024-11-30T23:50:04.9242509+00:00\"},{\"Key\":3,\"Name\":\"Spotify\",\"Value\":5.0,\"IsChecked\":true,\"CreatedAt\":\"2024-11-30T23:50:04.9242512+00:00\"},{\"Key\":4,\"Name\":\"Kredit\",\"Value\":248.18,\"IsChecked\":true,\"CreatedAt\":\"2024-11-30T23:50:04.9242515+00:00\"},{\"Key\":5,\"Name\":\"Lebensversicherung\",\"Value\":257.92,\"IsChecked\":true,\"CreatedAt\":\"2024-11-30T23:50:04.9242527+00:00\"},{\"Key\":6,\"Name\":\"Berufsunf\u00e4higkeit\",\"Value\":38.94,\"IsChecked\":true,\"CreatedAt\":\"2024-11-30T23:50:04.9242529+00:00\"},{\"Key\":7,\"Name\":\"Miete\",\"Value\":650.0,\"IsChecked\":true,\"CreatedAt\":\"2024-11-30T23:50:04.9242533+00:00\"},{\"Key\":8,\"Name\":\"J\u00e4hrliche Kosten R\u00fccklage\",\"Value\":125.0,\"IsChecked\":true,\"CreatedAt\":\"2024-11-30T23:50:04.9242536+00:00\"}]",
+    "CreatedAt": "2024-11-30 23:50:04.924355"
+  },
+  {
+    "Id": 16,
+    "UserYearMonthKey": "ce8b7be8-9b8d-4286-9c2a-bacbddd8288a-2025-0",
+    "MonthlyFixedcostsJson": "[{\"Key\":0,\"Name\":\"FitX\",\"Value\":24.0,\"IsChecked\":false,\"CreatedAt\":\"2025-01-31T01:18:59.5368901+00:00\"},{\"Key\":1,\"Name\":\"Handy\",\"Value\":12.99,\"IsChecked\":false,\"CreatedAt\":\"2025-01-31T01:18:59.5368915+00:00\"},{\"Key\":2,\"Name\":\"Hetzner\",\"Value\":5.18,\"IsChecked\":false,\"CreatedAt\":\"2025-01-31T01:18:59.5368917+00:00\"},{\"Key\":3,\"Name\":\"Spotify\",\"Value\":5.0,\"IsChecked\":false,\"CreatedAt\":\"2025-01-31T01:18:59.5368918+00:00\"},{\"Key\":4,\"Name\":\"Kredit\",\"Value\":244.18,\"IsChecked\":false,\"CreatedAt\":\"2025-01-31T01:18:59.5368921+00:00\"},{\"Key\":5,\"Name\":\"Lexus\",\"Value\":350.0,\"IsChecked\":false,\"CreatedAt\":\"2025-01-31T01:18:59.5368924+00:00\"},{\"Key\":6,\"Name\":\"HDI Lebensversicherung\",\"Value\":154.5,\"IsChecked\":false,\"CreatedAt\":\"2025-01-31T01:18:59.5368926+00:00\"},{\"Key\":7,\"Name\":\"RentenBasis\",\"Value\":110.27,\"IsChecked\":false,\"CreatedAt\":\"2025-01-31T01:18:59.5368927+00:00\"},{\"Key\":8,\"Name\":\"Berufsunf\u00e4higkeit\",\"Value\":40.1,\"IsChecked\":false,\"CreatedAt\":\"2025-01-31T01:18:59.536893+00:00\"},{\"Key\":9,\"Name\":\"Miete\",\"Value\":650.0,\"IsChecked\":false,\"CreatedAt\":\"2025-01-31T01:18:59.5368933+00:00\"},{\"Key\":10,\"Name\":\"J\u00e4hrliche Kosten R\u00fccklage\",\"Value\":80.0,\"IsChecked\":false,\"CreatedAt\":\"2025-01-31T01:18:59.5368935+00:00\"}]",
+    "CreatedAt": "2025-01-02 20:17:10.068757"
+  },
+  {
+    "Id": 18,
+    "UserYearMonthKey": "ce8b7be8-9b8d-4286-9c2a-bacbddd8288a-2024-8",
+    "MonthlyFixedcostsJson": "[{\"Key\":0,\"Name\":\"FitX\",\"Value\":24.0,\"IsChecked\":true,\"CreatedAt\":\"2025-01-31T01:13:46.1687693+00:00\"},{\"Key\":1,\"Name\":\"Handy\",\"Value\":12.99,\"IsChecked\":true,\"CreatedAt\":\"2025-01-31T01:13:46.1687709+00:00\"},{\"Key\":2,\"Name\":\"Hetzner\",\"Value\":5.18,\"IsChecked\":true,\"CreatedAt\":\"2025-01-31T01:13:46.1687711+00:00\"},{\"Key\":3,\"Name\":\"Spotify\",\"Value\":5.0,\"IsChecked\":true,\"CreatedAt\":\"2025-01-31T01:13:46.1687711+00:00\"},{\"Key\":4,\"Name\":\"Kredit\",\"Value\":244.18,\"IsChecked\":true,\"CreatedAt\":\"2025-01-31T01:13:46.1687714+00:00\"},{\"Key\":5,\"Name\":\"Lexus\",\"Value\":350.0,\"IsChecked\":true,\"CreatedAt\":\"2025-01-31T01:13:46.1687716+00:00\"},{\"Key\":6,\"Name\":\"HDI Lebensversicherung\",\"Value\":154.5,\"IsChecked\":true,\"CreatedAt\":\"2025-01-31T01:13:46.1687717+00:00\"},{\"Key\":7,\"Name\":\"RentenBasis\",\"Value\":110.27,\"IsChecked\":true,\"CreatedAt\":\"2025-01-31T01:13:46.1687718+00:00\"},{\"Key\":8,\"Name\":\"Berufsunf\u00e4higkeit\",\"Value\":40.1,\"IsChecked\":true,\"CreatedAt\":\"2025-01-31T01:13:46.168772+00:00\"},{\"Key\":9,\"Name\":\"Miete\",\"Value\":650.0,\"IsChecked\":true,\"CreatedAt\":\"2025-01-31T01:13:46.1687722+00:00\"},{\"Key\":10,\"Name\":\"J\u00e4hrliche Kosten R\u00fccklage\",\"Value\":80.0,\"IsChecked\":true,\"CreatedAt\":\"2025-01-31T01:13:46.1687723+00:00\"}]",
+    "CreatedAt": "2025-01-31 00:50:22.908032"
+  },
+  {
+    "Id": 21,
+    "UserYearMonthKey": "ce8b7be8-9b8d-4286-9c2a-bacbddd8288a-2025-1",
+    "MonthlyFixedcostsJson": "[{\"Key\":0,\"Name\":\"FitX\",\"Value\":24.0,\"IsChecked\":false,\"CreatedAt\":\"2025-02-03T19:48:48.5621959+00:00\"},{\"Key\":1,\"Name\":\"Handy\",\"Value\":12.99,\"IsChecked\":false,\"CreatedAt\":\"2025-02-03T19:48:48.5621975+00:00\"},{\"Key\":2,\"Name\":\"Hetzner\",\"Value\":5.18,\"IsChecked\":false,\"CreatedAt\":\"2025-02-03T19:48:48.5621977+00:00\"},{\"Key\":3,\"Name\":\"Spotify\",\"Value\":5.0,\"IsChecked\":false,\"CreatedAt\":\"2025-02-03T19:48:48.5621978+00:00\"},{\"Key\":4,\"Name\":\"Kredit\",\"Value\":244.18,\"IsChecked\":false,\"CreatedAt\":\"2025-02-03T19:48:48.5621982+00:00\"},{\"Key\":5,\"Name\":\"Lexus\",\"Value\":350.0,\"IsChecked\":true,\"CreatedAt\":\"2025-02-03T19:48:48.5621984+00:00\"},{\"Key\":6,\"Name\":\"HDI Lebensversicherung\",\"Value\":159.14,\"IsChecked\":true,\"CreatedAt\":\"2025-02-03T19:48:48.5621988+00:00\"},{\"Key\":7,\"Name\":\"RentenBasis\",\"Value\":110.27,\"IsChecked\":true,\"CreatedAt\":\"2025-02-03T19:48:48.5621989+00:00\"},{\"Key\":8,\"Name\":\"Berufsunf\u00e4higkeit\",\"Value\":40.1,\"IsChecked\":true,\"CreatedAt\":\"2025-02-03T19:48:48.5621991+00:00\"},{\"Key\":9,\"Name\":\"Miete\",\"Value\":650.0,\"IsChecked\":true,\"CreatedAt\":\"2025-02-03T19:48:48.5621993+00:00\"},{\"Key\":10,\"Name\":\"J\u00e4hrliche Kosten R\u00fccklage\",\"Value\":80.0,\"IsChecked\":true,\"CreatedAt\":\"2025-02-03T19:48:48.5621995+00:00\"}]",
+    "CreatedAt": "2025-02-01 00:25:19.864670"
+  }
+]

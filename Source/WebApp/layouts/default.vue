@@ -12,7 +12,7 @@
         </div>
         <div class="col-span-3 flex-1">
           <Navbar />
-          <div class="flex w-full  p-6" :class="isMobil?'h-full':'h-[90svh]'">
+          <div class="flex w-full  p-6" :class="isMobil?'h-full':'h-[90svh] overflow-auto'">
             <slot />
           </div>
         </div>

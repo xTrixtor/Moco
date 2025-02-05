@@ -8,6 +8,13 @@ using NSwag;
 using MocoApi.Handler;
 using Moco.Api.Factories.Db;
 using Moco.Api.DataStore;
+using Microsoft.EntityFrameworkCore;
+using System.Formats.Asn1;
+using System.Globalization;
+using CsvHelper;
+using MocoApi.Models.Moco.Resource;
+using Moco.Api.Models.Moco.Dto;
+using Newtonsoft.Json;
 
 IConfigurationRoot config = new ConfigurationBuilder()
     .AddJsonFile("appsettings.json")
@@ -104,6 +111,22 @@ app.UseAuthentication() //add this
         dbContext.Database.EnsureDeleted();
         dbContext.Database.EnsureCreated();
         Console.WriteLine("Start Created");
+
+        var scripts = Directory.GetFiles(@"SqlScripts/");
+        foreach (var script in scripts)
+        {
+            if (script.ToLower().Contains("inspection"))
+            {
+                var json = await File.ReadAllTextAsync(script);
+                var records = JsonConvert.DeserializeObject<CostInspection[]>(json);
+                await dbContext.CostInspections.AddRangeAsync(records);
+                await dbContext.SaveChangesAsync();
+                continue;
+            }
+            var sql = await File.ReadAllTextAsync(script);
+            await dbContext.Database.ExecuteSqlRawAsync(sql);
+        }
+        Console.WriteLine("Seeded Data");
     }
 }
 #endif
@@ -115,7 +138,7 @@ app.UseAuthentication() //add this
             dbContext.Database.EnsureCreated();
         }
     }
-        app.Run();
+    app.Run();
 }
 
 

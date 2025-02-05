@@ -28,7 +28,8 @@ services:
     command: [ 'start-dev' ]
     ports:
       - "8081:8080"
-
+    volumes:
+      - keycloak_data:/opt/keycloak/data
     networks:
       - moco
 
@@ -41,6 +42,11 @@ services:
       MYSQL_PASSWORD: keycloak
     ports:
       - "3307:3306"
-
+    volumes:
+      - db_data:/var/lib/mysql
     networks:
       - moco
+
+volumes:
+  db_data:
+  keycloak_data:

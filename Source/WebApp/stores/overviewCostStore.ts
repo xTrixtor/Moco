@@ -93,11 +93,6 @@ export const useOverviewCostStore = defineStore("costOverview", {
         info: "Aktuelles Geld welches sich aus den aktuellen abgespeichert Kosten ergibt",
       };
 
-      const luxaryMoney: OverviewCost = {
-        name: "Verfügbares Einkommen",
-        value: monthlyRevenue.value - budgetLimit.value - fixcostSum.value,
-        info: "Geld minus alle abgespeicherten Kosten",
-      };
       const { isMobil } = useUtilStore();
 
       if(isMobil){
@@ -115,7 +110,6 @@ export const useOverviewCostStore = defineStore("costOverview", {
         currentMoney,
         toPayMoney,
         chargesSum,
-        luxaryMoney,
         fixcostSum,
         budgetLimit,
         monthlyRevenue,
@@ -204,7 +198,7 @@ export const useOverviewCostStore = defineStore("costOverview", {
       );
     },
     setAvailibleMoney() {
-      this.availibleMoney.value = useCeil(
+      this.availibleMoney.value = useRound(
         this.totalRevenue.value -
           (this.budgetCost.value + this.fixedCost.value),
         2,

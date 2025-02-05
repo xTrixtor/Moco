@@ -68,6 +68,7 @@ const allowedToSafe = computed(() => {
 
 const clear = () => {
   isAdding.value = false;
+  revenueCDTO = {} as RevenueDto;
 };
 
 const handleCreateRevenue = async () => {

@@ -31,6 +31,14 @@ namespace Moco.Api.Endpoints.FixedCost
                     dbContext.FixedCosts.Remove(selectedFixedCost);
                     var savingGoalGroupCost = dbContext.GroupCosts.FirstOrDefault(x => x.Name.Equals("Sparziel"));
 
+                    if (savingGoalGroupCost is null)
+                    {
+                        var newGroupCost = new Models.Moco.Resource.GroupCost { Name = "Sparziel", UserId = req.UserId };
+                        dbContext.GroupCosts.Add(newGroupCost);
+                        await dbContext.SaveChangesAsync();
+                        savingGoalGroupCost = newGroupCost;
+                    }
+
                     if (selectedFixedCost.GroupCostId == savingGoalGroupCost.Id)
                     {
                         var savingGoal = await dbContext.SavingGoals.FirstOrDefaultAsync(x => x.Name == selectedFixedCost.Name);
@@ -49,6 +57,8 @@ namespace Moco.Api.Endpoints.FixedCost
     }
     public record DeleteFixedCostRequest
     {
+        [FromClaim("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier")]
+        public string? UserId { get; set; }
         public int FixedCostId { get; set; }
     }
 }

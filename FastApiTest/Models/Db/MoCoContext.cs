@@ -102,6 +102,7 @@ public class MoCoContext : DbContext
         modelBuilder.Entity<MonthlyBudget>()
             .HasMany(x => x.Charges)
             .WithOne(x => x.MonthlyBudget)
+            .OnDelete(DeleteBehavior.Cascade)
             .HasForeignKey(x => x.MonthlyBudgetId)
             .IsRequired(false);
 
@@ -111,6 +112,7 @@ public class MoCoContext : DbContext
         modelBuilder.Entity<CostInspection>()
            .HasMany(x => x.MonthlyBudgets)
            .WithOne(x => x.CostInspection) 
+           .OnDelete(DeleteBehavior.Cascade)
            .HasForeignKey(x => x.CostInspectionId)
            .IsRequired();
 
@@ -119,22 +121,22 @@ public class MoCoContext : DbContext
             .WithOne(x => x.SavingGoal)
             .HasForeignKey(x => x.SavingGoalId);
 
-        modelBuilder.Entity<Budget>()
-            .HasData(budgets);
+        //modelBuilder.Entity<Budget>()
+        //    .HasData(budgets);
 
-        modelBuilder.Entity<GroupCost>()
-            .HasData(costGroups);
+        //modelBuilder.Entity<GroupCost>()
+        //    .HasData(costGroups);
 
-        modelBuilder.Entity<FixedCost>()
-            .HasData(fixCosts);
+        //modelBuilder.Entity<FixedCost>()
+        //    .HasData(fixCosts);
 
-        modelBuilder.Entity<Revenue>()
-            .HasData(revenues);
+        //modelBuilder.Entity<Revenue>()
+        //    .HasData(revenues);
 
-        modelBuilder.Entity<User>()
-            .HasData(
-                new User { CreatedAt = new DateTime(), Email = "email@gmx.de", KeycloakUserId = "67f4dc76-02f5-4cf1-bbe8-85edbc2af1ed", Id = 1, Firstname = "Nico", LastName = "Böhner", Username = "boehnern" }
-            );
+        //modelBuilder.Entity<User>()
+        //    .HasData(
+        //        new User { CreatedAt = new DateTime(), Email = "email@gmx.de", KeycloakUserId = "67f4dc76-02f5-4cf1-bbe8-85edbc2af1ed", Id = 1, Firstname = "Nico", LastName = "Böhner", Username = "boehnern" }
+        //    );
     }
 }
 

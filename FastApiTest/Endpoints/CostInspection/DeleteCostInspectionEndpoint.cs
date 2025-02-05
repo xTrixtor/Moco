@@ -29,7 +29,6 @@ namespace Moco.Api.Endpoints.CostInspection
                     if (selectedCostInspection is null)
                     {
                         ThrowError("Could not find CostInspection with given Id");
-
                     }
 
                     

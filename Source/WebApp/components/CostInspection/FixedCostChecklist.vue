@@ -12,7 +12,7 @@
       <Icon
         name="grommet-icons:upgrade"
         @click="fixedCostUpToDate"
-        class="rotate-180 cursor-pointer hover:!text-primary duration-300"
+        class="cursor-pointer hover:!text-primary duration-300"
         size="1.5rem"
         color="white"
       />
@@ -34,7 +34,7 @@
         :binary="true"
         @click="checkFixcost(fixcost)"
       />
-      <label :for="`${fixcost.key}`" class="ml-6 flex-1">
+      <label :for="`${fixcost.key}`" class="ml-6 flex-1 w-max-[45%] truncate">
         {{ fixcost.name }}
       </label>
       <label :for="`${fixcost.key}`" class="ml-2 flex-1 flex justify-end mr-6">
@@ -49,8 +49,6 @@ import { storeToRefs } from "pinia";
 import {
   CheckableFixedCostDto,
   CheckableFixedCostUDto,
-  CheckableFixedCostUptoDateRequest,
-  CostInspectionDto,
   FixedCostDto,
   UpdateCheckableFixedCostRequest,
 } from "~/stores/apiClient";
@@ -60,16 +58,16 @@ import { useFixedCostStore } from "~/stores/fixedCostStore";
 
 const costInspectionStore = useInspectionStore();
 const { groupCosts } = storeToRefs(useFixedCostStore());
-const { fetch, selectedCostInspection, isUpgradeable } =
+const { selectedCostInspection } =
   storeToRefs(costInspectionStore);
 
-var sortedChecklist = ref(
-  useOrderBy(
+var sortedChecklist = computed(() =>{
+  return useOrderBy(
     selectedCostInspection.value.fixedCostChecklist,
     ["value"],
     ["desc"]
-  ),
-  []
+  );
+} 
 );
 
 const isUpdateable = computed(() => calculateUpgradeable());
@@ -82,33 +80,36 @@ const calculateUpgradeable = (): Boolean => {
   ) {
     return true;
   }
+  
   const checklistCompareArray =
     selectedCostInspection.value.fixedCostChecklist.map((checkableFixcost) => {
       return {
         name: checkableFixcost.name,
-        value: checkableFixcost.value
+        value: useRound(checkableFixcost.value,2), 
       };
     });
 
   const totalFixedcostCompareArray = allFixcosts.map((x) => {
     {
-      return { name: x.name, value: calculateMontlyChargeCost(x) };
+      return { name: x.name, value: calculateMontlyChargeCost(x), timeInterval: x.timeInterval };
     }
   });
 
-  const totalFixedCosts = useSumBy(allFixcosts, function (cost) {
-    return calculateMontlyChargeCost(cost);
+  const totalFixedCosts = useSumBy(totalFixedcostCompareArray, function (cost : FixedCostDto) {
+    return cost.value;
   });
 
   const totalCheckableFixcosts = useSumBy(
     checklistCompareArray,
     function (cost: FixedCostDto) {
-      return useCeil(cost.value, 2);
+      return cost.value;
     }
-  );
-
-
-  if (useCeil(totalFixedCosts, 2) != useCeil(totalCheckableFixcosts, 2)) {
+  );  
+  
+  console.log(totalCheckableFixcosts)
+  console.log(totalFixedCosts)
+  
+  if (useRound(totalCheckableFixcosts, 2) != useRound(totalFixedCosts, 2)) {
     return true;
   }
 
@@ -116,30 +117,20 @@ const calculateUpgradeable = (): Boolean => {
     totalFixedcostCompareArray,
     checklistCompareArray
   );
-  return !isEqualBool;
+
+  return isEqualBool;
+
 };
 
 const getAllFixcosts = (): FixedCostDto[] => {
-  return groupCosts.value.flatMap((a) => a.fixedCosts);
+  return groupCosts.value.flatMap((a) => a.fixedCosts) as FixedCostDto[];
 };
 
 const fixedCostUpToDate = async () => {
   if (selectedCostInspection.value === undefined) {
     return;
   }
-  const insp = selectedCostInspection.value as CostInspectionDto;
-  const request: CheckableFixedCostUptoDateRequest = {
-    costInspectionId: insp.id,
-  };
-  await useApiStore().InspectionClient.checkableFixedCostUptoDate(request);
-  await costInspectionStore.fetch();
-
-  (sortedChecklist.value = useOrderBy(
-    selectedCostInspection.value.fixedCostChecklist,
-    ["value"],
-    ["desc"]
-  )),
-    [];
+  await costInspectionStore.updateSelectedCostInspection();
 };
 
 const checkFixcost = async (changedFixedCost: CheckableFixedCostDto) => {

@@ -150,10 +150,12 @@ onKeyStroke("Enter", async (e) => {
   if (props.modelValue) {
     await handleCreateCharge();
   }
+  clear();
 });
 
 onKeyStroke("Escape", async (e) => {
   data.value = false;
+  clear();
 });
 
 watchDeep(fixedCostCDto, (newValue) => {
@@ -172,6 +174,10 @@ onMounted(() => {
   fixedCostCDto.groupCostId = groupCostOptions.value[activeIndex.value].id;
   calculatedMontlyChargeCost.value = calculateMontlyChargeCost(fixedCostCDto)
 });
+
+onUnmounted(() => {
+  clear();
+})
 </script>
 
 <style>

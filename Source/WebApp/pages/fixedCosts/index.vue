@@ -1,9 +1,13 @@
 <template>
   <div class="flex flex-row w-full h-full">
     <div v-if="!loading" class="flex-1">
+      
       <div id="dashboard" class="gap-4 h-full w-full">
+        <div class="h-full col-span-5 row-span-1 w-full flex flex-col xl:flex-row justify-between items-center border-2 border-border bg-card rounded-lg text-primary-text shadow-lg">
+          <MeterGroup :value="value" />
+      </div>
         <div
-          class="h-full col-span-5 row-span-3 w-full flex flex-col xl:flex-row justify-between items-center border-2 border-border bg-card rounded-lg text-primary-text shadow-lg"
+          class="h-full col-span-5 row-span-2 w-full flex flex-col xl:flex-row justify-between items-center border-2 border-border bg-card rounded-lg text-primary-text shadow-lg"
         >
           <div class="flex-1 w-full h-full flex-col p-4 overflow-auto">
             <p
@@ -49,7 +53,7 @@
               <div
                 v-for="(budget, key) in butgetBars"
                 :class="key%2?'':'bg-gray-700'"
-                class="bg-background border-2 rounded border-border p-4 h-full max-h-[100px] w-full  hover:shadow-primary hover:shadow-lg hover:scale-105 hover:outline hover:outline-primary hover:text-highlight-text hover:rounded-sm duration-300 text-highlight-text flex"
+                class="bg-background border-2 rounded border-border p-4 h-full max-h-[100px] w-full duration-300 text-highlight-text flex"
               >
                 <div class="flex flex-col w-full h-full">
                   {{ budget.monthlyBudget.name }}
@@ -58,7 +62,7 @@
                       <p
                         class="absolute w-full h-full text-white font-black flex-center"
                       >
-                        {{ budget.chargeSum }}€ /
+                        {{ useCeil(budget.chargeSum, 2) }}€ /
                         {{ budget.monthlyBudget.limit }}€
                       </p>
                     </div>
@@ -74,22 +78,22 @@
             <div
               v-for="(groupCost,key) in groupCosts"
               :class="key%2?'':'bg-gray-700'"
-              class="text-center bg-background flex-col border-2 rounded border-border p-4 h-full max-h-[75px] w-full duration-300  hover:shadow-primary hover:shadow-lg hover:scale-105 hover:outline hover:outline-primary hover:text-highlight-text hover:rounded-sm text-highlight-text flex"
+              class="text-center bg-background flex-col border-2 rounded border-border p-4 h-full max-h-[75px] w-full duration-300 text-highlight-text flex"
             >
               <div class="font-black underline decoration-2 underline-offset-2">
                 {{ groupCost.name }}
               </div>
               <div class="text-secondary-light">
                 {{
-                  useSumBy(groupCost.fixedCosts, function (c) {
+                  useCeil(useSumBy(groupCost.fixedCosts, function (c:FixedCostDto) {
                     return c.value;
-                  })
+                  }), 2)
                 }}
                 €
               </div>
             </div>
           </div>
-          <div
+          <!-- <div
             v-if="fixedCostsByTimeInterval"
             class="flex-1 w-full p-4 grid grid-cols-1 lg:grid-cols-4 gap-2 h-full"
           >
@@ -113,7 +117,7 @@
                 €
               </div>
             </div>
-          </div>
+          </div> -->
         </div>
       </div>
     </div>
@@ -128,7 +132,7 @@ import { useFixedCostStore } from "~/stores/fixedCostStore";
 import { useInspectionStore } from "~/stores/costInspectionStore";
 import { storeToRefs } from "pinia";
 import OverviewCell from "@/components/FixedCosts/OverviewCell.vue";
-import { ChargeDto, MonthlyBudgetDto, TimeInterval } from "~/stores/apiClient";
+import { ChargeDto, FixedCostDto, MonthlyBudgetDto, TimeInterval } from "~/stores/apiClient";
 import { useApiStore } from "@/stores/apiStore";
 import { useUtilStore } from "~/stores/utilStore";
 const { isMobil } = storeToRefs(useUtilStore());
@@ -145,15 +149,12 @@ export interface BudgetBar {
   barstyling: string;
 }
 
-const timeIntervalKeys = Object.keys(TimeInterval).filter(
-  (x) => !(parseInt(x) >= 0)
-);
+const value = ref([{ label: 'Space used', value: 15, color: 'var(--p-primary-color)' }]);
 
 const loading = ref(false);
 const overviewStore = useOverviewCostStore();
 const { overviewCosts } = storeToRefs(overviewStore);
 const { selectedCostInspection } = storeToRefs(useInspectionStore());
-const { fixedCostsByTimeInterval } = storeToRefs(useFixedCostStore());
 
 var butgetBars = computed(() =>
   calculateBar(selectedCostInspection?.value?.monthlyBudgets ?? [])

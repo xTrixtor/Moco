@@ -2,7 +2,7 @@ import { useUserStore } from "~/stores/userStore";
 
 export class BaseAPIClient {
   getBaseUrl(defaultURL?: string, urlOverride?: string): string {
-    return "https://localhost:53084";
+    return "https://finanzhorus-api.boehnern.de";
   }
   transformOptions(opt: any): Promise<any> {
     const userStore = useUserStore();
@@ -16,7 +16,7 @@ export class BaseAPIClient {
   async transformResult(
     url: string,
     resp: Response,
-    castFunction: (resp: Response) => Promise<any>,
+    castFunction: (resp: Response) => Promise<any>
   ): Promise<any> {
     if (resp.status === 401) {
       useUserStore().logout();

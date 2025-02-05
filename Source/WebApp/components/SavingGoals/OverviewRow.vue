@@ -26,7 +26,7 @@
     </div>
     <div :class="cellStyling" v-if="selectedSavingGoal.goalValue">
       <p>Gespart</p>
-      <p>{{ useCeil(selectedSavingGoal.currentSaving, 2) }} €</p>
+      <p>{{ useRound(selectedSavingGoal.currentSaving, 2) }} €</p>
     </div>
   </div>
 </template>

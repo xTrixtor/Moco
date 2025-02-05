@@ -1,6 +1,6 @@
 export default defineNuxtConfig({
-  server:{
-    port: 3001
+  server: {
+    port: 3001,
   },
 
   devtools: { enabled: true },
@@ -29,6 +29,10 @@ export default defineNuxtConfig({
     usePrimeVue: true,
     options: {
       ripple: true,
+    },
+    components: {
+      include: "*",
+      exclude: ["tristatecheckbox"]
     },
   },
 

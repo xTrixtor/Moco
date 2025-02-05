@@ -51,7 +51,7 @@ export const calculateDepositsWithMonthlyRate = (
   }
 
   if (goalCopy % rate != 0) {
-    const lastSavingMonth = addMonths(start, useCeil(depositRateNumber));
+    const lastSavingMonth = addMonths(start, useRound(depositRateNumber));
     const key = GetKeyFromDate(lastSavingMonth);
     const depositRate: DepositRateDto = {
       key: key,
@@ -72,7 +72,7 @@ export const calculateDepositsWithDate = (
 ): { depositRates: DepositRateDto[]; monthRate: number } => {
   let goalCopy = goalValue - initialCapital;
   const monthRange = differenceInCalendarMonths(endDate, startDate);
-  const monthRate = useCeil(goalCopy / monthRange, 2);
+  const monthRate = useRound(goalCopy / monthRange, 2);
   let capital = initialCapital;
 
   const depositRates: DepositRateDto[] = [
@@ -89,7 +89,7 @@ export const calculateDepositsWithDate = (
     capital += monthRate;
     const depositRate: DepositRateDto = {
       key: key,
-      value: useCeil(capital, 2),
+      value: useRound(capital, 2),
       savingMonth: monthOfSaving,
     };
     depositRates.push(depositRate);

@@ -1,11 +1,11 @@
 version: '3'
 
 services:
-  nuxt-app:
+  finanzhorus-frontend:
     build:
       context: . # Path to the directory containing the Dockerfile
       dockerfile: Dockerfile
-    container_name: nuxt-app
+    container_name: finanzhorus-frontend
     ports:
       - "3001:3000" # Map port 3000 on the host to port 3000 in the container
     environment:

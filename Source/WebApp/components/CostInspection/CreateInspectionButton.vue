@@ -24,10 +24,7 @@ const initializeCostInspection = async () => {
   await useApiStore().InspectionClient.createCostInspectionEndpoint(
     costInspectionCRequest,
   );
-  await useInspectionStore().fetch(
-    selectedDate.value.getFullYear(),
-    selectedDate.value.getMonth(),
-  );
+  await useInspectionStore().fetch();
 };
 </script>
 

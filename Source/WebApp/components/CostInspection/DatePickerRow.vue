@@ -35,7 +35,7 @@ import { useInspectionStore } from "~/stores/costInspectionStore";
 import Calendar from "primevue/calendar";
 
 const { selectedDate } = storeToRefs(useInspectionStore());
-
+const loading = ref(false)
 const todayDateKey = format(new Date(), "M-yy")
 
 const isInThePast = computed(() => {
@@ -57,6 +57,8 @@ const previousMonth = async () => {
   selectedDate.value = nextMonthDate;
   await useInspectionStore().fetch();
 };
+
+
 </script>
 
 <style scoped>

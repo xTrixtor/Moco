@@ -12,17 +12,17 @@ namespace Moco.Api.DataStore
             switch (fixedCost.TimeInterval)
             {
                 case TimeInterval.wöchentlich:
-                    return Math.Ceiling(fixedCost.Value * 4.29 * 100) / 100;
+                    return Math.Round(fixedCost.Value * 4.29, 2) ;
                 case TimeInterval.zweiwöchtentlich:
-                    return Math.Ceiling(fixedCost.Value * 2.14 * 100) / 100;
+                    return Math.Round(fixedCost.Value * 2.14, 2);
                 case TimeInterval.monatlich:
-                    return Math.Ceiling(fixedCost.Value * 100) / 100;
+                    return Math.Round(fixedCost.Value, 2);
                 case TimeInterval.vierteljährlich:
-                    return Math.Ceiling(fixedCost.Value / 3 * 100) / 100;
+                    return Math.Round(fixedCost.Value / 3, 2);
                 case TimeInterval.halbjährlich:
-                    return Math.Ceiling(fixedCost.Value / 6 * 100) / 100;
+                    return Math.Round(fixedCost.Value / 6, 2);
                 case TimeInterval.jährlich:
-                    return Math.Ceiling(fixedCost.Value / 12 * 100) / 100;
+                    return Math.Round(fixedCost.Value / 12, 2);
                 default:
                     return 0;
             }

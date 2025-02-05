@@ -5,17 +5,17 @@ export const calculateMontlyChargeCost = (fixedcost: FixedCostDto): number => {
 
   switch (fixedcost.timeInterval) {
     case TimeInterval.Wöchentlich:
-      return useCeil(fixedcost.value * 4.29, 2);
+      return useRound(fixedcost.value * 4.29, 2);
     case TimeInterval.Zweiwöchtentlich:
-      return useCeil(fixedcost.value * 2.14, 2);
+      return useRound(fixedcost.value * 2.14, 2);
     case TimeInterval.Monatlich:
-      return useCeil(fixedcost.value, 2);
+      return useRound(fixedcost.value, 2);
     case TimeInterval.Vierteljährlich:
-      return useCeil(fixedcost.value / 3, 2);
+      return useRound(fixedcost.value / 3, 2);
     case TimeInterval.Halbjährlich:
-      return useCeil(fixedcost.value / 6, 2);
+      return useRound(fixedcost.value / 6, 2);
     case TimeInterval.Jährlich:
-      return useCeil(fixedcost.value / 12, 2);
+      return useRound(fixedcost.value / 12, 2);
     default:
       return 0;
   }
