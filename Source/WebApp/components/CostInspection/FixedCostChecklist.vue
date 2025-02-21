@@ -1,7 +1,7 @@
 <template>
   <div
     v-if="selectedCostInspection"
-    class="flex flex-1 flex-col p-2 border-2 border-border rounded-lg rounded-br-[2rem] rounded-tl-[2rem] shadow-lg bg-foreground"
+    class="w-full flex flex-1 flex-col p-2 border-2 border-border rounded-lg rounded-br-[2rem] rounded-tl-[2rem] shadow-lg bg-foreground"
   >
     <div
       v-if="isUpdateable"

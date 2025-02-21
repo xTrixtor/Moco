@@ -19,7 +19,7 @@
 
   <div
     v-else
-    class="w-5/6 bg-foreground border-2 border-border rounded-lg grid grid-cols-5 divide-x-2 divide-border p-6"
+    class="w-full bg-foreground border-2 border-border rounded-lg grid grid-cols-5 divide-x-2 divide-border p-6"
   >
     <div class="col-span-2 px-2">
       <div class="flex flex-col text-primary-text">
@@ -37,7 +37,7 @@
         </div>
       </div>
     </div>
-    <div class="col-span-3">
+    <div class="col-span-3 pl-4">
       <ConfigurationFixedCost v-if="selectedConfig == 'Fix-Kosten'" />
       <ConfigurationBudget v-if="selectedConfig == 'Budgets'" />
       <ConfigurationProfil v-if="selectedConfig == 'Profil'" />

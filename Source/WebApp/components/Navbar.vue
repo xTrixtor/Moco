@@ -1,7 +1,7 @@
 <template>
   <div
     v-if="isMobil"
-    class="flex-center justify-between !h-[70px] !bg-background px-4"
+    class="flex-center flex-row-reverse justify-between !h-[70px] !bg-background px-4"
     id="navbar"
   >
     <NuxtLink to="/">
