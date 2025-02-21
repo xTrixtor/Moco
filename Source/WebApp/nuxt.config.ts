@@ -1,6 +1,6 @@
 export default defineNuxtConfig({
-  server: {
-    port: 3001,
+  experimental: {
+    renderJsonPayloads: false,
   },
 
   devtools: { enabled: true },
@@ -32,7 +32,7 @@ export default defineNuxtConfig({
     },
     components: {
       include: "*",
-      exclude: ["tristatecheckbox"]
+      exclude: ["tristatecheckbox"],
     },
   },
 
