@@ -1,6 +1,7 @@
 ﻿using MocoApi.Extensions;
 using FastEndpoints;
 using Moco.Api.Factories.Db;
+using MocoApi.Models.Moco.Dto;
 
 namespace MocoApi.Endpoints.Charge
 {
@@ -27,14 +28,17 @@ namespace MocoApi.Endpoints.Charge
 
         public async override Task HandleAsync(CreateChargeRequest req, CancellationToken ct)
         {
+            ChargeDto createdChargeDto;
             using(var dbContext = mocoContextFactory.CreateMocoContext())
             {
                 var charge = await req.ChargeCDto.PrepareAddAsync(dbContext);
                 await dbContext.SaveChangesAsync();
                 dbContext.SaveChanges();
+
+                createdChargeDto = charge.asDto();
             }
 
-            await SendAsync(new CreateChargeRespone { Success = true });
+            await SendAsync(new CreateChargeRespone { CreatedCharge = createdChargeDto });
         }
     }
     public record CreateChargeRequest
@@ -46,7 +50,7 @@ namespace MocoApi.Endpoints.Charge
 
     public record CreateChargeRespone
     {
-        public bool Success { get; set; }
+        public ChargeDto CreatedCharge { get; set; }
     }
 
     public record ChargeCDto

@@ -28,7 +28,7 @@ CREATE TABLE `Budgets` (
   `Limit` double NOT NULL,
   `UserId` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   PRIMARY KEY (`Id`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -37,7 +37,7 @@ CREATE TABLE `Budgets` (
 
 LOCK TABLES `Budgets` WRITE;
 /*!40000 ALTER TABLE `Budgets` DISABLE KEYS */;
-INSERT INTO `Budgets` VALUES (1,'Haushalt',300,'ce8b7be8-9b8d-4286-9c2a-bacbddd8288a'),(2,'Tanken',150,'ce8b7be8-9b8d-4286-9c2a-bacbddd8288a'),(3,'Aktivität',100,'ce8b7be8-9b8d-4286-9c2a-bacbddd8288a'),(4,'Luxus',100,'ce8b7be8-9b8d-4286-9c2a-bacbddd8288a'),(5,'Lebensmittel',300,'ce8b7be8-9b8d-4286-9c2a-bacbddd8288a'),(6,'Tanken',150,'ce8b7be8-9b8d-4286-9c2a-bacbddd8288a'),(7,'Fun',100,'ce8b7be8-9b8d-4286-9c2a-bacbddd8288a'),(8,'Essen Gehen',100,'ce8b7be8-9b8d-4286-9c2a-bacbddd8288a'),(10,'Lebensmittel',250,'ffc028fc-5c14-4584-841c-bc7344b8aab8');
+INSERT INTO `Budgets` VALUES (1,'Haushalt',300,'67f4dc76-02f5-4cf1-bbe8-85edbc2af1ed'),(2,'Tanken',150,'67f4dc76-02f5-4cf1-bbe8-85edbc2af1ed'),(3,'Aktivität',100,'67f4dc76-02f5-4cf1-bbe8-85edbc2af1ed'),(4,'Luxus',100,'67f4dc76-02f5-4cf1-bbe8-85edbc2af1ed'),(5,'Lebensmittel',250,'ce8b7be8-9b8d-4286-9c2a-bacbddd8288a'),(6,'Tanken',150,'ce8b7be8-9b8d-4286-9c2a-bacbddd8288a'),(8,'Unternehmungen + Essen',150,'ce8b7be8-9b8d-4286-9c2a-bacbddd8288a'),(10,'Lebensmittel',250,'ffc028fc-5c14-4584-841c-bc7344b8aab8'),(14,'Sonstiges',100,'ce8b7be8-9b8d-4286-9c2a-bacbddd8288a');
 /*!40000 ALTER TABLE `Budgets` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -50,4 +50,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-12-05 23:31:48
+-- Dump completed on 2025-02-26 18:10:14

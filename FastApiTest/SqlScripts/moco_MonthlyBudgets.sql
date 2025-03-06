@@ -16,31 +16,31 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `Charges`
+-- Table structure for table `MonthlyBudgets`
 --
 
-DROP TABLE IF EXISTS `Charges`;
+DROP TABLE IF EXISTS `MonthlyBudgets`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `Charges` (
+CREATE TABLE `MonthlyBudgets` (
   `Id` int NOT NULL AUTO_INCREMENT,
   `Name` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
-  `Value` double NOT NULL,
-  `MonthlyBudgetId` int NOT NULL,
+  `Limit` double NOT NULL,
+  `CostInspectionId` int NOT NULL,
   PRIMARY KEY (`Id`),
-  KEY `IX_Charges_MonthlyBudgetId` (`MonthlyBudgetId`),
-  CONSTRAINT `FK_Charges_MonthlyBudgets_MonthlyBudgetId` FOREIGN KEY (`MonthlyBudgetId`) REFERENCES `MonthlyBudgets` (`Id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=39 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  KEY `IX_MonthlyBudgets_CostInspectionId` (`CostInspectionId`),
+  CONSTRAINT `FK_MonthlyBudgets_CostInspections_CostInspectionId` FOREIGN KEY (`CostInspectionId`) REFERENCES `CostInspections` (`Id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=71 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `Charges`
+-- Dumping data for table `MonthlyBudgets`
 --
 
-LOCK TABLES `Charges` WRITE;
-/*!40000 ALTER TABLE `Charges` DISABLE KEYS */;
-INSERT INTO `Charges` VALUES (3,'müller',26.93,25),(4,'Globus',5.47,25),(5,'Smyths toys',5.98,25),(6,'Burger',20,26),(7,'Geld auszahlen',50,25),(8,'Mgges',15.37,26),(9,'shisha bar',25,25),(10,'Aldi',69.08,23),(11,'crunchy',7.13,26),(12,'ps Plus',9,25),(13,'classic',83.03,24),(14,'Crunchy ',17,26),(15,'Bk',23.07,26),(16,'Zalando',107.41,25),(17,'Netto',15.28,23),(18,'Netto/Eier/Netto',13.78,23),(19,'Monster hunter',8.93,25),(20,'Netto',20.5,23),(21,'Crunchy',14,26),(22,'Kino',22.5,25),(23,'netto',10.04,23),(24,'Weihnachtsgeschenk',221.9,25),(25,'Marcel geschenk',39.98,25),(26,'behälter+ esn',80.14,23),(27,'19th Burger ',24.03,31),(28,'Parken hd',3.5,30),(29,'Kaffee',56.7,30),(30,'Pizza Zutaten ',34.44,28),(31,'Aldi',37.39,28),(32,'Weihnachtsmarkt',12,31),(34,'EMS',20,30),(35,'Sony',7.98,30),(36,'Twitch',4.49,30),(37,'Mineral',83.39,29),(38,'AIrbnb',39.32,30);
-/*!40000 ALTER TABLE `Charges` ENABLE KEYS */;
+LOCK TABLES `MonthlyBudgets` WRITE;
+/*!40000 ALTER TABLE `MonthlyBudgets` DISABLE KEYS */;
+INSERT INTO `MonthlyBudgets` VALUES (23,'Lebensmittel',300,10),(24,'Tanken',150,10),(25,'Fun',100,10),(26,'Essen Gehen',100,10),(27,'Lebensmittel',250,12),(28,'Lebensmittel',300,13),(29,'Tanken',150,13),(30,'Fun',100,13),(31,'Essen Gehen',100,13),(41,'Lebensmittel',300,16),(42,'Tanken',150,16),(43,'Fun',100,16),(44,'Essen Gehen',100,16),(45,'Bargeld',150,16),(49,'Lebensmittel',250,18),(50,'Tanken',150,18),(51,'Unternehmungen + Essen',150,18),(58,'Lebensmittel',250,21),(59,'Tanken',150,21),(60,'Unternehmungen + Essen',150,21),(61,'Sonstiges',100,21),(63,'Lebensmittel',250,23),(64,'Tanken',150,23),(65,'Unternehmungen + Essen',150,23),(66,'Sonstiges',100,23),(67,'Lebensmittel',250,24),(68,'Tanken',150,24),(69,'Unternehmungen + Essen',150,24),(70,'Sonstiges',100,24);
+/*!40000 ALTER TABLE `MonthlyBudgets` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -52,4 +52,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-12-05 23:31:50
+-- Dump completed on 2025-02-26 18:10:17

@@ -12,14 +12,14 @@
         </div>
         <div class="col-span-3 flex-1">
           <Navbar />
-          <div class="flex w-full  p-6" :class="isMobil?'h-full':'h-[90svh] overflow-auto'">
+          <div class="flex w-full p-6" :class="isMobil?'h-full':'h-[90svh] overflow-auto'">
             <slot />
           </div>
         </div>
       </div>
     </div>
     <BaseScrollButton v-if="isMobil && loggedIn" />
-    <BaseLogoutButton v-if="isMobil && loggedIn"/>
+    <BaseLogoutButton v-if="isMobil && loggedIn" />
   </BaseMocoErrorBoundry>
 </template>
 

@@ -16,29 +16,32 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `Revenue`
+-- Table structure for table `FixedCosts`
 --
 
-DROP TABLE IF EXISTS `Revenue`;
+DROP TABLE IF EXISTS `FixedCosts`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `Revenue` (
+CREATE TABLE `FixedCosts` (
   `Id` int NOT NULL AUTO_INCREMENT,
-  `Source` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `Name` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   `Value` double NOT NULL,
-  `UserId` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
-  PRIMARY KEY (`Id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  `GroupCostId` int NOT NULL,
+  `TimeInterval` int NOT NULL,
+  PRIMARY KEY (`Id`),
+  KEY `IX_FixedCosts_GroupCostId` (`GroupCostId`),
+  CONSTRAINT `FK_FixedCosts_GroupCosts_GroupCostId` FOREIGN KEY (`GroupCostId`) REFERENCES `GroupCosts` (`Id`)
+) ENGINE=InnoDB AUTO_INCREMENT=32 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `Revenue`
+-- Dumping data for table `FixedCosts`
 --
 
-LOCK TABLES `Revenue` WRITE;
-/*!40000 ALTER TABLE `Revenue` DISABLE KEYS */;
-INSERT INTO `Revenue` VALUES (1,'Inter Gmbh',2500.22,'ce8b7be8-9b8d-4286-9c2a-bacbddd8288a'),(2,'Knorrberry',450.98,'ce8b7be8-9b8d-4286-9c2a-bacbddd8288a'),(3,'Oma',25,'ce8b7be8-9b8d-4286-9c2a-bacbddd8288a'),(4,'Company 1',1234,'ffc028fc-5c14-4584-841c-bc7344b8aab8'),(5,'Company 2',445,'ffc028fc-5c14-4584-841c-bc7344b8aab8'),(6,'Inter',2458.8,'ce8b7be8-9b8d-4286-9c2a-bacbddd8288a');
-/*!40000 ALTER TABLE `Revenue` ENABLE KEYS */;
+LOCK TABLES `FixedCosts` WRITE;
+/*!40000 ALTER TABLE `FixedCosts` DISABLE KEYS */;
+INSERT INTO `FixedCosts` VALUES (1,'Miete',650,1,3),(2,'Strom',45,1,3),(3,'Renten Basis',250,2,3),(4,'Flexible',250,2,3),(5,'Versicherung',250,3,6),(6,'Kredit',244,3,3),(7,'FitX',24,4,3),(8,'Kredit',244.18,5,3),(10,'HDI Lebensversicherung',159.14,6,3),(11,'Berufsunfähigkeit',40.09,7,3),(13,'Miete',650,8,3),(14,'Handy',12.99,4,3),(15,'Hetzner',5.18,4,3),(16,'Spotify',5,4,3),(17,'Jährliche Kosten Rücklage',80,9,3),(20,'Miete',900,13,3),(21,'Auto-Versicherung',800,14,6),(25,'RentenBasis',110.27,6,3),(31,'Japan Urlaub',350,9,3);
+/*!40000 ALTER TABLE `FixedCosts` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -50,4 +53,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-12-05 23:31:49
+-- Dump completed on 2025-02-26 18:10:13

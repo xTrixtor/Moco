@@ -16,32 +16,31 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `Users`
+-- Table structure for table `Credits`
 --
 
-DROP TABLE IF EXISTS `Users`;
+DROP TABLE IF EXISTS `Credits`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `Users` (
+CREATE TABLE `Credits` (
   `Id` int NOT NULL AUTO_INCREMENT,
-  `KeycloakUserId` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
-  `Username` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
-  `Firstname` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
-  `LastName` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
-  `Email` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
-  `CreatedAt` datetime(6) NOT NULL,
-  PRIMARY KEY (`Id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  `Name` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `Value` double NOT NULL,
+  `CostInspectionId` int NOT NULL,
+  PRIMARY KEY (`Id`),
+  KEY `IX_Credits_CostInspectionId` (`CostInspectionId`),
+  CONSTRAINT `FK_Credits_CostInspections_CostInspectionId` FOREIGN KEY (`CostInspectionId`) REFERENCES `CostInspections` (`Id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `Users`
+-- Dumping data for table `Credits`
 --
 
-LOCK TABLES `Users` WRITE;
-/*!40000 ALTER TABLE `Users` DISABLE KEYS */;
-INSERT INTO `Users` VALUES (1,'ce8b7be8-9b8d-4286-9c2a-bacbddd8288a','boehnern','Nico','Böhner','email@gmx.de','0001-01-01 00:00:00.000000');
-/*!40000 ALTER TABLE `Users` ENABLE KEYS */;
+LOCK TABLES `Credits` WRITE;
+/*!40000 ALTER TABLE `Credits` DISABLE KEYS */;
+INSERT INTO `Credits` VALUES (7,'Inter',2458.8,10),(10,'Company 1',1234,12),(11,'Company 2',445,12),(12,'Inter',2458.8,13),(15,'Inter',2458.8,16),(17,'Inter',2440,18),(20,'Inter',2420,21),(23,'Inter',2420,23),(24,'Inter',2420,24);
+/*!40000 ALTER TABLE `Credits` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -53,4 +52,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-12-05 23:31:53
+-- Dump completed on 2025-02-26 18:10:18
