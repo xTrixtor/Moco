@@ -2,16 +2,16 @@
   <div class="flex flex-row w-full h-full">
     <div v-if="!loading" class="flex-1">
 
-      <div id="dashboard" class="gap-4 w-full">
+      <div id="dashboard" class="gap-4 w-full h-full">
         <div
-          class="h-full col-span-5 row-span-2 w-full flex flex-col xl:flex-row justify-between items-center border-2 border-border bg-card rounded-lg text-primary-text shadow-lg">
-          <div class="flex-1 w-full h-full flex-col p-4 overflow-auto">
+          class="h-full col-span-5 row-span-3 w-full flex flex-col xl:flex-row justify-between items-center border-2 border-border bg-card rounded-lg text-primary-text shadow-lg">
+          <div class="flex flex-1 w-full h-full flex-col p-4">
             <p class="font-semibold tracking-wide text-highlight-text text-lg underline underline-offset-2 mb-1">
               Kalkulierte & statische Beträge
             </p>
-            <div class="">
+            <div class="flex flex-1">
               <div v-if="overviewCosts != undefined"
-                class="grid grid-cols-1 lg:grid-cols-4 gap-2 rounded-xl w-full h-full">
+                class="grid grid-cols-1 lg:grid-cols-5 gap-1 rounded-xl w-full h-full">
                 <OverviewCell v-for="(overviewCost, key) in useOrderBy(overviewCosts, ['isStaticCost'], ['asc'])" :cost="overviewCost"
                   class="!text-white flex-center" :class="[overviewCost.isStaticCost ? 'bg-secondary' : 'bg-teal-800']" />
               </div>
@@ -33,7 +33,7 @@
           <div class="h-1/2 w-full overflow-auto overflow-x-hidden">
             <div v-if="butgetBars.length != 0" class="grid grid-cols-1 lg:grid-cols-3 gap-2 w-full h-full p-3">
               <div v-for="(budget, key) in butgetBars" :class="key%2?'':'bg-gray-700'"
-                class="bg-background border-2 rounded border-border p-4 h-full max-h-[100px] w-full duration-300 text-highlight-text flex">
+                class="bg-background border-2 rounded border-border p-2 h-full max-h-[100px] w-full duration-300 text-highlight-text flex">
                 <div class="flex flex-col w-full min-h-[60px]">
                   <label class="h-3/5 truncate">{{ budget.monthlyBudget.name }}</label>
                   <div class="flex h-2/5 relative w-full">
@@ -167,7 +167,7 @@ onMounted(async () => {
 @media only screen and (min-width: 800px) {
   #dashboard {
     display: grid;
-    grid-template-rows: repeat(7, minmax(0, 1fr));
+    grid-template-rows: repeat(8, minmax(0, 1fr));
     grid-template-columns: repeat(5, minmax(0, 1fr));
   }
 }

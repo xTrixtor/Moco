@@ -32,7 +32,7 @@ export default defineNuxtConfig({
     },
     components: {
       include: "*",
-      exclude: ["tristatecheckbox"],
+      exclude: ["tristatecheckbox", "editor"],
     },
   },
 

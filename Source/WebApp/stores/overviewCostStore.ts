@@ -89,12 +89,7 @@ export const useOverviewCostStore = defineStore("costOverview", {
         value: budgetLimit.value - chargesSum.value,
         isStaticCost: false,
       };
-      const currentMoney: OverviewCost = {
-        name: "Geld für Luxus",
-        info: "Geld nach allen Abzügen. \n Monatliches Gehalt - Vertragliche Kosten - Budget Limits",
-        value: monthlyRevenue.value - (fixcostSum.value + budgetLimit.value),
-        isStaticCost: false,
-      };
+
       const toPayMoney: OverviewCost = this.calculateToPayMoney(
         selectedCostInspection.value,
         availableBudgetMoney.value
@@ -119,23 +114,39 @@ export const useOverviewCostStore = defineStore("costOverview", {
       if (isMobil) {
         this.overviewCosts = [
           availableMoney,
-          currentMoney,
+          this.getCalculatedLuxuryMoneyOverviewCost(
+            monthlyRevenue.value,
+            fixcostSum.value,
+            chargesSum.value,
+            budgetLimit.value
+          ),
           toPayMoney,
           chargesSum,
           availableBudgetMoney,
+          this.getLuxuryMoneyOverviewCost(
+            monthlyRevenue.value,
+            fixcostSum.value,
+            budgetLimit.value
+          ),
         ];
         return;
       }
 
       this.overviewCosts = [
         availableMoney,
-        currentMoney,
+        this.getCalculatedLuxuryMoneyOverviewCost(
+          monthlyRevenue.value,
+          fixcostSum.value,
+          chargesSum.value,
+          budgetLimit.value
+        ),
         toPayMoney,
         chargesSum,
         fixcostSum,
         budgetLimit,
         monthlyRevenue,
         availableBudgetMoney,
+        this.getLuxuryMoneyOverviewCost(monthlyRevenue.value, fixcostSum.value, budgetLimit.value),
       ];
     },
     calculateToPayMoney(
@@ -156,13 +167,11 @@ export const useOverviewCostStore = defineStore("costOverview", {
           return c.value;
         });
 
-        if(sum < monthlyBudget.limit){
+        if (sum < monthlyBudget.limit) {
           budgetSpace += monthlyBudget.limit - sum;
         }
-        
       });
-      
-      
+
       return {
         name: "Maximal zu zahlende Summe",
         value: budgetSpace,
@@ -212,6 +221,45 @@ export const useOverviewCostStore = defineStore("costOverview", {
         return b.limit;
       });
       return { name: "Budget Limit", value: sum, isStaticCost: true };
+    },
+    getCalculatedLuxuryMoneyOverviewCost(
+      monthlyRevenue: number,
+      fixcostSum: number,
+      chargeSum: number,
+      budgetLimit: number
+    ): OverviewCost {
+      let luxuryMoney = monthlyRevenue - (fixcostSum + budgetLimit);
+
+      if (chargeSum > budgetLimit) {
+        const dif = chargeSum - budgetLimit;
+        luxuryMoney = luxuryMoney - dif;
+      }
+
+      const luxuryMoneyOverviewCost: OverviewCost = {
+        name: "Übriges Geld",
+        info: "Geld nach allen möglichen Kosten. \n Auch abzug bei Budget-Limit überzug",
+        value: luxuryMoney,
+        isStaticCost: false,
+      };
+
+      return luxuryMoneyOverviewCost;
+    },
+
+    getLuxuryMoneyOverviewCost(
+      monthlyRevenue: number,
+      fixcostSum: number,
+      budgetLimit: number
+    ): OverviewCost {
+
+
+      const luxuryMoneyOverviewCost: OverviewCost = {
+        name: "Geld für Luxus",
+        info: "Geld nach allen Abzügen. \n Monatliches Gehalt - Vertragliche Kosten - Budget Limits",
+        value: monthlyRevenue - (fixcostSum + budgetLimit),
+        isStaticCost: true,
+      };
+
+      return luxuryMoneyOverviewCost;
     },
 
     async calulateCostOverview() {

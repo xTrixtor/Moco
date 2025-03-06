@@ -103,12 +103,14 @@ app.UseAuthentication() //add this
    .UseSwaggerGen()
    .UseDefaultExceptionHandler();
 
-#if DEBUGCLEAN
+
+using (var dbContext = new MoCoContext())
 {
-    using (var dbContext = new MoCoContext())
+    if (!dbContext.DatabaseExists())
     {
         Console.WriteLine("Start Deleting");
         dbContext.Database.EnsureDeleted();
+
         dbContext.Database.EnsureCreated();
         Console.WriteLine("Start Created");
 
@@ -129,17 +131,7 @@ app.UseAuthentication() //add this
         Console.WriteLine("Seeded Data");
     }
 }
-#endif
-{
-    using (var dbContext = new MoCoContext())
-    {
-        if (!dbContext.DatabaseExists())
-        {
-            dbContext.Database.EnsureCreated();
-        }
-    }
-    app.Run();
-}
+app.Run();
 
 
 enum AppsettingsSection

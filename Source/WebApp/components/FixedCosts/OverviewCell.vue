@@ -1,6 +1,6 @@
 <template>
   <div
-    class="h-[100px] p-4 flex-col flex-start text-center duration-300 border-hightlight-bg text-secondary"
+    class="flex flex-1 p-2 flex-col flex-start text-center duration-300 border-hightlight-bg text-secondary"
     @click="() => (showInfo = !showInfo)"
       >
     <div v-if="showInfo" class="flex-center w-full h-full flex-col">

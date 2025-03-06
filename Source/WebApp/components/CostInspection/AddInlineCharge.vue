@@ -78,7 +78,8 @@ const handleCreateCharge = async () => {
     await useApiStore().ChargeClient.createChargeEndpoint({
       chargeCDto,
     } as CreateChargeRequest);
-    await useInspectionStore().fetch();
+
+    await useInspectionStore().fetch(true);
   }
   chargeCDto.value = undefined;
   chargeCDto.name = undefined;

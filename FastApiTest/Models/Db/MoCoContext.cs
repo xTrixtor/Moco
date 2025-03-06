@@ -42,7 +42,7 @@ public class MoCoContext : DbContext
             .Build();
         if (configuration is null) throw new Exception("Couldnt load config");
 
-        var serverVersion = new MySqlServerVersion(new Version(8, 1, 0));
+        var serverVersion = new MySqlServerVersion(new Version(8, 1, 21));
         options
             .UseLazyLoadingProxies()
             .UseMySql(configuration.GetConnectionString("MySql"), serverVersion);
