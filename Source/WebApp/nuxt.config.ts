@@ -1,40 +1,26 @@
+// https://nuxt.com/docs/api/configuration/nuxt-config
+import Aura from '@primevue/themes/aura';
+
 export default defineNuxtConfig({
-  experimental: {
-    renderJsonPayloads: false,
-  },
-
+  compatibilityDate: '2024-04-03',
   devtools: { enabled: true },
-  css: ["~/main.css", "primevue/resources/themes/lara-dark-teal/theme.css"],
-
   modules: [
-    "nuxt-primevue",
-    "nuxt-icon",
-    "nuxt-lodash",
-    "@pinia/nuxt",
-    "@nuxtjs/tailwindcss",
-    "@vueuse/nuxt",
-    "@nuxt/image",
-    [
-      "@nuxtjs/google-fonts",
-      {
-        families: {
-          Tektur: [400],
-        },
-        display: "swap",
-      },
-    ],
+    '@nuxtjs/tailwindcss',
+    '@pinia/nuxt',
+    '@primevue/nuxt-module'
   ],
-
+  css: ['~/assets/css/main.css'],
   primevue: {
     usePrimeVue: true,
     options: {
       ripple: true,
-    },
-    components: {
-      include: "*",
-      exclude: ["tristatecheckbox", "editor"],
-    },
-  },
-
-  compatibilityDate: "2024-09-25",
-});
+      theme: {
+        preset: Aura,
+        options: {
+          darkModeSelector: 'system',
+          cssLayer: false
+        }
+      }
+    }
+  }
+})

@@ -1,0 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  @apply bg-surface-50 dark:bg-surface-950 text-surface-900 dark:text-surface-50 m-0 p-0 font-sans;
+}
